@@ -28,7 +28,7 @@ namespace DeskMateLearning
             test("extend profile controls bind and mirror never inherits them",delegate {
                 var size=(ComboBox)studio.Window.FindName("StreamSize");var fps=(ComboBox)studio.Window.FindName("StreamFps");var mode=(ComboBox)studio.Window.FindName("ModePicker");
                 if(!studio.SelectedProfile().IsDefault)throw new Exception("Unexpected override");size.SelectedIndex=1;fps.SelectedIndex=3;
-                if(!studio.SelectedProfile().Matches(1280,720,90))throw new Exception("Wrong profile");mode.SelectedIndex=1;
+                if(!studio.SelectedProfile().Matches(1280,720,90))throw new Exception("Wrong profile");fps.SelectedIndex=4;if(!studio.SelectedProfile().Matches(1280,720,120))throw new Exception("120 fps not wired");mode.SelectedIndex=1;
                 if(size.IsEnabled || fps.IsEnabled || !studio.SelectedProfile().IsDefault)throw new Exception("Mirror override");mode.SelectedIndex=0;size.SelectedIndex=0;fps.SelectedIndex=0;
             });
             test("metrics blank until actual samples",delegate {

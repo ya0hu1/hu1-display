@@ -132,6 +132,17 @@ namespace DeskMateLearning
             }
             if(result.Count==0)throw new InvalidOperationException(UiText.Get("未读到活动桌面。请在本地Windows交互会话运行。"));return result.ToArray();
         }
+        internal static void SetTemporaryVddRate(DesktopDisplay expected,int hz)
+        {
+            // Recheck stable monitor + adapter identities and the starting mode immediately before writing.
+            var d=Capture().SingleOrDefault(x=>x.Key==expected.Key && x.AdapterId==expected.AdapterId && x.Virtual && !x.Primary);
+            if(d==null || !LayoutPolicy.Same(new[]{expected},new[]{d},true) || !d.AvailableRates.Contains(hz))
+                throw new InvalidOperationException(UiText.Get("显示布局已变化，请刷新后重试。"));
+            var m=Current(d.Name);m.Frequency=(uint)hz;m.Fields=0x400000; // DM_DISPLAYFREQUENCY only
+            int code=ChangeDisplaySettingsEx(d.Name,ref m,IntPtr.Zero,2,IntPtr.Zero); // CDS_TEST
+            if(code==0)code=ChangeDisplaySettingsEx(d.Name,ref m,IntPtr.Zero,0,IntPtr.Zero); // no registry update
+            if(code!=0)throw new InvalidOperationException(UiText.Get("虚拟屏刷新率切换失败，Windows 返回：")+code);
+        }
         // Called only by the watchdog helper after an explicit Apply action. All original settings
         // are journalled first; no primary/mode/adapter enable state is changed here.
         internal static void StageAndCommit(DesktopDisplay[] targets)

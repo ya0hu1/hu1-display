@@ -36,6 +36,22 @@ namespace DeskMateLearning
             test("snap brings edge to exact desktop boundary",delegate {var a=Sample();a[2].X=2570;LayoutPolicy.Snap(a[2],a,20);Check(a[2].X==2560);});
             test("corner-only contact rejected",delegate {var a=Sample();var b=LayoutPolicy.Clone(a);b[2].Y=1440;Reject(()=>LayoutPolicy.Validate(a,b));});
             test("external position changes detected",delegate {var a=Sample();var b=LayoutPolicy.Place(a,a[2].Key,"bottom");Check(!LayoutPolicy.Same(a,b,true) && LayoutPolicy.Same(a,b,false));});
+            test("owned VDD refresh 120 is restored; physical and mismatched targets ignored",delegate {
+                var actual=Sample();var v=actual[2];v.AvailableRates=new[]{60,90,120};
+                var choice=new DisplayInfo{Virtual=true,Description=v.Name+" synthetic"};int writes=0;
+                Func<DesktopDisplay[]> read=()=>LayoutPolicy.Clone(actual);
+                Action<DesktopDisplay,int> write=(d,hz)=>{if(d.Key!=v.Key)throw new Exception("physical target");writes++;v.RefreshHz=hz;};
+                var owner=new VddRefreshSession(read(),choice,DisplayMode.Extend,120,read,write);owner.Apply();Check(v.RefreshHz==120);owner.Restore();Check(v.RefreshHz==60 && writes==2);
+                new VddRefreshSession(read(),choice,DisplayMode.Mirror,120,read,write).Apply();choice.Description=actual[0].Name+" synthetic";
+                new VddRefreshSession(read(),choice,DisplayMode.Extend,120,read,write).Apply();Check(writes==2);
+            });
+            test("unsupported rates and external changes never cause a blind restore",delegate {
+                var actual=Sample();var v=actual[2];var choice=new DisplayInfo{Virtual=true,Description=v.Name+" synthetic"};int writes=0;
+                Func<DesktopDisplay[]> read=()=>LayoutPolicy.Clone(actual);Action<DesktopDisplay,int> write=(d,hz)=>{v.RefreshHz=hz;writes++;};
+                new VddRefreshSession(read(),choice,DisplayMode.Extend,90,read,write).Apply();Check(writes==0);
+                v.AvailableRates=new[]{60,90};var owner=new VddRefreshSession(read(),choice,DisplayMode.Extend,90,read,write);
+                owner.Apply();v.X+=10;Reject(()=>owner.Restore());Check(writes==1);
+            });
             lines.Add("RESULT passed="+(lines.Count-failed)+" failed="+failed);
             lines.Add("Scope: synthetic layout policy only. No Windows display mutation, helper, phone, driver or session started.");
             File.WriteAllLines(report,lines);return failed==0 ? 0 : 1;

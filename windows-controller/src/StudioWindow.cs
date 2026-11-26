@@ -88,8 +88,8 @@ namespace DeskMateLearning
             Click("DriverFolder",delegate {PrepareDriver();});Click("DriverWizard",delegate {DriverWizard();});
             Click("OpenLogs",delegate {Directory.CreateDirectory(settings.LogDirectory);StudioServices.Open(settings.LogDirectory,false);});
             Click("ClearLogs",delegate {C<TextBox>("LogText").Clear();});
-            Click("CopyDiagnostics",delegate {Clipboard.SetText(UiText.Brand+" Studio 0.5 Preview\nOS: "+Environment.OSVersion+"\n"+C<TextBlock>("StreamInfo").Text+UiText.Get("\n设备数: ")+(scan==null ? 0 : scan.Devices.Count)+UiText.Get("\n（未复制设备序列号或画面）"));Log(UiText.Get("诊断摘要已复制到Windows剪贴板，未转发到手机。"));});
-            Click("About",delegate {MessageBox.Show(Window,UiText.Get("晖映 · 工作台预览版 0.5\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB，单设备；触控/音频/剪贴板回传暂未开放。"),UiText.Get("关于与开源说明"));});
+            Click("CopyDiagnostics",delegate {Clipboard.SetText(UiText.Brand+" Studio 0.5.1 Preview\nOS: "+Environment.OSVersion+"\n"+C<TextBlock>("StreamInfo").Text+UiText.Get("\n设备数: ")+(scan==null ? 0 : scan.Devices.Count)+UiText.Get("\n（未复制设备序列号或画面）"));Log(UiText.Get("诊断摘要已复制到Windows剪贴板，未转发到手机。"));});
+            Click("About",delegate {MessageBox.Show(Window,UiText.Get("晖映 · 工作台预览版 0.5.1\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB，单设备；触控/音频/剪贴板回传暂未开放。"),UiText.Get("关于与开源说明"));});
             Click("Start",delegate {StartSession();});Click("Stop",RequestStop);
             C<ComboBox>("ModePicker").SelectionChanged+=delegate {BindDisplays();};
             C<ComboBox>("DevicePicker").SelectionChanged+=delegate {UpdateDeviceHint();UpdateButtons();};
@@ -317,7 +317,7 @@ namespace DeskMateLearning
             try{SafetyPolicy.ValidateDevice(settings,d);SafetyPolicy.ValidateDisplay(Mode,display);}catch(Exception e){Fail(e);return;}
             bool continuous=C<CheckBox>("Continuous").IsChecked==true;DisplayMode mode=Mode;
             var profile=SelectedProfile();
-            if(!Confirm(UiText.Get("连接 ")+d.Model+" → "+(mode==DisplayMode.Extend ? UiText.Get("独立扩展桌面") : UiText.Get("主屏镜像"))+"\n"+(continuous ? UiText.Get("持续连接，点击停止或关闭窗口退出。") : UiText.Get("30秒限时测试。"))+UiText.Get("\n\n仅USB；触控、音频、剪贴板回传禁用。"),UiText.Get("开始副屏")))return;
+            if(!Confirm(UiText.Get("连接 ")+d.Model+" → "+(mode==DisplayMode.Extend ? UiText.Get("独立扩展桌面") : UiText.Get("主屏镜像"))+"\n"+(continuous ? UiText.Get("持续连接，点击停止或关闭窗口退出。") : UiText.Get("30秒限时测试。"))+(profile.Fps>=90 ? "\n"+UiText.Get("若支持所选高刷，将临时切换虚拟屏刷新率，结束时还原。") : "")+UiText.Get("\n\n仅USB；触控、音频、剪贴板回传禁用。"),UiText.Get("开始副屏")))return;
             activeProfile=profile;stop=new ManualResetEvent(false);began=DateTime.Now;SetBusy(true);Text("StatusPill",UiText.Get("●  连接中"));Log(UiText.Get("正在建立USB会话…"));
             try{
                 SessionResult result=await Task.Run(()=>backend.RunSession(d,display,mode,stop,continuous,profile));

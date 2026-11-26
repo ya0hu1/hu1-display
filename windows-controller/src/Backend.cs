@@ -143,10 +143,12 @@ namespace DeskMateLearning
             var outTail=new BoundedTextTail(BoundedTextTail.DefaultLimit);
             var errTail=new BoundedTextTail(BoundedTextTail.DefaultLimit);
             int ownedPort=0; bool started=false,clientOwned=false,requestedStop=false;
+            var rate=new VddRefreshSession(before,fresh,mode,profile.Fps,WindowsDisplays.Capture,WindowsDisplays.SetTemporaryVddRate);
             var watch=Stopwatch.StartNew();
             try
             {
                 if(stop.WaitOne(0)) throw new OperationCanceledException(UiText.Get("启动手机客户端前已停止。"));
+                rate.Apply();
                 clientOwned=true;
                 Adb("-s",selected.Serial,"shell","am","start","-W","-n","dev.anydisplay.client/.ui.MainActivity");
                 string port=Adb("-s",selected.Serial,"forward","tcp:0","tcp:47820");
@@ -179,23 +181,27 @@ namespace DeskMateLearning
             catch(Exception e) { result.Error=e.Message; if(e is OperationCanceledException) result.UserStopped=true; }
             finally
             {
-                if(started && !engine.HasExited)
-                {
-                    if(relay!=null) relay.RequestGracefulStop();
-                    if(!engine.WaitForExit(5000)) { engine.Kill(); engine.WaitForExit(3000); }
+                try {
+                    if(started && !engine.HasExited)
+                    {
+                        if(relay!=null) relay.RequestGracefulStop();
+                        if(!engine.WaitForExit(5000)) { engine.Kill(); engine.WaitForExit(3000); }
+                    }
+                    if(engineJob!=null) engineJob.Dispose();
+                    if(relay!=null)
+                    {
+                        result.BlockedInputFrames=Interlocked.Read(ref relay.InputBlocked);
+                        result.BlockedClipboardFrames=Interlocked.Read(ref relay.ClipboardBlocked);
+                        if(relay.Error!=null && result.Error==null) result.Error="Relay: "+relay.Error;
+                        relay.Dispose();
+                    }
+                    if(clientOwned) try { Adb("-s",selected.Serial,"shell","am","force-stop","dev.anydisplay.client"); }
+                        catch(Exception e) { result.CleanupErrors.Add(e.Message); }
+                    if(ownedPort>=1024 && ownedPort<=65535) try { Adb(SafetyPolicy.RemoveOwnedForward(selected.Serial,ownedPort)); }
+                        catch(Exception e) { result.CleanupErrors.Add(e.Message); }
+                } finally {
+                    try{rate.Restore();}catch(Exception e){result.CleanupErrors.Add(e.Message);}
                 }
-                if(engineJob!=null) engineJob.Dispose();
-                if(relay!=null)
-                {
-                    result.BlockedInputFrames=Interlocked.Read(ref relay.InputBlocked);
-                    result.BlockedClipboardFrames=Interlocked.Read(ref relay.ClipboardBlocked);
-                    if(relay.Error!=null && result.Error==null) result.Error="Relay: "+relay.Error;
-                    relay.Dispose();
-                }
-                if(clientOwned) try { Adb("-s",selected.Serial,"shell","am","force-stop","dev.anydisplay.client"); }
-                    catch(Exception e) { result.CleanupErrors.Add(e.Message); }
-                if(ownedPort>=1024 && ownedPort<=65535) try { Adb(SafetyPolicy.RemoveOwnedForward(selected.Serial,ownedPort)); }
-                    catch(Exception e) { result.CleanupErrors.Add(e.Message); }
             }
             try {
                 if(stdout!=null && !stdout.Wait(2000)) result.CleanupErrors.Add("stdout drain did not finish within timeout.");

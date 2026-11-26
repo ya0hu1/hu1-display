@@ -132,8 +132,8 @@
     },
     {
       "Key": "Text027",
-      "Zh": "晖映 · 工作台预览版 0.5\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB，单设备；触控/音频/剪贴板回传暂未开放。",
-      "En": "hu1 display · Studio Preview 0.5\nOriginal Windows interface and controller (MIT).\nVideo engine and Android client: AnyDisplay v0.1.4 (MIT).\nVirtual display: Virtual Display Driver / MikeTheTech.\nADB: Google Android Platform-Tools.\n\nWorkspace organization inspired by DeskMate; no DeskMate code, icons or branding included. Not an official distribution of those projects.\nUSB only, one device; touch, audio and clipboard forwarding are disabled."
+      "Zh": "晖映 · 工作台预览版 0.5.1\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB，单设备；触控/音频/剪贴板回传暂未开放。",
+      "En": "hu1 display · Studio Preview 0.5.1\nOriginal Windows interface and controller (MIT).\nVideo engine and Android client: AnyDisplay v0.1.4 (MIT).\nVirtual display: Virtual Display Driver / MikeTheTech.\nADB: Google Android Platform-Tools.\n\nWorkspace organization inspired by DeskMate; no DeskMate code, icons or branding included. Not an official distribution of those projects.\nUSB only, one device; touch, audio and clipboard forwarding are disabled."
     },
     {
       "Key": "Text028",
@@ -1467,8 +1467,8 @@
     },
     {
       "Key": "Text299",
-      "Zh": "Studio Preview 0.5",
-      "En": "Studio Preview 0.5"
+      "Zh": "Studio Preview 0.5.1",
+      "En": "Studio Preview 0.5.1"
     },
     {
       "Key": "Text300",
@@ -1769,6 +1769,36 @@
       "Key": "ProfileRates",
       "Zh": "Windows 当前 {0} Hz · 此分辨率可用：{1}",
       "En": "Windows: {0} Hz · Available at this size: {1}"
+    },
+    {
+      "Key": "VddRefreshConfirm",
+      "Zh": "若支持所选高刷，将临时切换虚拟屏刷新率，结束时还原。",
+      "En": "If supported, the virtual display will temporarily switch to the selected high refresh rate and restore at the end."
+    },
+    {
+      "Key": "VddRefreshStale",
+      "Zh": "显示布局已变化，请刷新后重试。",
+      "En": "The display layout changed. Refresh and retry."
+    },
+    {
+      "Key": "VddRefreshMiss",
+      "Zh": "虚拟屏未进入请求的刷新率。",
+      "En": "The VDD did not reach the requested refresh rate."
+    },
+    {
+      "Key": "VddRefreshChanged",
+      "Zh": "显示布局已被更改，未覆盖新设置。请核对虚拟屏刷新率。",
+      "En": "The display layout changed. New settings were not overwritten; check the VDD refresh rate."
+    },
+    {
+      "Key": "VddRefreshRestore",
+      "Zh": "虚拟屏刷新率还原未通过验证。",
+      "En": "Could not verify the restored VDD refresh rate."
+    },
+    {
+      "Key": "VddRefreshError",
+      "Zh": "虚拟屏刷新率切换失败，Windows 返回：",
+      "En": "Windows rejected the VDD refresh change: "
     }
   ]
 }

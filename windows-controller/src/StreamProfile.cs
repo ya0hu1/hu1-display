@@ -13,7 +13,7 @@ namespace DeskMateLearning
         {
             if(!((width==0 && height==0) || (width==1280 && height==720) || (width==1920 && height==1080)))
                 throw new ArgumentOutOfRangeException("width");
-            if(fps!=0 && fps!=30 && fps!=60 && fps!=90)throw new ArgumentOutOfRangeException("fps");
+            if(fps!=0 && fps!=30 && fps!=60 && fps!=90 && fps!=120)throw new ArgumentOutOfRangeException("fps");
             Width=width;Height=height;Fps=fps;
         }
         internal void Apply(byte[] request)
