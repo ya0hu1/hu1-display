@@ -10,7 +10,7 @@ Use your phone as an independent Windows desktop, or explicitly mirror the prima
 
 ## Quick start
 
-**Option A — prebuilt Windows portable ZIP (recommended).** If you have `hu1-display-0.5.1-preview-windows-x64.zip`, you do not need a compiler or Android Studio. [GitHub Releases](https://github.com/ya0hu1/hu1-display/releases) is the public distribution location. A local 0.5.1 candidate has been built and checked; only treat a matching, named release asset as a binary download. GitHub's *Source code (zip)* is not an installer.
+**Option A — prebuilt Windows portable ZIP (recommended).** [Download 0.5.1 Preview for Windows x64](https://github.com/ya0hu1/hu1-display/releases/download/v0.5.1-preview/hu1-display-0.5.1-preview-windows-x64.zip) · [SHA-256 checksum](https://github.com/ya0hu1/hu1-display/releases/download/v0.5.1-preview/hu1-display-0.5.1-preview-windows-x64.zip.sha256) · [All versions and release notes](https://github.com/ya0hu1/hu1-display/releases). No compiler or Android Studio is required. Choose the named `windows-x64` asset, not GitHub’s automatically generated *Source code (zip)*.
 
 1. Compare `Get-FileHash .\hu1-display-0.5.1-preview-windows-x64.zip -Algorithm SHA256` with the `.sha256` sidecar. Extract the **entire ZIP to a local Windows drive** in a separate folder. Do not run from the archive or a network share.
 2. Open `Hu1.Display.exe`. Browsing the workspace needs no phone or driver. The binary is not formally signed; verify its source instead of disabling security protections.

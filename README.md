@@ -12,7 +12,7 @@
 
 ### 方式一：使用预编译 Windows 便携包（推荐）
 
-如果你已经拿到 `hu1-display-0.5.1-preview-windows-x64.zip`，**不需要编译、安装 Android Studio 或覆盖旧版**。公开下载入口是 [本项目的 GitHub Releases](https://github.com/ya0hu1/hu1-display/releases)。本次 0.5.1 已生成并校验本地测试包；在 Releases 看到对应版本及资产前，请勿把 GitHub 的 **Source code (zip)** 当成安装包。
+[下载 0.5.1 Preview · Windows x64 便携 ZIP](https://github.com/ya0hu1/hu1-display/releases/download/v0.5.1-preview/hu1-display-0.5.1-preview-windows-x64.zip) · [SHA-256 校验文件](https://github.com/ya0hu1/hu1-display/releases/download/v0.5.1-preview/hu1-display-0.5.1-preview-windows-x64.zip.sha256) · [其他版本与发布说明](https://github.com/ya0hu1/hu1-display/releases)。**不需要编译、安装 Android Studio 或覆盖旧版**。请选择带 `windows-x64` 的附件，而不是 GitHub 自动生成的 **Source code (zip)**。
 
 1. **校验并解压。** 可用 `Get-FileHash .\hu1-display-0.5.1-preview-windows-x64.zip -Algorithm SHA256` 对照随包 `.sha256`。完整解压到 Windows 本地独立目录；不要只取 EXE，也不要直接从压缩包或网络路径运行。
 2. **打开工作台。** 双击 `Hu1.Display.exe`；只看界面不需要手机或虚拟显示驱动。便携包未正式签名，请核对来源，不要关闭系统防护。
