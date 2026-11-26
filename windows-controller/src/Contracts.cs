@@ -23,13 +23,18 @@ namespace DeskMateLearning
     public sealed class DisplayInfo
     {
         public int Index; public bool Primary, Virtual; public string Description;
+        internal string MonitorPath; internal uint Slot; internal bool Dormant;
+        internal string RouteKey {get{return MonitorPath ?? ScreenSessions.Identity(this);}}
         public string Label { get {
+            if(Dormant)return UiText.Get("待启用虚拟屏")+"  ·  VDD "+Slot;
             Match m=Regex.Match(Description ?? "", "\"([^\"]+)\" (\\d+)x(\\d+)");
+            if(MonitorPath!=null)return (m.Success ? m.Groups[2].Value+" × "+m.Groups[3].Value+"  ·  " : "")+ScreenSessions.Identity(this).Replace(@"\\.\","")+"  ·  VDD "+Slot;
             return m.Success ? (Virtual ? UiText.Get("独立副屏") : Primary ? UiText.Get("主屏") : UiText.Get("显示器"))+" · "+m.Groups[2].Value+" × "+m.Groups[3].Value+" · "+m.Groups[1].Value : Description;
         } }
     }
     public sealed class ScanResult
     {
+        public string PathWarning;
         public readonly List<DeviceInfo> Devices = new List<DeviceInfo>();
         public readonly List<DisplayInfo> Displays = new List<DisplayInfo>();
     }
@@ -39,8 +44,9 @@ namespace DeskMateLearning
         public string Mode, SelectedDisplay;
         public int SelectedDisplayIndex;
         public int? ExitCode;
-        public bool TimedOut, UserStopped, DisplayLayoutUnchanged;
-        public bool Continuous, LogTailTruncated;
+        public bool TimedOut, UserStopped, DisplayLayoutUnchanged, DisplayModesRestored;
+        public bool Continuous, LogTailTruncated, DesktopRetired;
+        public int WindowsMoved,WindowsSkipped;
         public string StopReason;
         public double ElapsedSeconds;
         public long BlockedInputFrames, BlockedClipboardFrames;
@@ -82,7 +88,7 @@ namespace DeskMateLearning
             DisplayInfo selected = null;
             foreach (DisplayInfo d in displays)
             {
-                if (d == null) continue;
+                if (d == null || d.Dormant) continue;
                 bool eligible = mode == DisplayMode.Mirror ? d.Primary && !d.Virtual : d.Virtual && !d.Primary;
                 if (!eligible) continue;
                 if (selected != null) throw new InvalidOperationException(UiText.Get("找到多个可用显示器，请在工作台中明确选择。"));

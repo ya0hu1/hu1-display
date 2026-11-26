@@ -20,6 +20,7 @@ namespace DeskMateLearning
         private readonly object gate=new object();
         private readonly Queue<double> history=new Queue<double>();
         private bool config,stats;
+        internal bool Configured {get{lock(gate)return config;}}
         private int width,height,hz;
         private string codec;
         private double lastAt;

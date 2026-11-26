@@ -132,8 +132,8 @@
     },
     {
       "Key": "Text027",
-      "Zh": "晖映 · 工作台预览版 0.5.1\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB，单设备；触控/音频/剪贴板回传暂未开放。",
-      "En": "hu1 display · Studio Preview 0.5.1\nOriginal Windows interface and controller (MIT).\nVideo engine and Android client: AnyDisplay v0.1.4 (MIT).\nVirtual display: Virtual Display Driver / MikeTheTech.\nADB: Google Android Platform-Tools.\n\nWorkspace organization inspired by DeskMate; no DeskMate code, icons or branding included. Not an official distribution of those projects.\nUSB only, one device; touch, audio and clipboard forwarding are disabled."
+      "Zh": "晖映 · 工作台预览版 0.6.2\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB；触控/音频/剪贴板回传暂未开放。",
+      "En": "hu1 display · Studio Preview 0.6.2\nOriginal Windows interface and controller (MIT).\nVideo engine and Android client: AnyDisplay v0.1.4 (MIT).\nVirtual display: Virtual Display Driver / MikeTheTech.\nADB: Google Android Platform-Tools.\n\nWorkspace organization inspired by DeskMate; no DeskMate code, icons or branding included. Not an official distribution of those projects.\nUSB only; touch, audio and clipboard forwarding are disabled."
     },
     {
       "Key": "Text028",
@@ -1077,8 +1077,8 @@
     },
     {
       "Key": "Text220",
-      "Zh": "01  连接你的 Android",
-      "En": "01  Connect your Android"
+      "Zh": "连接设备",
+      "En": "Connect a device"
     },
     {
       "Key": "Text221",
@@ -1102,8 +1102,8 @@
     },
     {
       "Key": "Text225",
-      "Zh": "02  选择独立桌面",
-      "En": "02  Choose your desktop"
+      "Zh": "选择桌面",
+      "En": "Choose a desktop"
     },
     {
       "Key": "Text226",
@@ -1137,8 +1137,8 @@
     },
     {
       "Key": "Text232",
-      "Zh": "实际解码帧率",
-      "En": "Decoded frame rate"
+      "Zh": "解码帧率 · FPS",
+      "En": "Decoded · FPS"
     },
     {
       "Key": "Text233",
@@ -1152,8 +1152,8 @@
     },
     {
       "Key": "Text235",
-      "Zh": "接收速率",
-      "En": "Receive rate"
+      "Zh": "接收速率 · Mbps",
+      "En": "Received · Mbps"
     },
     {
       "Key": "Text236",
@@ -1162,8 +1162,8 @@
     },
     {
       "Key": "Text237",
-      "Zh": "链路往返",
-      "En": "Round-trip time"
+      "Zh": "往返时间 · ms",
+      "En": "Round trip · ms"
     },
     {
       "Key": "Text238",
@@ -1312,8 +1312,8 @@
     },
     {
       "Key": "Text267",
-      "Zh": "右上角一键切换天蓝、雾霾蓝、樱粉、薄荷；也可以选择喜欢的颜色。主题会保存在本机。",
-      "En": "Choose Sky, Mist, Rose or Mint in the header, or pick your own color. Your theme stays on this computer."
+      "Zh": "选择工作台的强调色。",
+      "En": "Choose the accent colour for this workspace."
     },
     {
       "Key": "Text268",
@@ -1367,8 +1367,8 @@
     },
     {
       "Key": "Text278",
-      "Zh": "托盘可查看真实FPS/速率、返回工作台、停止当前连接。关闭窗口仍会退出并清理，不偷偷留在后台。",
-      "En": "Use the tray to check actual FPS and rate, return to the workspace or stop. Closing the window still exits and cleans up."
+      "Zh": "退出会停止本工作台的所有会话并释放目录。ADB 从用户缓存运行，不强制结束共享服务；不会删除信任或偏好。",
+      "En": "Exit stops this workspace’s sessions and releases the folder. ADB runs from the user cache. Shared servers, trust and preferences are left alone."
     },
     {
       "Key": "Text279",
@@ -1377,8 +1377,8 @@
     },
     {
       "Key": "Text280",
-      "Zh": "Windows 11 x64 主机；Android 8.0+（API 26+）客户端；USB 调试/ADB；一次连接一个设备；H.264；现有非主屏 VDD。",
-      "En": "Windows 11 x64 host; Android 8.0+ / API 26+; USB debugging / ADB; one device; H.264; an existing non-primary VDD."
+      "Zh": "Windows 11 x64、Android 8.0+、USB/ADB 与 H.264。多个扩展会话需要各自独立的活动或待机 MttVDD；镜像独占。",
+      "En": "Windows 11 x64, Android 8.0+, USB/ADB, H.264. Each extend session needs its own active or standby MttVDD slot; mirror is exclusive."
     },
     {
       "Key": "Text281",
@@ -1457,18 +1457,18 @@
     },
     {
       "Key": "Text297",
-      "Zh": "你的桌面，一目了然",
-      "En": "Your desktop at a glance"
+      "Zh": "屏幕排列",
+      "En": "Display arrangement"
     },
     {
       "Key": "Text298",
-      "Zh": "仅编辑布局草稿。真实布局应用 / 还原尚未验收，请保留当前 Windows 布局。",
-      "En": "Draft only. Applying and restoring real layouts is not yet validated; keep your current Windows layout."
+      "Zh": "拖动只修改草稿。应用后 15 秒内可保留或还原。",
+      "En": "Dragging edits the draft. After applying, keep or revert within 15 seconds."
     },
     {
       "Key": "Text299",
-      "Zh": "Studio Preview 0.5.1",
-      "En": "Studio Preview 0.5.1"
+      "Zh": "Studio Preview 0.6.2",
+      "En": "Studio Preview 0.6.2"
     },
     {
       "Key": "Text300",
@@ -1477,8 +1477,8 @@
     },
     {
       "Key": "Text301",
-      "Zh": "晖映  /  WINDOWS → ANDROID  /  USB ONLY",
-      "En": "hu1 display  /  WINDOWS → ANDROID  /  USB ONLY"
+      "Zh": "USB  ·  Windows → Android",
+      "En": "USB  ·  Windows → Android"
     },
     {
       "Key": "Text302",
@@ -1799,6 +1799,211 @@
       "Key": "VddRefreshError",
       "Zh": "虚拟屏刷新率切换失败，Windows 返回：",
       "En": "Windows rejected the VDD refresh change: "
+    },
+    {
+      "Key": "WorkspaceMark",
+      "Zh": "晖映  /  设备中心",
+      "En": "HU1 DISPLAY  /  DEVICE STUDIO"
+    },
+    {
+      "Key": "WorkspaceTitle",
+      "Zh": "屏幕与会话",
+      "En": "Screens & sessions"
+    },
+    {
+      "Key": "SessionShelf",
+      "Zh": "会话与性能小窗",
+      "En": "Sessions & performance overlay"
+    },
+    {
+      "Key": "SessionGuide",
+      "Zh": "每台已信任设备对应一块空闲虚拟屏。先选会话，再停止或调整小窗。",
+      "En": "Pair each trusted device with a free VDD. Select a session to stop it or adjust its overlay."
+    },
+    {
+      "Key": "HudEnabled",
+      "Zh": "显示性能小窗",
+      "En": "Show overlay"
+    },
+    {
+      "Key": "HudCompact",
+      "Zh": "紧凑",
+      "En": "Compact"
+    },
+    {
+      "Key": "HudPlace",
+      "Zh": "小窗位置",
+      "En": "Overlay position"
+    },
+    {
+      "Key": "HudTL",
+      "Zh": "左上",
+      "En": "Top left"
+    },
+    {
+      "Key": "HudTR",
+      "Zh": "右上",
+      "En": "Top right"
+    },
+    {
+      "Key": "HudBL",
+      "Zh": "左下",
+      "En": "Bottom left"
+    },
+    {
+      "Key": "HudBR",
+      "Zh": "右下",
+      "En": "Bottom right"
+    },
+    {
+      "Key": "HudOpacity",
+      "Zh": "小窗透明度",
+      "En": "Overlay opacity"
+    },
+    {
+      "Key": "WindowReturn",
+      "Zh": "断开扩展连接时，将该屏窗口迁回实体主屏",
+      "En": "Return windows to the physical primary display on disconnect"
+    },
+    {
+      "Key": "WindowReturnHelp",
+      "Zh": "不关闭应用，不改其他屏。部分系统、管理员或隐藏窗口可能无法迁回。",
+      "En": "Apps stay open. Other screens are untouched. Elevated, system or hidden windows may be unavailable."
+    },
+    {
+      "Key": "WindowReturnReport",
+      "Zh": "窗口迁回：{0}；无法移动：{1}。",
+      "En": "Window move requests: {0}; skipped or unavailable: {1}."
+    },
+    {
+      "Key": "WindowReturnError",
+      "Zh": "迁回窗口未完成：",
+      "En": "Window handoff incomplete: "
+    },
+    {
+      "Key": "HudCaption",
+      "Zh": "副屏性能",
+      "En": "DISPLAY STATS"
+    },
+    {
+      "Key": "HudTarget",
+      "Zh": "目标",
+      "En": "Target"
+    },
+    {
+      "Key": "HudDrops",
+      "Zh": "丢帧",
+      "En": "Drops"
+    },
+    {
+      "Key": "SessionInUse",
+      "Zh": "设备或屏幕已有会话。",
+      "En": "Device or display already in use."
+    },
+    {
+      "Key": "ResyncScreen",
+      "Zh": "请重新同步虚拟屏。",
+      "En": "Refresh the virtual display first."
+    },
+    {
+      "Key": "ReleasePortable",
+      "Zh": "退出并释放便携目录",
+      "En": "Exit & release portable folder"
+    },
+    {
+      "Key": "CapacityGuide",
+      "Zh": "预留更多虚拟屏",
+      "En": "Prepare more display slots"
+    },
+    {
+      "Key": "CapacityHelp",
+      "Zh": "先结束所有虚拟屏会话，备份系统的 vdd_settings.xml。将 monitors 下的 count 改为需要的上限（例如 3），保留刷新率等其他配置，再按驱动说明重载该虚拟适配器。首次可在 Windows 显示设置中断开闲置虚拟屏。返回工作台刷新后，连接时会启用所选待机屏幕。不要重启实体显卡。",
+      "En": "End all VDD sessions and back up the installed vdd_settings.xml. Under monitors, set count to the required capacity (e.g. 3). Preserve the other settings, then reload only the virtual adapter following its driver instructions. Initially disconnect idle virtual displays in Windows Display settings. Refresh the workspace; starting a route activates its standby display. Do not restart physical GPUs."
+    },
+    {
+      "Key": "RetireDesktop",
+      "Zh": "断开时停用所选 MttVDD 桌面",
+      "En": "Disconnect the selected MttVDD desktop when its session ends"
+    },
+    {
+      "Key": "RetireHint",
+      "Zh": "下次连接可重新启用。若虚拟屏还用于其他软件，请在连接前取消此项；按需启用的屏幕总是随会话释放。",
+      "En": "Reconnect to activate it again. If another app needs an already-active VDD, clear this before connecting. A standby display activated by a session is always released."
+    },
+    {
+      "Key": "RetireConfirm",
+      "Zh": "断开时将停用这块 Windows 虚拟桌面。",
+      "En": "Disconnecting will remove this virtual display from the Windows desktop."
+    },
+    {
+      "Key": "Retired",
+      "Zh": "已停用所选虚拟桌面。",
+      "En": "The selected virtual desktop is now disconnected."
+    },
+    {
+      "Key": "Dormant",
+      "Zh": "待启用虚拟屏",
+      "En": "Standby display"
+    },
+    {
+      "Key": "PathChanged",
+      "Zh": "显示路径已变化或不唯一；请刷新或打开 Windows 显示设置。",
+      "En": "Display path changed or is ambiguous; refresh or open Windows Display settings."
+    },
+    {
+      "Key": "PathFailed",
+      "Zh": "Windows 拒绝更改所选虚拟屏：",
+      "En": "Windows rejected the selected virtual display change: "
+    },
+    {
+      "Key": "FullPool",
+      "Zh": "没有空闲虚拟屏。可在「连接与安装 → 预留更多虚拟屏」查看扩容步骤。",
+      "En": "No free VDD. See Setup → Prepare more display slots to increase capacity."
+    },
+    {
+      "Key": "CapacityDraft",
+      "Zh": "计划同时使用的虚拟屏数",
+      "En": "Concurrent VDD slots"
+    },
+    {
+      "Key": "ExportCapacity",
+      "Zh": "生成配置副本",
+      "En": "Export configuration copy"
+    },
+    {
+      "Key": "CapacityWritten",
+      "Zh": "已生成配置副本，尚未应用到驱动。",
+      "En": "Configuration copy exported; the installed driver has not been changed."
+    },
+    {
+      "Key": "CapacityInvalid",
+      "Zh": "配置格式不匹配或当前容量更大，未生成副本。",
+      "En": "Unrecognized configuration or current capacity is larger; no copy exported."
+    },
+    {
+      "Key": "BeforeRetire",
+      "Zh": "；回收前模式已还原=",
+      "En": "; modes restored before retirement="
+    },
+    {
+      "Key": "LivePositionOnly",
+      "Zh": "传输中仅可移动本次连接的虚拟屏。",
+      "En": "During streaming, only move the virtual display owned by this session."
+    },
+    {
+      "Key": "LayoutTransition",
+      "Zh": "显示布局正在切换，请稍后重试。",
+      "En": "A display transition is in progress. Try again shortly."
+    },
+    {
+      "Key": "LivePositionHint",
+      "Zh": "传输中可拖动已连接的虚拟屏；实体屏保持原位。",
+      "En": "Drag the connected virtual display. Physical screens stay in place while streaming."
+    },
+    {
+      "Key": "ConfirmLivePosition",
+      "Zh": "只移动当前虚拟桌面，不重启视频引擎或更改分辨率。15 秒内未确认将还原。本次位置不写入系统配置。",
+      "En": "Move this virtual desktop without restarting the engine or changing its resolution. Confirm within 15 seconds or the position is restored. This live position is not saved to system settings."
     }
   ]
 }

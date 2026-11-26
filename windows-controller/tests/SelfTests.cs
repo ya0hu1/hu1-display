@@ -83,6 +83,16 @@ namespace DeskMateLearning
             Test("profile ignores server and non-control packets",delegate {Check(pass(reqFrame,custom,false).SequenceEqual(reqFrame));var v=Frame(1,0x11,req);Check(pass(v,custom,true).SequenceEqual(v));});
             Test("profile rejects unknown choices",delegate {Reject(()=>new StreamProfile(1920,720,60));Reject(()=>new StreamProfile(0,0,200));});
             Test("reused buffer preserves large irregular packets",delegate {var data=Enumerable.Range(0,135001).Select(n=>(byte)n).ToArray();var f=Frame(1,0x20,data);Check(pass(f,custom,false).SequenceEqual(f));});
+            Test("pinned route rejects repeated configuration and capture fallback before forwarding",delegate {
+                var client=new FrameCodec.PacketBuffers{ExpectedMode=DisplayMode.Extend};var sink=new MemoryStream();
+                Action forward=()=>FrameCodec.CopyPacket(new MemoryStream(reqFrame),sink,true,false,null,new object(),null,custom,client);
+                forward();Reject(forward);Check(sink.Length==reqFrame.Length);
+                var host=new FrameCodec.PacketBuffers{ExpectedMode=DisplayMode.Extend};var output=new MemoryStream();
+                Action<byte[]> send=f=>FrameCodec.CopyPacket(new MemoryStream(f),output,false,false,null,new object(),null,custom,host);
+                Reject(()=>send(Frame(1,0x20,new byte[8])));var cfg=new byte[24];cfg[15]=8;
+                Reject(()=>send(Frame(0,0x12,cfg)));Check(output.Length==0);cfg[15]=0;send(Frame(0,0x12,cfg));send(Frame(1,0x20,new byte[8]));Check(host.ConfigAccepted);
+            });
+            Test("adb child cwd outside the portable folder",delegate {Check(ProcessRunner.StartInfo("adb.exe",new[]{"devices"},null).WorkingDirectory==Environment.SystemDirectory);});
             Test("default configuration bounded and read-only",delegate {SafetyPolicy.ValidateSettings(Config());});
             Test("read-only cannot be disabled",delegate {var c=Config();c.ReadOnly=false;Reject(()=>SafetyPolicy.ValidateSettings(c));});
             Test("zero duration rejected",delegate {var c=Config();c.StreamingSeconds=0;Reject(()=>SafetyPolicy.ValidateSettings(c));});

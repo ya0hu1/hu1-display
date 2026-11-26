@@ -6,7 +6,7 @@ using System.Web.Script.Serialization;
 
 namespace DeskMateLearning
 {
-    public sealed class LayoutRequest {public DesktopDisplay[] Before,After;public string CreatedAt,Language;}
+    public sealed class LayoutRequest {public DesktopDisplay[] Before,After;public string CreatedAt,Language,LiveMonitor,Permit;}
     public sealed class LayoutStatus {public string Phase,Message,UpdatedAt;public bool LayoutChanged,Restored,Kept;}
     public static class LayoutWatchdog
     {
@@ -15,28 +15,45 @@ namespace DeskMateLearning
         public static int Run(string requestFile)
         {
             string dir=Path.GetDirectoryName(Path.GetFullPath(requestFile));bool changed=false;
-            LayoutRequest request=null;
+            LayoutRequest request=null;bool live=false;EventWaitHandle grant=null;Action rollback=null;
             using(var session=new Mutex(false,"Local\\DeskMateLearning.UsbSession"))
-            using(var layout=new Mutex(false,"Local\\Huiying.DisplayLayout")){
+            using(var layout=new Mutex(false,ScreenSessions.DisplayMutex)){
                 bool sessionHeld=false,layoutHeld=false;
                 try{
-                    try{sessionHeld=session.WaitOne(0);}catch(AbandonedMutexException){sessionHeld=true;}
-                    if(!sessionHeld)throw new InvalidOperationException(UiText.Get("副屏会话正在运行，请先停止再调整布局。"));
-                    try{layoutHeld=layout.WaitOne(0);}catch(AbandonedMutexException){layoutHeld=true;}
-                    if(!layoutHeld)throw new InvalidOperationException(UiText.Get("另一个布局确认尚未结束。"));
                     request=new JavaScriptSerializer().Deserialize<LayoutRequest>(File.ReadAllText(requestFile));
                     if(request==null)throw new InvalidDataException(UiText.Get("布局请求无效。"));
                     if(request.Language!=null)UiText.SetLanguage(request.Language);
+                    live=request.LiveMonitor!=null;
+                    try{layoutHeld=layout.WaitOne(0);}catch(AbandonedMutexException){layoutHeld=true;}
+                    if(!layoutHeld)throw new InvalidOperationException(UiText.Get("显示布局正在切换，请稍后重试。"));
+                    try{sessionHeld=session.WaitOne(0);}catch(AbandonedMutexException){sessionHeld=true;}
+                    if(live){
+                        LayoutPolicy.LiveMove(request.Before,request.After,request.LiveMonitor);
+                        if(sessionHeld)throw new InvalidOperationException(UiText.Get("请重新同步虚拟屏。"));
+                        grant=ScreenSessions.LivePermit(request.Permit,request.LiveMonitor,false);
+                        if(!grant.WaitOne(0))throw new InvalidOperationException(UiText.Get("请重新同步虚拟屏。"));
+                    }else if(!sessionHeld)throw new InvalidOperationException(UiText.Get("副屏会话正在运行，请先停止再调整布局。"));
                     LayoutPolicy.Validate(request.Before,request.After);
                     if(!LayoutPolicy.Same(WindowsDisplays.Capture(),request.Before,true))throw new InvalidOperationException(UiText.Get("Windows布局已变化，取消过期的操作。"));
                     StudioServices.AtomicJson(Path.Combine(dir,"original.json"),request.Before);
                     Status(dir,"applying",UiText.Get("正在应用位置；不更改模式或主屏。"),false,false,false);
-                    changed=true;WindowsDisplays.StageAndCommit(request.After);
+                    rollback=delegate {
+                        var actual=WindowsDisplays.Capture();if(LayoutPolicy.Same(actual,request.Before,true))return;
+                        if(live){ // Never undo a later external move or write to a replacement target.
+                            if(!LayoutPolicy.Same(actual,request.After,true))throw new InvalidOperationException(UiText.Get("设备/模式有变化，拒绝盲目恢复。"));
+                            VddPaths.Position(request.After,request.Before,request.LiveMonitor);
+                        }else{
+                            if(!LayoutPolicy.Same(actual,request.Before,false))throw new InvalidOperationException(UiText.Get("设备/模式有变化，拒绝盲目恢复。"));
+                            WindowsDisplays.StageAndCommit(request.Before);
+                        }
+                    };
+                    changed=true;
+                    if(live)VddPaths.Position(request.Before,request.After,request.LiveMonitor);else WindowsDisplays.StageAndCommit(request.After);
                     if(!LayoutPolicy.Same(WindowsDisplays.Capture(),request.After,true))throw new InvalidOperationException(UiText.Get("Windows实际位置与草稿不一致，将还原。"));
                     Status(dir,"confirm",UiText.Get("15秒内确认保留，否则自动还原。"),true,false,false);
                     var watch=Stopwatch.StartNew();
                     while(watch.Elapsed.TotalSeconds<15){
-                        if(File.Exists(Path.Combine(dir,"cancel")))break;
+                        if((live && !grant.WaitOne(0)) || File.Exists(Path.Combine(dir,"cancel")))break;
                         if(File.Exists(Path.Combine(dir,"keep"))){
                             if(!LayoutPolicy.Same(WindowsDisplays.Capture(),request.After,true))throw new InvalidOperationException(UiText.Get("确认时Windows布局发生变化，不保留过期草稿。"));
                             Status(dir,"kept",UiText.Get("已保留Windows显示位置。"),true,false,true);return 0;
@@ -44,8 +61,7 @@ namespace DeskMateLearning
                         Thread.Sleep(100);
                     }
                     // UI failure/close/no answer all take this route, independently of the UI process.
-                    if(!LayoutPolicy.Same(WindowsDisplays.Capture(),request.Before,false))throw new InvalidOperationException(UiText.Get("显示设备或模式已变化，无法安全还原；请使用Windows显示设置核对。"));
-                    WindowsDisplays.StageAndCommit(request.Before);
+                    rollback();
                     bool restored=LayoutPolicy.Same(WindowsDisplays.Capture(),request.Before,true);
                     Status(dir,restored ? "restored" : "error",restored ? UiText.Get("未保留，已自动还原原布局。") : UiText.Get("还原后检查不一致，请打开Windows显示设置。"),true,restored,false);
                     return restored ? 0 : 1;
@@ -54,14 +70,13 @@ namespace DeskMateLearning
                     string message=e.Message;bool restored=false;
                     if(changed && request!=null){
                         try{
-                            if(!LayoutPolicy.Same(WindowsDisplays.Capture(),request.Before,false))throw new InvalidOperationException(UiText.Get("设备/模式有变化，拒绝盲目恢复。"));
-                            WindowsDisplays.StageAndCommit(request.Before);restored=LayoutPolicy.Same(WindowsDisplays.Capture(),request.Before,true);
+                            rollback();restored=LayoutPolicy.Same(WindowsDisplays.Capture(),request.Before,true);
                         }catch(Exception restore){message+=UiText.Get("\n还原提示：")+restore.Message;}
                     }
                     try{Status(dir,"error",message,changed,restored,false);}catch(Exception){}
                     return 1;
                 }
-                finally{if(layoutHeld)layout.ReleaseMutex();if(sessionHeld)session.ReleaseMutex();}
+                finally{if(grant!=null)grant.Dispose();if(layoutHeld)layout.ReleaseMutex();if(sessionHeld)session.ReleaseMutex();}
             }
         }
     }

@@ -11,13 +11,9 @@ namespace DeskMateLearning
 {
     public static class StudioServices
     {
-        private sealed class PhoneLease : IDisposable
-        {
-            private readonly Mutex lease=new Mutex(false,"Local\\DeskMateLearning.UsbSession");
-            private bool held;
-            public PhoneLease(){try{held=lease.WaitOne(0);}catch(AbandonedMutexException){held=true;}
-                if(!held){lease.Dispose();throw new InvalidOperationException(UiText.Get("副屏会话正在运行，请先停止，再执行安装或设备操作。"));}}
-            public void Dispose(){if(held){lease.ReleaseMutex();held=false;}lease.Dispose();}
+        private static IDisposable PhoneLease(DeviceInfo d){
+            if(d==null)throw new InvalidOperationException(UiText.Get("请先选择一台已授权的设备。"));
+            return ScreenSessions.Reserve(d.Serial,new DisplayInfo{Description="setup:"+d.Serial},DisplayMode.Extend);
         }
         public const string ApkHash="732ae1ebaabe0c0b2b40e8e88349b698be930443919fa4f3c0059bd79dd50803";
         public static string Hash(string path) {using(var sha=SHA256.Create())using(var f=File.OpenRead(path))return BitConverter.ToString(sha.ComputeHash(f)).Replace("-","").ToLowerInvariant();}
@@ -59,7 +55,7 @@ namespace DeskMateLearning
         }
         public static void Trust(Settings s,DeviceInfo d)
         {
-            using(var lease=new PhoneLease()){TrustOwned(s,d);}
+            using(var lease=PhoneLease(d)){TrustOwned(s,d);}
         }
         private static void TrustOwned(Settings s,DeviceInfo d)
         {
@@ -74,7 +70,7 @@ namespace DeskMateLearning
         public static void VerifyApk(Settings s) {if(!File.Exists(s.ApkPath) || Hash(s.ApkPath)!=ApkHash)throw new InvalidDataException(UiText.Get("Android安装包缺失或校验失败。请使用完整便携包，不执行未知APK。"));}
         public static string InstallClient(Settings s,DeviceInfo d)
         {
-            using(var lease=new PhoneLease()){return InstallClientOwned(s,d);}
+            using(var lease=PhoneLease(d)){return InstallClientOwned(s,d);}
         }
         private static string InstallClientOwned(Settings s,DeviceInfo d)
         {
@@ -87,7 +83,7 @@ namespace DeskMateLearning
         }
         public static string OpenClient(Settings s,DeviceInfo d,bool developerSettings)
         {
-            using(var lease=new PhoneLease()){return OpenClientOwned(s,d,developerSettings);}
+            using(var lease=PhoneLease(d)){return OpenClientOwned(s,d,developerSettings);}
         }
         private static string OpenClientOwned(Settings s,DeviceInfo d,bool developerSettings)
         {

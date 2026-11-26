@@ -59,6 +59,8 @@ namespace DeskMateLearning
         // One set per direction; no shared buffer and no frame-sized allocations on the video path.
         internal sealed class PacketBuffers
         {
+            internal bool ConfigRequested,ConfigAccepted;
+            internal DisplayMode? ExpectedMode;internal Action VerifyTarget;
             internal readonly byte[] Header=new byte[6], Payload=new byte[65536];
         }
         internal static bool CopyPacket(Stream input,Stream output,bool fromClient,bool first,
@@ -79,9 +81,26 @@ namespace DeskMateLearning
                 lock(writeLock) { output.Write(header,0,6); output.Write(hello,0,hello.Length); }
                 return true;
             }
-            if(!profile.IsDefault && fromClient && header[4]==0 && header[5]==0x11){
+            if(fromClient && header[4]==0 && header[5]==0x11){
+                // An index could refer to a different desktop after a peer disconnected.
+                if(buffers.ConfigRequested)throw new InvalidDataException("Reconnect to reconfigure the capture target.");
+                buffers.ConfigRequested=true;
+            }
+            if(!fromClient && buffers.ExpectedMode.HasValue){
+                if(header[4]==1 && !buffers.ConfigAccepted)throw new InvalidDataException("Video before verified CONFIG.");
+                if(header[4]==0 && header[5]==0x12){
+                    if(remaining!=24 || buffers.ConfigAccepted)throw new InvalidDataException("Unexpected CONFIG.");
+                    var config=new byte[24];ReadExactly(input,config,24,false);
+                    if(((config[15]&8)!=0)!=(buffers.ExpectedMode==DisplayMode.Mirror))throw new InvalidDataException("Engine selected a different display mode; video blocked.");
+                    if(buffers.VerifyTarget!=null)buffers.VerifyTarget();
+                    lock(writeLock){output.Write(header,0,6);output.Write(config,0,24);}
+                    buffers.ConfigAccepted=true;if(observed!=null)observed(0x12,config,false);return true;
+                }
+            }
+            if((buffers.ExpectedMode.HasValue || !profile.IsDefault) && fromClient && header[4]==0 && header[5]==0x11){
                 if(remaining!=13)throw new InvalidDataException("Invalid v1 CONFIG_REQ length.");
                 var request=new byte[13];ReadExactly(input,request,13,false);profile.Apply(request);
+                if(buffers.ExpectedMode.HasValue)request[12]=(byte)((request[12]&~8)|(buffers.ExpectedMode==DisplayMode.Mirror?8:0));
                 lock(writeLock){output.Write(header,0,6);output.Write(request,0,13);}return true;
             }
             bool drop=(fromClient && header[4]==4) || (header[4]==0 && header[5]==0x18) || header[4]==2;
@@ -127,9 +146,12 @@ namespace DeskMateLearning
         public TelemetryStore Telemetry {get;private set;}
         private readonly StreamProfile profile;
         public ReadOnlyRelay(int devicePort) : this(devicePort,StreamProfile.ClientDefault) {}
-        public ReadOnlyRelay(int devicePort,StreamProfile profile)
+        private readonly DisplayMode? expectedMode;private readonly Action verifyTarget;
+        public ReadOnlyRelay(int devicePort,StreamProfile profile):this(devicePort,profile,null,null){}
+        internal ReadOnlyRelay(int devicePort,StreamProfile profile,DisplayMode? mode,Action verifyTarget)
         {
             if (devicePort<1024 || devicePort>65535) throw new ArgumentOutOfRangeException("devicePort");
+            expectedMode=mode;this.verifyTarget=verifyTarget;
             this.devicePort=devicePort;this.profile=profile ?? StreamProfile.ClientDefault;
             Telemetry=new TelemetryStore();
             listener=new TcpListener(IPAddress.Loopback,0); listener.Start(1);
@@ -157,7 +179,7 @@ namespace DeskMateLearning
             try
             {
                 bool first=true;
-                var buffers=new FrameCodec.PacketBuffers();
+                var buffers=new FrameCodec.PacketBuffers{ExpectedMode=expectedMode,VerifyTarget=verifyTarget};
                 Action<int> onDrop=delegate(int kind){
                     if(kind==4) Interlocked.Increment(ref InputBlocked);
                     if(kind==0x18) Interlocked.Increment(ref ClipboardBlocked);

@@ -28,19 +28,19 @@ namespace DeskMateLearning
         internal void Apply()
         {
             if(target==null)return;
-            if(!LayoutPolicy.Same(before,capture(),true))throw new InvalidOperationException(UiText.Get("显示布局已变化，请刷新后重试。"));
+            if(!ScreenSessions.SameRouteLayout(before,capture(),target.Name))throw new InvalidOperationException(UiText.Get("显示布局已变化，请刷新后重试。"));
             owned=true; // The native call may partially succeed. Finally always verifies ownership.
             setRate(target,during.Single(d=>d.Key==target.Key).RefreshHz);
-            if(!LayoutPolicy.Same(during,capture(),true))throw new InvalidOperationException(UiText.Get("虚拟屏未进入请求的刷新率。"));
+            if(!ScreenSessions.SameRouteLayout(during,capture(),target.Name))throw new InvalidOperationException(UiText.Get("虚拟屏未进入请求的刷新率。"));
         }
         internal void Restore()
         {
             if(!owned)return;
             var current=capture();
-            if(!LayoutPolicy.Same(before,current,true)){
-                if(!LayoutPolicy.Same(during,current,true))throw new InvalidOperationException(UiText.Get("显示布局已被更改，未覆盖新设置。请核对虚拟屏刷新率。"));
+            if(!ScreenSessions.SameRouteLayout(before,current,target.Name,true)){
+                if(!ScreenSessions.SameRouteLayout(during,current,target.Name,true))throw new InvalidOperationException(UiText.Get("显示布局已被更改，未覆盖新设置。请核对虚拟屏刷新率。"));
                 setRate(current.Single(d=>d.Key==target.Key),target.RefreshHz);
-                if(!LayoutPolicy.Same(before,capture(),true))throw new InvalidOperationException(UiText.Get("虚拟屏刷新率还原未通过验证。"));
+                if(!ScreenSessions.SameRouteLayout(before,capture(),target.Name,true))throw new InvalidOperationException(UiText.Get("虚拟屏刷新率还原未通过验证。"));
             }
             owned=false;
         }

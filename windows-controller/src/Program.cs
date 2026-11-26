@@ -14,6 +14,7 @@ namespace DeskMateLearning
         {
             if(args.Length==2 && args[0]=="--layout-watchdog")return LayoutWatchdog.Run(args[1]);
             if(args.Length==2 && args[0]=="--layout-self-test")return LayoutTests.Run(args[1]);
+            if(args.Length==2 && args[0]=="--vdd-path-check")return VddPaths.Check(args[1]);
             if(args.Length==2 && args[0]=="--display-inventory") {StudioServices.AtomicJson(args[1],WindowsDisplays.Capture());return 0;}
             if(args.Length==1 && args[0]=="--job-test-child") {Thread.Sleep(60000);return 0;}
             if(args.Length==2 && args[0]=="--job-self-test") return JobLifetimeTests.Run(args[1]);

@@ -16,6 +16,7 @@ namespace DeskMateLearning
         public DesktopDisplay Copy(){return (DesktopDisplay)MemberwiseClone();}
         public string Key {get{return Name+"|"+MonitorId;}}
         public string DisplayTitle {get{return Virtual ? UiText.Get("手机虚拟屏 · VDD") : Title;}}
+        public string PickerTitle {get{return Regex.Match(Name ?? "",@"\d+$").Value+"  ·  "+DisplayTitle+(Primary ? UiText.Get(" · 主屏") : "");}}
         public string Label {get{return DisplayTitle+" · "+Width+"×"+Height+" @ "+RefreshHz+"Hz";}}
     }
     public static class LayoutPolicy
@@ -25,7 +26,7 @@ namespace DeskMateLearning
         {
             var x=a.OrderBy(d=>d.Key).ToArray();var y=b.OrderBy(d=>d.Key).ToArray();
             if(x.Length!=y.Length)return false;
-            for(int i=0;i<x.Length;i++)if(x[i].Key!=y[i].Key || x[i].Primary!=y[i].Primary || x[i].Virtual!=y[i].Virtual ||
+            for(int i=0;i<x.Length;i++)if(x[i].Key!=y[i].Key || x[i].AdapterId!=y[i].AdapterId || x[i].Primary!=y[i].Primary || x[i].Virtual!=y[i].Virtual ||
                 x[i].Width!=y[i].Width || x[i].Height!=y[i].Height || x[i].Orientation!=y[i].Orientation ||
                 x[i].RefreshHz!=y[i].RefreshHz || x[i].BitsPerPixel!=y[i].BitsPerPixel ||
                 (positions && (x[i].X!=y[i].X || x[i].Y!=y[i].Y)))return false;
@@ -47,15 +48,29 @@ namespace DeskMateLearning
             bool progress=true;while(progress){progress=false;foreach(var d in draft)if(!visited.Contains(d.Key) && draft.Any(x=>visited.Contains(x.Key) && Touch(d,x))){visited.Add(d.Key);progress=true;}}
             if(visited.Count!=draft.Length)throw new InvalidOperationException(UiText.Get("屏幕之间必须有边缘相接，请拖动吸附或使用快捷方向。"));
         }
+        // A live move must be exactly one translation. Reuse all desktop geometry/mode guards.
+        internal static DesktopDisplay LiveMove(DesktopDisplay[] from,DesktopDisplay[] to,string monitor){
+            Validate(from,to);
+            var changed=to.Where(d=>from.Any(o=>o.Key==d.Key && (o.X!=d.X || o.Y!=d.Y))).ToArray();
+            if(changed.Length!=1 || !changed[0].Virtual || changed[0].Primary || String.IsNullOrEmpty(monitor) || changed[0].MonitorId!=monitor)
+                throw new InvalidOperationException(UiText.Get("传输中仅可移动本次连接的虚拟屏。"));
+            return changed[0];
+        }
         public static DesktopDisplay[] Place(DesktopDisplay[] draft,string key,string direction)
         {
             var result=Clone(draft);var d=result.Single(x=>x.Key==key);var p=result.Single(x=>x.Primary);
             if(d.Primary)throw new InvalidOperationException(UiText.Get("不能快捷移动主屏。"));
-            if(direction=="left"){d.X=p.X-d.Width;d.Y=p.Y;}
-            else if(direction=="right"){d.X=p.X+p.Width;d.Y=p.Y;}
-            else if(direction=="top"){d.X=p.X;d.Y=p.Y-d.Height;}
-            else if(direction=="bottom"){d.X=p.X;d.Y=p.Y+p.Height;}
-            else throw new InvalidOperationException(UiText.Get("未知摆放方向。"));
+            // Walk past occupied neighbours rather than placing a VDD on top of the
+            // portrait display already to the left of the primary. Each step moves outwards.
+            var anchor=p;
+            for(int step=0;step<result.Length;step++){
+                if(direction=="left"){d.X=anchor.X-d.Width;d.Y=anchor.Y;}
+                else if(direction=="right"){d.X=anchor.X+anchor.Width;d.Y=anchor.Y;}
+                else if(direction=="top"){d.X=anchor.X;d.Y=anchor.Y-d.Height;}
+                else if(direction=="bottom"){d.X=anchor.X;d.Y=anchor.Y+anchor.Height;}
+                else throw new InvalidOperationException(UiText.Get("未知摆放方向。"));
+                anchor=result.FirstOrDefault(b=>b!=d && Overlap(b,d));if(anchor==null)break;
+            }
             return result;
         }
         public static void Snap(DesktopDisplay moving,DesktopDisplay[] all,int threshold)

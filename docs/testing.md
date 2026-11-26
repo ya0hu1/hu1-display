@@ -1,4 +1,37 @@
-# 0.5.1 Preview · 验证记录 / Validation
+# 0.6.2 Preview · 在线位置与主题 / Live placement and themes
+
+Windows 离线验证：策略 102、布局 35、回环 9、WPF/UI 17，共 **163** 项。用例覆盖已连接虚拟屏可编辑、连接中/退出中和实体屏不可在线移动、已占用方向避让、会话专属位置许可、高刷恢复不覆盖新坐标，以及浅深色和标签对比度。租约自测使用独立互斥锁，不会争用真实会话。
+
+在线验收方法：确认手机正在扩展传输，拖动其编号，先检查草稿未改变原生坐标；应用后核对只有该虚拟屏的 X/Y 变化，实体屏、源模式、视频进程不变；选择还原或等待 15 秒，再核对原布局和连接。保留在线位置仅适用于当前桌面，不代表跨断开保存。
+
+**单机 USB 实测：** 在 1920 × 1080 / 60 Hz 扩展会话中拖动虚拟屏编号。应用前 Windows 坐标未变；应用后只有该虚拟屏移动，两块实体屏和源模式均不变。手动还原恢复了原布局，视频进程没有重启，会话持续传输。本次没有实测「保留」、超时还原或双机并发。
+
+**USB hardware check:** On one connected Android, dragging changed only the draft until Apply. Windows then moved only the selected VDD; both physical displays stayed put. Revert restored the original layout without restarting the stream. Keep, timeout and simultaneous phones were not exercised in this run.
+
+## 0.6.1 Preview · 排版验证 / UI verification
+
+Windows 自测：策略 102、布局 32、回环 9、WPF/UI 15，共 **158 项**。HUD 使用同一套度量与绘制逻辑验证 `1920 × 1080`：紧凑、详细，96/120/144/192 DPI，280/1000 像素可用宽度；窄窗口另外检查连接区换行和选屏参数。README 的图来自双语工作台自测与 144 DPI 合成 HUD，不是手机截图。
+
+参考了 [PowerToys 的 Power Display](https://learn.microsoft.com/en-us/windows/powertoys/power-display)、[Apple HIG 的侧栏层级](https://developer.apple.com/design/human-interface-guidelines/sidebars)，以及 [Impeccable 的 distill / polish 指引](https://github.com/pbakaus/impeccable/tree/2fc5e1459efbbf06d92c7306517c286bf12490cf/.agents/skills/impeccable/reference)。保留 Windows 原生标题栏、表单、键盘焦点与系统显示器编号；没有打包第三方图像、字体或插件。
+
+实机证据需分开看：最近一次 0.6 会话的 Windows 源和传输 CONFIG 均为 1920 × 1080、目标 60 fps。这不能证明手机最后 80 行可见。本轮已发现受信任的 Reno7；设备处于锁屏时，边缘验证入口会跳过，不启动会话、不修改手机设置。完整像素边缘检查尚未验收。可选的本地开发探针在解锁且空闲时，使用非主屏 MttVDD 的四边及第 1005 行色带检查显示范围；只在副屏客户端位于前台时内存取样，不存储手机截图。
+
+## 0.6 Preview · 验证记录 / Validation
+
+Windows x64/.NET Framework：`--self-test` **102**、`--layout-self-test` **32**、`--relay-self-test` **9**、`--ui-self-test` **12**，共 **155** 项通过。布局用例模拟活动/待机槽位、独占源、复制屏、主屏保护、显示器序号复用与容量副本；回环用例不使用手机。界面截图仅含合成设备。
+
+此外，`--vdd-path-check <report>` 在现有 MttVDD 上通过了停用单一路径的 Windows **SDC_VALIDATE**，未执行 SDC_APPLY。单窗口探针只移动自己的 HWND：普通、最大化、最小化都保留状态，且还原到主屏。它不代表每个提权或自绘应用都能迁移。
+
+**仍需实机验收 / hardware checklist**（用自己的普通测试窗口和设备）：
+
+1. 预留两块 MttVDD，连接 A、B 到不同槽位。更换一个会话的 HUD 位置/透明度，只应改变对应手机画面。在镜像会话中 HUD 应不可用。
+2. 把普通窗口和最大化窗口拖到 B。分别测试点停止、拔 B 的 USB 线、关闭工作台。B 的桌面应消失；窗口应出现在实体主屏，还原后仍可见。单独停 B 时 A 应继续传输；重新连接 B 应能再次使用待机槽位。
+3. 取消「停用所选 MttVDD」后连接一块已活动的 VDD：窗口迁回按独立选项执行，已有桌面应保留。连接失败不应停用一块原本活动、尚未传输的桌面。
+4. 保持另一个工具的 ADB 工作，选「退出并释放便携目录」，再尝试重命名新版本解压目录。既有工具的服务及信任、主题和语言文件不应被删除。
+
+未以两台真机并发执行上述清单，未修改已安装驱动的容量，未实际切断当前 Windows 桌面；不要将上一版本的 Reno7 单机测量当作 0.6 多机性能数据。
+
+## 0.5.1 Preview · 验证记录 / Validation
 
 ## Windows 自测 / Offline checks
 

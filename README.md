@@ -1,20 +1,54 @@
 # 晖映 · hu1 display
 
-**简体中文** · [English](README.en.md)　|　Windows x64 → Android · USB 副屏工作台 · 0.5.1 Preview
+**简体中文** · [English](README.en.md)　|　Windows x64 → Android · USB 副屏工作台 · [0.6.2 Preview](https://github.com/ya0hu1/hu1-display/releases/tag/v0.6.2-preview)
 
 用一根 USB 数据线，把 Android 手机变成 Windows 的独立副屏。可以把窗口拖到手机上，也可以明确选择镜像主屏。右上角可切换中英文；视频在本机传输，不经过云端。
 
 [快速上手](#快速上手) · [选择分辨率和帧率](#选择分辨率和帧率) · [支持范围](#支持范围) · [源码构建](#方式二从源码构建) · [测试记录](docs/testing.md)
 
-![工作台：合成虚拟屏、Windows 刷新率和会话传输设置](docs/assets/workspace-zh-CN.png)
+![0.6.2 中文工作台：排列图选中虚拟屏 5，右侧显示 Windows 源规格 1920 × 1080、60 Hz](docs/assets/workspace-zh-CN.png)
+
+## 0.6.2：连接中调整副屏位置
+
+扩展会话开始传输后，工作台会选中对应的虚拟屏。在排列图里拖动**这块屏的编号**，或选择方向，再点「应用到 Windows」。确认后 **15 秒内保留**，否则自动还原。在线操作每次只改本工作台一个已连接 MttVDD 的坐标，不写入系统配置；断开再启用时的位置由 Windows 决定。主屏、其他应用的屏以及仍在连接或退出的会话不能在线移动。要调整实体副屏，请在没有传输会话时操作。
+
+偏好设置里的同一主题色现在有不同明暗：侧栏与画布用浅色，未选主屏和副屏使用不同中间色，选中屏使用深色。已有自定义色和语言不需要重新设置。
+
+![同一排列图，左为樱粉、右为薄荷；两边最深的色块都是选中的虚拟屏 5](docs/assets/themes-preview.png)
+
+*同一组合成屏幕，左为樱粉、右为薄荷。编号 5 是选中的扩展屏。*
+
+## 0.6.1：看清分辨率和实时统计
+
+紧凑小窗默认在一行显示 **解码 FPS、协商分辨率、Mbps 和 RTT**；详细模式加上目标帧率与累计丢帧。窗口按实际字形和 DPI 排版，空间不足时按整项换行，不把 `1920 × 1080` 截成半个数。小窗仍只用于扩展屏，位置与透明度仍按会话调整。
+
+**紧凑小窗** · 解码帧率、传输分辨率、码率、往返延迟
+
+![紧凑小窗，完整显示 59.9 FPS、1920 × 1080、12.4 Mbps、RTT 4 ms](docs/assets/hud-compact.png)
+
+**详细小窗** · 同一组合成数据，另列目标 60 fps 和丢帧数
+
+![详细小窗，分两行显示完整分辨率、目标帧率和丢帧数](docs/assets/hud-detail.png)
+
+工作台将屏幕编号和排列图放在中央，选中后旁边显示完整的 **Windows 源分辨率与 Hz**，不要把它和 HUD 的**传输规格**混淆。窄窗口改为上下排列；配色移到「偏好设置」。0.6 的窗口迁回、虚拟桌面回收和 ADB 退出流程未改。
+
+## 0.6：多屏连接与断开
+
+这些功能已包含在 0.6.2 便携包中。升级时请解压到新目录，不要覆盖正在运行的版本。
+
+- **连接第二台设备：** 工作台刷新，选择并信任另一台 Android，选择不同的空闲 VDD，然后开始扩展。会话区按「设备 → 屏幕」列出连接；停止只影响选中项。镜像独占，没有空闲虚拟屏时不会拿实体屏顶替。
+- **只有一个 VDD？** MttVDD 25.7.23 的 `monitors/count` 决定驱动容量，不是当前工作台连接数。要同时用两块副屏，先停止所有使用该驱动的软件，在「连接与安装」选择容量 2（也可选 3、4）并点「生成配置副本」。该按钮只从系统的 `vdd_settings.xml` 生成副本，保留刷新率等配置。备份原文件后，按驱动说明手动应用副本、重载**虚拟适配器**；不要重装或停用实体显卡。首次在 Windows 显示设置中断开闲置的虚拟屏，此后只需在工作台刷新并选择「待启用虚拟屏」。**容量以内按会话启停桌面，超出容量不会热重载整个驱动。**
+- **断开后的窗口：** 默认先把该虚拟屏上的普通应用窗口迁回实体主屏，再停用该 Windows 桌面。手动停止、USB 意外断线和退出共用清理流程。若 OBS 等软件也在使用一块已启用的 VDD，可在开始前到「偏好设置」取消停用；由会话从待机状态启用的屏幕总会申请释放。隐藏、提权或自行管理位置的应用可能不接受迁移。若强制结束进程或 Windows 拒绝更改，请到系统显示设置核对；不会强制重置整个拓扑。
+- **统计小窗：** 在会话区选择扩展连接并打开小窗，可选四角、紧凑模式和透明度。FPS 来自手机解码统计，另列 Mbps 和 RTT；无新样本时显示 `—`。不会给主屏镜像添加小窗。
+- **整理便携目录：** 偏好设置或托盘菜单中的「退出并释放便携目录」会结束本工作台的所有会话并退出。固定版本的 ADB 从 `%LOCALAPPDATA%\DeskLinkStudio\runtime` 运行，不以便携目录作为工作目录；不调用全局 `kill-server`。这不负责回收旧版本、资源管理器或其他软件持有的句柄。
 
 ## 快速上手
 
 ### 方式一：使用预编译 Windows 便携包（推荐）
 
-[下载 0.5.1 Preview · Windows x64 便携 ZIP](https://github.com/ya0hu1/hu1-display/releases/download/v0.5.1-preview/hu1-display-0.5.1-preview-windows-x64.zip) · [SHA-256 校验文件](https://github.com/ya0hu1/hu1-display/releases/download/v0.5.1-preview/hu1-display-0.5.1-preview-windows-x64.zip.sha256) · [其他版本与发布说明](https://github.com/ya0hu1/hu1-display/releases)。**不需要编译、安装 Android Studio 或覆盖旧版**。请选择带 `windows-x64` 的附件，而不是 GitHub 自动生成的 **Source code (zip)**。
+[下载 0.6.2 Preview · Windows x64 便携 ZIP](https://github.com/ya0hu1/hu1-display/releases/download/v0.6.2-preview/hu1-display-0.6.2-preview-windows-x64.zip) · [SHA-256 校验文件](https://github.com/ya0hu1/hu1-display/releases/download/v0.6.2-preview/hu1-display-0.6.2-preview-windows-x64.zip.sha256) · [其他版本与发布说明](https://github.com/ya0hu1/hu1-display/releases)。**不需要编译、安装 Android Studio 或覆盖旧版**。请选择带 `windows-x64` 的附件，而不是 GitHub 自动生成的 **Source code (zip)**。
 
-1. **校验并解压。** 可用 `Get-FileHash .\hu1-display-0.5.1-preview-windows-x64.zip -Algorithm SHA256` 对照随包 `.sha256`。完整解压到 Windows 本地独立目录；不要只取 EXE，也不要直接从压缩包或网络路径运行。
+1. **校验并解压。** 可用 `Get-FileHash .\hu1-display-0.6.2-preview-windows-x64.zip -Algorithm SHA256` 对照随包 `.sha256`。完整解压到 Windows 本地独立目录；不要只取 EXE，也不要直接从压缩包或网络路径运行。
 2. **打开工作台。** 双击 `Hu1.Display.exe`；只看界面不需要手机或虚拟显示驱动。便携包未正式签名，请核对来源，不要关闭系统防护。
 3. **连接并信任手机。** 在 Android 开发者选项开启 **USB 调试**，使用数据线连接并解锁手机，核对 RSA 提示后允许。工作台点「刷新」，选择自己的设备并点「信任此设备」。手机端的 USB 授权和晖映的本机信任是两步。
 4. **准备客户端。** 已有 AnyDisplay v0.1.4 则无须重复安装。否则在「连接与安装」点「安装手机端」，在手机上确认；如系统要求允许 USB 安装，按本机策略决定。客户端沿用上游名称，不叫“晖映”。
@@ -25,7 +59,7 @@
 | 用途 | 需要什么 | 不需要什么 |
 |---|---|---|
 | 识别手机、传输视频 | 支持数据传输的 USB 线、授权的 ADB、匹配的 Android 客户端 | 不使用 AOA，不要用 Zadig 替换手机 MTP 接口；不需要 Root |
-| 独立扩展桌面 | Windows 已启用的**非主屏** Virtual Display Driver / MttVDD | 已有可用 VDD 不要重装；不自动创建或删除虚拟屏 |
+| 独立扩展桌面 | 已安装、可识别的**非主屏** MttVDD 槽位 | 已有可用 VDD 不要重装；启停的是 Windows 桌面，不是安装 / 删除 PnP 设备 |
 | 镜像实体主屏 | Windows 主屏及以上 USB 条件 | 无须安装虚拟显示驱动 |
 
 第一次使用扩展模式：先在 **Windows 设置 → 系统 → 显示** 确认是否已有虚拟屏，并设为扩展而非复制。没有时，可在「连接与安装」查看系统保护、准备已校验的驱动文件、打开手动安装向导；**准备文件不等于安装**。跟随 [VDD 官方项目](https://github.com/VirtualDrivers/Virtual-Display-Driver) 对应版本的安装说明；不要替换 GPU 驱动或关闭驱动签名检查。准备好后回工作台刷新；缺少 VDD 时不会偷偷镜像主屏。
@@ -49,11 +83,11 @@
 
 | 平台 / 设备 | 本版证据与边界 |
 |---|---|
-| Windows 11 x64 + .NET Framework 4.8 | 实机运行 WPF 控制端；USB / H.264，单设备、单会话 |
+| Windows 11 x64 + .NET Framework 4.8 | 实机运行 WPF 控制端；USB / H.264；0.6 新增独立扩展会话，多设备并发待实机验收 |
 | OPPO Reno7 / Android 13 | 0.5.1 动态实测：1080p/60 中位数 59 fps；1080p/90 与 720p/90 均为 87 fps。源屏 120 Hz 时 Reno7 协商到 90，不是手机跑到了 120 fps |
 | OPPO Find X8 / ColorOS 16.0.10 / Android 16 | 用户反馈 0.4 可正常使用；未单独验证 0.5 的 90 fps 档位 |
 | 其他 Android 8.0+ | 客户端最低要求，不是对所有机型、GPU 或 OEM 系统的兼容保证 |
-| macOS、HarmonyOS NEXT、无线、多设备 | 不支持。手机触控、键鼠、音频及剪贴板回传均被过滤 |
+| macOS、HarmonyOS NEXT、无线 | 不支持。手机触控、键鼠、音频及剪贴板回传均被过滤 |
 
 ## 方式二：从源码构建
 
@@ -86,4 +120,4 @@ packages/VirtualDisplayDriver/    # 可选：用于手动准备已校验的 VDD 
 - **90 档只有约 60 fps：** 先核对虚拟屏旁的源 Hz 和当前分辨率可用 Hz，再核对已协商规格和实际 FPS。若 Windows 不提供 90 Hz，降低传输分辨率可减轻负载，但不会解除源刷新率上限。
 - **卸载或迁移：** 退出程序后可移除便携目录。设备信任和偏好另存于 `%LOCALAPPDATA%\DeskLinkStudio`，删除会重置；移除工作台不等于卸载 Windows 显示驱动。
 
-[测试方法与结果](docs/testing.md) · [第三方来源](THIRD_PARTY_NOTICES.md) · [MIT 许可](LICENSE)。本轮未验收真实拓扑拖动后的「应用 / 保留 / 取消 / 超时还原」，使用副屏无须执行这些操作。
+[测试方法与结果](docs/testing.md) · [第三方来源](THIRD_PARTY_NOTICES.md) · [MIT 许可](LICENSE)。
