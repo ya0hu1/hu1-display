@@ -69,6 +69,12 @@ namespace DeskMateLearning
         private void UpdateButtons()
         {
             bool editable=!busy() && !applying;
+            var v=draft.FirstOrDefault(d=>d.Key==selected && d.Virtual && !d.Primary);
+            C<StackPanel>("VddProfileLink").Visibility=v==null ? Visibility.Collapsed : Visibility.Visible;
+            C<Button>("ToProfile").IsEnabled=editable && C<ComboBox>("ModePicker").SelectedIndex==0;
+            if(v!=null){var rates=v.AvailableRates;
+                C<TextBlock>("VddRates").Text=UiText.Format("Windows 当前 {0} Hz · 此分辨率可用：{1}",v.RefreshHz,
+                    rates==null || rates.Length==0 ? "—" : String.Join(" / ",rates)+" Hz");}
             C<Button>("LayoutApply").IsEnabled=editable && !stale && draft.Length>0 && !LayoutPolicy.Same(before,draft,true);
             foreach(string side in new[]{"left","right","top","bottom"})C<Button>("Layout"+side).IsEnabled=editable && draft.Any(d=>d.Key==selected && !d.Primary);
             C<Button>("LayoutRefresh").IsEnabled=!applying;C<Button>("LayoutReset").IsEnabled=editable;

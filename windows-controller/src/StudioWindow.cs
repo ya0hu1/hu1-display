@@ -52,6 +52,7 @@ namespace DeskMateLearning
             topology.ApplyingChanged+=delegate {SetBusy(busy);};
             Click("LayoutSystem",delegate {StudioServices.Open("ms-settings:display",false);});
             Click("RenameDevice",RenameDevice);
+            Click("ToProfile",delegate {C<Grid>("ProfilePanel").BringIntoView();C<ComboBox>("StreamSize").Focus();});
             EventHandler displayChanged=delegate {if(!Window.Dispatcher.HasShutdownStarted)Window.Dispatcher.BeginInvoke(new Action(delegate {topology.WindowsChanged();}));};
             if(!previewOnly){
                 Window.Loaded+=delegate {try{topology.Refresh();}catch(Exception e){Log(UiText.Get("显示布局读取失败：")+e.Message);}};
@@ -87,8 +88,8 @@ namespace DeskMateLearning
             Click("DriverFolder",delegate {PrepareDriver();});Click("DriverWizard",delegate {DriverWizard();});
             Click("OpenLogs",delegate {Directory.CreateDirectory(settings.LogDirectory);StudioServices.Open(settings.LogDirectory,false);});
             Click("ClearLogs",delegate {C<TextBox>("LogText").Clear();});
-            Click("CopyDiagnostics",delegate {Clipboard.SetText(UiText.Brand+" Studio 0.4 Preview\nOS: "+Environment.OSVersion+"\n"+C<TextBlock>("StreamInfo").Text+UiText.Get("\n设备数: ")+(scan==null ? 0 : scan.Devices.Count)+UiText.Get("\n（未复制设备序列号或画面）"));Log(UiText.Get("诊断摘要已复制到Windows剪贴板，未转发到手机。"));});
-            Click("About",delegate {MessageBox.Show(Window,UiText.Get("晖映 · 工作台预览版 0.4\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB，单设备；触控/音频/剪贴板回传暂未开放。"),UiText.Get("关于与开源说明"));});
+            Click("CopyDiagnostics",delegate {Clipboard.SetText(UiText.Brand+" Studio 0.5 Preview\nOS: "+Environment.OSVersion+"\n"+C<TextBlock>("StreamInfo").Text+UiText.Get("\n设备数: ")+(scan==null ? 0 : scan.Devices.Count)+UiText.Get("\n（未复制设备序列号或画面）"));Log(UiText.Get("诊断摘要已复制到Windows剪贴板，未转发到手机。"));});
+            Click("About",delegate {MessageBox.Show(Window,UiText.Get("晖映 · 工作台预览版 0.5\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB，单设备；触控/音频/剪贴板回传暂未开放。"),UiText.Get("关于与开源说明"));});
             Click("Start",delegate {StartSession();});Click("Stop",RequestStop);
             C<ComboBox>("ModePicker").SelectionChanged+=delegate {BindDisplays();};
             C<ComboBox>("DevicePicker").SelectionChanged+=delegate {UpdateDeviceHint();UpdateButtons();};
@@ -215,10 +216,21 @@ namespace DeskMateLearning
             C<ComboBox>("LanguagePicker").IsEnabled=topology==null || !topology.IsApplying;
             UpdateButtons();
         }
+        private StreamProfile activeProfile=StreamProfile.ClientDefault;
+        internal StreamProfile SelectedProfile()
+        {
+            if(Mode!=DisplayMode.Extend)return StreamProfile.ClientDefault;
+            var size=(ComboBoxItem)C<ComboBox>("StreamSize").SelectedItem;
+            var fps=(ComboBoxItem)C<ComboBox>("StreamFps").SelectedItem;
+            int width=Convert.ToInt32(size.Tag);
+            return new StreamProfile(width,width==0 ? 0 : width==1280 ? 720 : 1080,Convert.ToInt32(fps.Tag));
+        }
         private void UpdateButtons()
         {
             var d=Device;bool valid=d!=null && d.State=="device" && d.Trusted;
             bool idle=!busy && (topology==null || !topology.IsApplying);
+            C<Grid>("ProfilePanel").IsEnabled=idle && Mode==DisplayMode.Extend;
+            C<Button>("ToProfile").IsEnabled=idle && Mode==DisplayMode.Extend;
             C<Button>("Start").IsEnabled=idle && valid && C<ComboBox>("DisplayPicker").SelectedItem!=null;
             C<Button>("Start").Content=Mode==DisplayMode.Extend ? UiText.Get("开始扩展副屏 →") : UiText.Get("开始主屏镜像 →");
             C<Button>("Stop").IsEnabled=stop!=null;
@@ -304,10 +316,11 @@ namespace DeskMateLearning
             if(busy || topology.IsApplying)return;var d=Device;var display=C<ComboBox>("DisplayPicker").SelectedItem as DisplayInfo;
             try{SafetyPolicy.ValidateDevice(settings,d);SafetyPolicy.ValidateDisplay(Mode,display);}catch(Exception e){Fail(e);return;}
             bool continuous=C<CheckBox>("Continuous").IsChecked==true;DisplayMode mode=Mode;
+            var profile=SelectedProfile();
             if(!Confirm(UiText.Get("连接 ")+d.Model+" → "+(mode==DisplayMode.Extend ? UiText.Get("独立扩展桌面") : UiText.Get("主屏镜像"))+"\n"+(continuous ? UiText.Get("持续连接，点击停止或关闭窗口退出。") : UiText.Get("30秒限时测试。"))+UiText.Get("\n\n仅USB；触控、音频、剪贴板回传禁用。"),UiText.Get("开始副屏")))return;
-            stop=new ManualResetEvent(false);began=DateTime.Now;SetBusy(true);Text("StatusPill",UiText.Get("●  连接中"));Log(UiText.Get("正在建立USB会话…"));
+            activeProfile=profile;stop=new ManualResetEvent(false);began=DateTime.Now;SetBusy(true);Text("StatusPill",UiText.Get("●  连接中"));Log(UiText.Get("正在建立USB会话…"));
             try{
-                SessionResult result=await Task.Run(()=>backend.RunSession(d,display,mode,stop,continuous));
+                SessionResult result=await Task.Run(()=>backend.RunSession(d,display,mode,stop,continuous,profile));
                 bool ok=result.ExitCode==0 && result.Error==null && !result.TimedOut && result.DisplayLayoutUnchanged && result.CleanupErrors.Count==0;
                 Text("StatusPill",ok ? UiText.Get("●  已停止并清理") : UiText.Get("●  连接异常"));
                 Log(UiText.Get("会话结束：")+result.StopReason+UiText.Get("；退出码=")+result.ExitCode+UiText.Get("；布局不变=")+result.DisplayLayoutUnchanged+UiText.Get("。日志：")+result.LogFile);
@@ -331,7 +344,7 @@ namespace DeskMateLearning
             Text("RateValue",s.Fresh && s.Mbps.HasValue ? s.Mbps.Value.ToString("0.0") : "—");
             Text("RttValue",s.Fresh && s.RttMs.HasValue ? s.RttMs.Value.ToString("0.0") : "—");
             Text("DropValue",s.HasStats ? s.TotalDropped.ToString() : "—");
-            Text("StreamInfo",s.HasConfig ? s.Width+" × "+s.Height+"  ·  "+UiText.Get(s.Codec)+UiText.Get("  ·  目标 ")+s.TargetHz+"Hz" : UiText.Get("正在等待编码配置…"));
+            Text("StreamInfo",s.HasConfig ? s.Width+" × "+s.Height+"  ·  "+UiText.Get(s.Codec)+UiText.Get("  ·  目标 ")+s.TargetHz+" fps"+(!activeProfile.Matches(s.Width,s.Height,s.TargetHz) ? UiText.Get(" · 已协商调整") : "") : UiText.Get("正在等待编码配置…"));
             Text("StatsHint",!s.HasStats ? UiText.Get("等待手机端真实统计，首个采样不计算FPS。") : !s.Fresh ? UiText.Get("统计已超过3秒未更新，帧率显示为 —。") : s.TotalDecoded==0 ? UiText.Get("尚无成功解码帧，请检查手机是否亮屏解锁。当前统计不代表画面已可用。") : UiText.Get("实际解码FPS，非目标刷新率。")+(s.DecodeMs.HasValue ? UiText.Get(" 平均解码 ")+s.DecodeMs.Value.ToString("0.0")+UiText.Get("ms（不是端到端延迟）。") : UiText.Get(" 静止画面按需传输。")));
             var chart=C<Canvas>("Chart");chart.Children.Clear();double w=chart.ActualWidth,h=chart.ActualHeight;if(w<1 || h<1)return;
             for(int i=1;i<4;i++)chart.Children.Add(new Line{X1=0,X2=w,Y1=h*i/4,Y2=h*i/4,Stroke=new SolidColorBrush(Color.FromRgb(229,237,245)),StrokeThickness=1});

@@ -54,44 +54,57 @@ namespace DeskMateLearning
         public static bool CopyPacket(Stream input,Stream output,bool fromClient,bool first,
             Action<int> blocked,object writeLock,Action<int,byte[],bool> observed)
         {
-            byte[] prefix=new byte[4];
-            if (!ReadExactly(input,prefix,4,true)) return false;
-            uint size=(uint)(prefix[0] | prefix[1]<<8 | prefix[2]<<16 | prefix[3]<<24);
+            return CopyPacket(input,output,fromClient,first,blocked,writeLock,observed,StreamProfile.ClientDefault,new PacketBuffers());
+        }
+        // One set per direction; no shared buffer and no frame-sized allocations on the video path.
+        internal sealed class PacketBuffers
+        {
+            internal readonly byte[] Header=new byte[6], Payload=new byte[65536];
+        }
+        internal static bool CopyPacket(Stream input,Stream output,bool fromClient,bool first,
+            Action<int> blocked,object writeLock,Action<int,byte[],bool> observed,StreamProfile profile,PacketBuffers buffers)
+        {
+            byte[] header=buffers.Header;
+            if (!ReadExactly(input,header,6,true)) return false;
+            uint size=(uint)(header[0] | header[1]<<8 | header[2]<<16 | header[3]<<24);
             if (size<2 || size>MaxFrameBytes) throw new InvalidDataException("Frame exceeds safe 2..8MiB limits.");
-            byte[] header=new byte[2]; ReadExactly(input,header,2,false);
-            if (header[0]>4) throw new InvalidDataException("Unknown protocol channel.");
+            if (header[4]>4) throw new InvalidDataException("Unknown protocol channel.");
             int remaining=(int)size-2;
             if (first)
             {
-                if (header[0]!=0 || header[1]!=(fromClient ? 1 : 2) || remaining>4096)
+                if (header[4]!=0 || header[5]!=(fromClient ? 1 : 2) || remaining>4096)
                     throw new InvalidDataException("Expected bounded HELLO before session data.");
                 byte[] hello=new byte[remaining]; ReadExactly(input,hello,remaining,false);
                 ValidateHello(hello,fromClient);
-                lock(writeLock) { output.Write(prefix,0,4); output.Write(header,0,2); output.Write(hello,0,hello.Length); }
+                lock(writeLock) { output.Write(header,0,6); output.Write(hello,0,hello.Length); }
                 return true;
             }
-            bool drop=(fromClient && header[0]==4) || (header[0]==0 && header[1]==0x18) || header[0]==2;
+            if(!profile.IsDefault && fromClient && header[4]==0 && header[5]==0x11){
+                if(remaining!=13)throw new InvalidDataException("Invalid v1 CONFIG_REQ length.");
+                var request=new byte[13];ReadExactly(input,request,13,false);profile.Apply(request);
+                lock(writeLock){output.Write(header,0,6);output.Write(request,0,13);}return true;
+            }
+            bool drop=(fromClient && header[4]==4) || (header[4]==0 && header[5]==0x18) || header[4]==2;
             // Only two bounded, public control payloads are observed. Video/input/clipboard are never copied for telemetry.
-            bool inspect=observed!=null && header[0]==0 &&
-                ((fromClient && header[1]==0x15 && remaining==20) || (!fromClient && header[1]==0x12 && remaining==24));
+            bool inspect=observed!=null && header[4]==0 &&
+                ((fromClient && header[5]==0x15 && remaining==20) || (!fromClient && header[5]==0x12 && remaining==24));
             byte[] observation=inspect ? new byte[remaining] : null;
             int observationOffset=0;
-            byte[] chunk=new byte[Math.Min(65536,Math.Max(1,remaining))];
+            byte[] chunk=buffers.Payload;
             lock(writeLock)
             {
-                if (!drop) { output.Write(prefix,0,4); output.Write(header,0,2); }
+                if (!drop) { output.Write(header,0,6); }
                 while (remaining>0)
                 {
                     int amount=Math.Min(remaining,chunk.Length);
-                    byte[] readBuffer=amount==chunk.Length ? chunk : new byte[amount];
-                    ReadExactly(input,readBuffer,amount,false);
-                    if (!drop) output.Write(readBuffer,0,amount);
-                    if(inspect){Buffer.BlockCopy(readBuffer,0,observation,observationOffset,amount);observationOffset+=amount;}
+                    ReadExactly(input,chunk,amount,false);
+                    if (!drop) output.Write(chunk,0,amount);
+                    if(inspect){Buffer.BlockCopy(chunk,0,observation,observationOffset,amount);observationOffset+=amount;}
                     remaining-=amount;
                 }
             }
-            if(inspect) observed(header[1],observation,fromClient);
-            if (drop && blocked!=null) blocked(header[0]==4 ? 4 : (header[0]==2 ? 2 : 0x18));
+            if(inspect) observed(header[5],observation,fromClient);
+            if (drop && blocked!=null) blocked(header[4]==4 ? 4 : (header[4]==2 ? 2 : 0x18));
             return true;
         }
     }
@@ -112,10 +125,12 @@ namespace DeskMateLearning
         public string Error { get; private set; }
         public long InputBlocked, ClipboardBlocked;
         public TelemetryStore Telemetry {get;private set;}
-        public ReadOnlyRelay(int devicePort)
+        private readonly StreamProfile profile;
+        public ReadOnlyRelay(int devicePort) : this(devicePort,StreamProfile.ClientDefault) {}
+        public ReadOnlyRelay(int devicePort,StreamProfile profile)
         {
             if (devicePort<1024 || devicePort>65535) throw new ArgumentOutOfRangeException("devicePort");
-            this.devicePort=devicePort;
+            this.devicePort=devicePort;this.profile=profile ?? StreamProfile.ClientDefault;
             Telemetry=new TelemetryStore();
             listener=new TcpListener(IPAddress.Loopback,0); listener.Start(1);
             Port=((IPEndPoint)listener.LocalEndpoint).Port;
@@ -142,12 +157,15 @@ namespace DeskMateLearning
             try
             {
                 bool first=true;
+                var buffers=new FrameCodec.PacketBuffers();
+                Action<int> onDrop=delegate(int kind){
+                    if(kind==4) Interlocked.Increment(ref InputBlocked);
+                    if(kind==0x18) Interlocked.Increment(ref ClipboardBlocked);
+                };
+                Action<int,byte[],bool> observe=Telemetry.Observe;
                 while (!stopped)
                 {
-                    if (!FrameCodec.CopyPacket(input,output,fromClient,first,delegate(int kind){
-                        if(kind==4) Interlocked.Increment(ref InputBlocked);
-                        if(kind==0x18) Interlocked.Increment(ref ClipboardBlocked);
-                    },writeLock,Telemetry.Observe)) break;
+                    if(!FrameCodec.CopyPacket(input,output,fromClient,first,onDrop,writeLock,observe,profile,buffers))break;
                     if(fromClient) Interlocked.Exchange(ref lastClientPacket,Stopwatch.GetTimestamp());
                     else Interlocked.Exchange(ref lastHostPacket,Stopwatch.GetTimestamp());
                     if(first) {if(fromClient) plainClientHello=true;else plainHostHello=true;}

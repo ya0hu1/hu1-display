@@ -11,7 +11,7 @@ namespace DeskMateLearning
         {return new[]{
             new DesktopDisplay{Name=@"\\.\DISPLAY1",MonitorId="test-primary",Title="Panel A",Primary=true,X=0,Y=0,Width=2560,Height=1440,RefreshHz=180,BitsPerPixel=32},
             new DesktopDisplay{Name=@"\\.\DISPLAY2",MonitorId="test-portrait",Title="Panel B",X=-1080,Y=150,Width=1080,Height=1920,Orientation=1,RefreshHz=60,BitsPerPixel=32},
-            new DesktopDisplay{Name=@"\\.\DISPLAY5",MonitorId="test-vdd",Title="VDD",Virtual=true,X=2560,Y=0,Width=1920,Height=1080,RefreshHz=60,BitsPerPixel=32}};}
+            new DesktopDisplay{Name=@"\\.\DISPLAY5",MonitorId="test-vdd",Title="VDD",AvailableRates=new[]{60},Virtual=true,X=2560,Y=0,Width=1920,Height=1080,RefreshHz=60,BitsPerPixel=32}};}
         private static void Check(bool v){if(!v)throw new Exception("Assertion failed");}
         private static void Reject(Action a){try{a();}catch(InvalidOperationException){return;}throw new Exception("Expected rejection");}
         public static int Run(string report)

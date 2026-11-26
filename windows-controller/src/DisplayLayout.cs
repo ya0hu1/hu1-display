@@ -11,6 +11,7 @@ namespace DeskMateLearning
     {
         public string Name,MonitorId,AdapterId,Title;
         public bool Primary,Virtual;
+        public int[] AvailableRates; // At the active VDD size; informational, never used for layout writes.
         public int X,Y,Width,Height,Orientation,RefreshHz,BitsPerPixel;
         public DesktopDisplay Copy(){return (DesktopDisplay)MemberwiseClone();}
         public string Key {get{return Name+"|"+MonitorId;}}
@@ -97,6 +98,17 @@ namespace DeskMateLearning
         [DllImport("user32.dll",CharSet=CharSet.Unicode)]private static extern int ChangeDisplaySettingsEx(string name,ref Mode mode,IntPtr hwnd,uint flags,IntPtr param);
         [DllImport("user32.dll",CharSet=CharSet.Unicode,EntryPoint="ChangeDisplaySettingsExW")]private static extern int CommitDisplaySettings(string name,IntPtr mode,IntPtr hwnd,uint flags,IntPtr param);
         private static Mode Current(string name){var m=new Mode();m.Size=(ushort)Marshal.SizeOf(typeof(Mode));if(m.Size!=220 || !EnumDisplaySettingsEx(name,-1,ref m,0))throw new InvalidOperationException(UiText.Get("无法读取原生显示模式：")+name);return m;}
+        private static int[] RatesAtSize(string name,Mode current)
+        {
+            var rates=new SortedSet<int>();
+            for(int index=0;index<2048;index++){
+                var mode=new Mode();mode.Size=current.Size;
+                if(!EnumDisplaySettingsEx(name,index,ref mode,0))break;
+                if(mode.Width==current.Width && mode.Height==current.Height && mode.Orientation==current.Orientation &&
+                   mode.BitsPerPel==current.BitsPerPel && mode.Frequency>1)rates.Add((int)mode.Frequency);
+            }
+            return rates.ToArray();
+        }
         private static string Friendly(string id,string fallback)
         {
             var match=Regex.Match(id ?? "",@"DISPLAY#([^#]+)#([^#]+)#");if(!match.Success)return fallback;
@@ -115,7 +127,7 @@ namespace DeskMateLearning
                 var m=Current(a.Name);var monitor=new Device();monitor.cb=Marshal.SizeOf(typeof(Device));
                 if(!EnumDisplayDevices(a.Name,0,ref monitor,1))throw new InvalidOperationException(UiText.Get("无法识别显示器：")+a.Name);
                 bool vdd=(monitor.Id ?? "").IndexOf("MTT1337",StringComparison.OrdinalIgnoreCase)>=0 || (a.Id ?? "").IndexOf("mttvdd",StringComparison.OrdinalIgnoreCase)>=0;
-                result.Add(new DesktopDisplay{Name=a.Name,MonitorId=monitor.Id,AdapterId=a.Id,Title=vdd ? "VDD" : Friendly(monitor.Id,monitor.Description),Primary=(a.Flags&4)!=0,Virtual=vdd,
+                result.Add(new DesktopDisplay{Name=a.Name,MonitorId=monitor.Id,AdapterId=a.Id,AvailableRates=vdd ? RatesAtSize(a.Name,m) : null,Title=vdd ? "VDD" : Friendly(monitor.Id,monitor.Description),Primary=(a.Flags&4)!=0,Virtual=vdd,
                     X=m.X,Y=m.Y,Width=(int)m.Width,Height=(int)m.Height,Orientation=(int)m.Orientation,RefreshHz=(int)m.Frequency,BitsPerPixel=(int)m.BitsPerPel});
             }
             if(result.Count==0)throw new InvalidOperationException(UiText.Get("未读到活动桌面。请在本地Windows交互会话运行。"));return result.ToArray();

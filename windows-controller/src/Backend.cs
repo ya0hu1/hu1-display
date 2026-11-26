@@ -88,10 +88,6 @@ namespace DeskMateLearning
             result.Displays.AddRange(SafetyPolicy.ParseDisplays(monitors.Output));
             return result;
         }
-        private static string[] Layout()
-        {
-            return Screen.AllScreens.Select(s=>s.DeviceName+"|"+s.Primary+"|"+s.Bounds.ToString()).OrderBy(s=>s).ToArray();
-        }
         private int BatteryTemperature(string serial)
         {
             string battery=Adb("-s",serial,"shell","dumpsys","battery");
@@ -105,6 +101,11 @@ namespace DeskMateLearning
         }
         public SessionResult RunSession(DeviceInfo selected,DisplayInfo display,DisplayMode mode,ManualResetEvent stop,bool continuous)
         {
+            return RunSession(selected,display,mode,stop,continuous,StreamProfile.ClientDefault);
+        }
+        public SessionResult RunSession(DeviceInfo selected,DisplayInfo display,DisplayMode mode,ManualResetEvent stop,bool continuous,StreamProfile profile)
+        {
+            if(profile==null || (!profile.IsDefault && mode!=DisplayMode.Extend))throw new ArgumentException("Custom stream profile requires extend mode.");
             // Cross-process guard protects the one-connection phone client and owned-forward lifecycle.
             using(var lease=new Mutex(false,"Local\\DeskMateLearning.UsbSession"))
             {
@@ -112,12 +113,12 @@ namespace DeskMateLearning
                 try {
                     try {acquired=lease.WaitOne(0);} catch(AbandonedMutexException) {acquired=true;}
                     if(!acquired) throw new InvalidOperationException(UiText.Get("另一个会话正在运行，请先在其窗口中停止。"));
-                    return RunOwnedSession(selected,display,mode,stop,continuous);
+                    return RunOwnedSession(selected,display,mode,stop,continuous,profile);
                 }
                 finally {if(acquired) lease.ReleaseMutex();}
             }
         }
-        private SessionResult RunOwnedSession(DeviceInfo selected,DisplayInfo display,DisplayMode mode,ManualResetEvent stop,bool continuous)
+        private SessionResult RunOwnedSession(DeviceInfo selected,DisplayInfo display,DisplayMode mode,ManualResetEvent stop,bool continuous,StreamProfile profile)
         {
             if(stop==null) throw new ArgumentNullException("stop");
             if(stop.WaitOne(0)) throw new OperationCanceledException(UiText.Get("访问手机前已停止。"));
@@ -134,7 +135,7 @@ namespace DeskMateLearning
             if(Adb("-s",selected.Serial,"shell","pm","list","packages","dev.anydisplay.client")!="package:dev.anydisplay.client")
                 throw new InvalidOperationException(UiText.Get("未检测到手机客户端。工作台不会自动安装 APK。"));
             Directory.CreateDirectory(settings.LogDirectory); Directory.CreateDirectory(settings.StateDirectory);
-            string[] before=Layout();
+            var before=WindowsDisplays.Capture();
             var result=new SessionResult { StartedAt=DateTimeOffset.Now.ToString("o"), Mode=mode.ToString(),
                 SelectedDisplay=display.Description, SelectedDisplayIndex=display.Index, Continuous=continuous };
             Process engine=null; ReadOnlyRelay relay=null; OwnedEngineJob engineJob=null;
@@ -151,7 +152,7 @@ namespace DeskMateLearning
                 string port=Adb("-s",selected.Serial,"forward","tcp:0","tcp:47820");
                 if(!Int32.TryParse(port,out ownedPort) || ownedPort<1024 || ownedPort>65535)
                     throw new InvalidOperationException(UiText.Get("返回的转发端口无效，未清理其他端口。"));
-                relay=new ReadOnlyRelay(ownedPort);
+                relay=new ReadOnlyRelay(ownedPort,profile);
                 telemetry=relay.Telemetry;
                 engine=new Process();
                 engine.StartInfo=ProcessRunner.StartInfo(settings.EnginePath,
@@ -205,7 +206,7 @@ namespace DeskMateLearning
             result.LogTailTruncated=outTail.Truncated || errTail.Truncated;
             result.ElapsedSeconds=watch.Elapsed.TotalSeconds;
             if(result.StopReason==null) result.StopReason=result.Error!=null ? "error" : "engine-ended";
-            result.DisplayLayoutUnchanged=before.SequenceEqual(Layout());
+            result.DisplayLayoutUnchanged=LayoutPolicy.Same(before,WindowsDisplays.Capture(),true);
             result.EndedAt=DateTimeOffset.Now.ToString("o");
             result.LogFile=Path.Combine(settings.LogDirectory,"controller-"+DateTime.Now.ToString("yyyyMMdd-HHmmss-fff")+".json");
             File.WriteAllText(result.LogFile,new JavaScriptSerializer().Serialize(result));

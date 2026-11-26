@@ -132,8 +132,8 @@
     },
     {
       "Key": "Text027",
-      "Zh": "晖映 · 工作台预览版 0.4\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB，单设备；触控/音频/剪贴板回传暂未开放。",
-      "En": "hu1 display · Studio Preview 0.4\nOriginal Windows interface and controller (MIT).\nVideo engine and Android client: AnyDisplay v0.1.4 (MIT).\nVirtual display: Virtual Display Driver / MikeTheTech.\nADB: Google Android Platform-Tools.\n\nWorkspace organization inspired by DeskMate; no DeskMate code, icons or branding included. Not an official distribution of those projects.\nUSB only, one device; touch, audio and clipboard forwarding are disabled."
+      "Zh": "晖映 · 工作台预览版 0.5\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB，单设备；触控/音频/剪贴板回传暂未开放。",
+      "En": "hu1 display · Studio Preview 0.5\nOriginal Windows interface and controller (MIT).\nVideo engine and Android client: AnyDisplay v0.1.4 (MIT).\nVirtual display: Virtual Display Driver / MikeTheTech.\nADB: Google Android Platform-Tools.\n\nWorkspace organization inspired by DeskMate; no DeskMate code, icons or branding included. Not an official distribution of those projects.\nUSB only, one device; touch, audio and clipboard forwarding are disabled."
     },
     {
       "Key": "Text028",
@@ -1382,8 +1382,8 @@
     },
     {
       "Key": "Text281",
-      "Zh": "实际已在本机 Windows 11 25H2 + Reno7 验证。其他品牌、GPU、系统版本需要实测，不保证全部兼容。触控、剪贴板、音频、无线及多屏并发尚未开放。",
-      "En": "The earlier link was tested on Windows 11 with Reno7. Other devices, GPUs and OS versions need testing. Touch, clipboard, audio, wireless and concurrent displays are not supported."
+      "Zh": "Reno7 已实机测试；用户反馈 Find X8（ColorOS 16.0.10 / Android 16）可用。反馈不代表已测高帧率或所有 Android 16 设备。",
+      "En": "Reno7 tested. Find X8 (ColorOS 16.0.10 / Android 16) works per user report; this does not verify high FPS or all Android 16 devices."
     },
     {
       "Key": "Text282",
@@ -1467,8 +1467,8 @@
     },
     {
       "Key": "Text299",
-      "Zh": "Studio Preview 0.4",
-      "En": "Studio Preview 0.4"
+      "Zh": "Studio Preview 0.5",
+      "En": "Studio Preview 0.5"
     },
     {
       "Key": "Text300",
@@ -1734,6 +1734,41 @@
       "Key": "NoTrust",
       "Zh": "尚未信任任何设备。",
       "En": "No trusted devices yet."
+    },
+    {
+      "Key": "ProfileSize",
+      "Zh": "副屏传输分辨率",
+      "En": "Stream resolution"
+    },
+    {
+      "Key": "ProfileFps",
+      "Zh": "目标帧率",
+      "En": "Target frame rate"
+    },
+    {
+      "Key": "ProfileClient",
+      "Zh": "跟随手机端",
+      "En": "Use client setting"
+    },
+    {
+      "Key": "ProfileHelp",
+      "Zh": "仅扩展会话。低负载可选 720p；目标帧率不等于实测 FPS 或 Windows 刷新率。",
+      "En": "Extend only. Try 720p for lower load. Target FPS is not measured FPS or the Windows refresh rate."
+    },
+    {
+      "Key": "ProfileAdjusted",
+      "Zh": " · 已协商调整",
+      "En": " · negotiated fallback"
+    },
+    {
+      "Key": "ProfileLink",
+      "Zh": "传输设置 ↓",
+      "En": "Stream settings ↓"
+    },
+    {
+      "Key": "ProfileRates",
+      "Zh": "Windows 当前 {0} Hz · 此分辨率可用：{1}",
+      "En": "Windows: {0} Hz · Available at this size: {1}"
     }
   ]
 }

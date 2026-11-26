@@ -1,39 +1,85 @@
-# 晖映
+# 晖映 · hu1 display
 
-**简体中文** · [English](README.en.md)　｜　Windows 工作台 · 0.4 源码预览
+**简体中文** · [English](README.en.md)　|　Windows x64 → Android · USB 副屏工作台 · 0.5 Preview
 
-通过 USB，把手边的 Android 手机或平板用作 Windows 副屏。工作台负责选择设备、查看显示布局、开始和停止会话；画面通过本机 ADB 转发，不经过云端。
+用一根 USB 数据线，把 Android 手机变成 Windows 的独立副屏。可以把窗口拖到手机上，也可以明确选择镜像主屏。右上角可切换中英文；视频在本机传输，不经过云端。
 
-![晖映工作台：未连接设备，画布上有三块合成显示器](docs/assets/workspace-zh-CN.png)
+[快速上手](#快速上手) · [选择分辨率和帧率](#选择分辨率和帧率) · [支持范围](#支持范围) · [源码构建](#方式二从源码构建) · [测试记录](docs/testing.md)
 
-*此图由工作台渲染，使用合成布局，没有采集真实桌面或手机内容。*
+![工作台：合成虚拟屏、Windows 刷新率和会话传输设置](docs/assets/workspace-zh-CN.png)
 
-## 界面与语言
+## 快速上手
 
-右上角的 **界面语言** 可选「简体中文」或「English」。首次打开时，中文 Windows 默认显示「晖映」，其他语言默认显示「hu1 display」。选择立即生效并记在本机，下次打开沿用；不需要断开会话或丢弃布局草稿。原版 Android 客户端、Windows 系统弹窗及历史日志不会被重新翻译。
+### 方式一：使用预编译 Windows 便携包（推荐）
 
-- **副屏工作台**：画布区分主屏、实体副屏与虚拟屏；拖动只编辑草稿。可选择已有的非主屏 VDD 进行扩展，也可明确选择主屏镜像，两者不会自动互换。
-- **连接与安装**：手动刷新 USB 设备，核对并信任后才能安装客户端或连接。启动工作台本身不会扫描手机或安装驱动。
-- **偏好与设备**：切换四种预设配色或自选颜色，管理设备信任与昵称。语言、主题和信任记录仅保存在此电脑。
-- **日志与帮助**：查看会话状态和诊断信息。FPS、码率与 RTT 取自实际采样，尚无样本时显示「—」。
+如果你已经拿到 `hu1-display-0.5-preview-windows-x64.zip`，**不需要编译、安装 Android Studio 或覆盖旧版**。公开下载入口是 [本项目的 GitHub Releases](https://github.com/ya0hu1/hu1-display/releases)。本次 0.5 已生成并校验本地测试包；在 Releases 看到对应版本及资产前，请勿把 GitHub 的 **Source code (zip)** 当成安装包。
 
-## 从源码打开工作台
+1. **校验并解压。** 可用 `Get-FileHash .\hu1-display-0.5-preview-windows-x64.zip -Algorithm SHA256` 对照随包 `.sha256`。完整解压到 Windows 本地独立目录；不要只取 EXE，也不要直接从压缩包或网络路径运行。
+2. **打开工作台。** 双击 `Hu1.Display.exe`；只看界面不需要手机或虚拟显示驱动。便携包未正式签名，请核对来源，不要关闭系统防护。
+3. **连接并信任手机。** 在 Android 开发者选项开启 **USB 调试**，使用数据线连接并解锁手机，核对 RSA 提示后允许。工作台点「刷新」，选择自己的设备并点「信任此设备」。手机端的 USB 授权和晖映的本机信任是两步。
+4. **准备客户端。** 已有 AnyDisplay v0.1.4 则无须重复安装。否则在「连接与安装」点「安装手机端」，在手机上确认；如系统要求允许 USB 安装，按本机策略决定。客户端沿用上游名称，不叫“晖映”。
+5. **开始使用。** 有独立副屏需求，先完成下面的 Windows 首次配置，选「扩展」和对应 VDD。只想看主屏则选「镜像」，无须 VDD。点击开始；结束时点「停止」或退出工作台。默认不会自动连接新插入的设备。
 
-在 **Windows 11 x64 本地磁盘**检出仓库，使用已有的 .NET Framework 4.8 与 WPF 组件。在仓库根目录运行：
+### Windows 首次配置：区分 USB 与虚拟屏
+
+| 用途 | 需要什么 | 不需要什么 |
+|---|---|---|
+| 识别手机、传输视频 | 支持数据传输的 USB 线、授权的 ADB、匹配的 Android 客户端 | 不使用 AOA，不要用 Zadig 替换手机 MTP 接口；不需要 Root |
+| 独立扩展桌面 | Windows 已启用的**非主屏** Virtual Display Driver / MttVDD | 已有可用 VDD 不要重装；不自动创建或删除虚拟屏 |
+| 镜像实体主屏 | Windows 主屏及以上 USB 条件 | 无须安装虚拟显示驱动 |
+
+第一次使用扩展模式：先在 **Windows 设置 → 系统 → 显示** 确认是否已有虚拟屏，并设为扩展而非复制。没有时，可在「连接与安装」查看系统保护、准备已校验的驱动文件、打开手动安装向导；**准备文件不等于安装**。跟随 [VDD 官方项目](https://github.com/VirtualDrivers/Virtual-Display-Driver) 对应版本的安装说明；不要替换 GPU 驱动或关闭驱动签名检查。准备好后回工作台刷新；缺少 VDD 时不会偷偷镜像主屏。
+
+## 选择分辨率和帧率
+
+在工作台的**手机虚拟屏 →「传输设置 ↓」**，或直接到「选择独立桌面」卡片，在开始连接前选择。更换档位请先停止会话；它不是修改主屏的按钮。
+
+| 设置 | 可选值 | 怎么选 |
+|---|---|---|
+| 副屏传输分辨率 | 跟随手机端、1280 × 720、1920 × 1080 | 文字清晰优先选 1080p；减轻编码、USB 和解码负载先试 720p |
+| 目标帧率 | 跟随手机端、30、60、90 fps | 办公建议从 60 开始；功耗优先试 30；90 用于支持高刷的链路 |
+
+两项可独立选择；默认保留 Android 请求，镜像模式不使用这些覆盖值。引擎根据手机能力和 VDD 模式协商：可用时可能临时切换虚拟屏模式，否则可能按比例缩放视频。工作台区分 **Windows 源刷新率**（画布旁）、**协商后的传输规格**和 **Android 实际解码 FPS**。输入 90 并不会让 60 Hz 源产生 90 个不同画面；静止桌面可接近 0 fps。
+
+## 支持范围
+
+| 平台 / 设备 | 本版证据与边界 |
+|---|---|
+| Windows 11 x64 + .NET Framework 4.8 | 实机运行 WPF 控制端；USB / H.264，单设备、单会话 |
+| OPPO Reno7 / Android 13 | 0.5 动态实测：1080p/60、720p/90、1080p/90 均成功传输。本机 VDD 在 1080p 只提供 60 Hz，实测约 59–60 fps，不是持续 90 fps |
+| OPPO Find X8 / ColorOS 16.0.10 / Android 16 | 用户反馈 0.4 可正常使用；未单独验证 0.5 的 90 fps 档位 |
+| 其他 Android 8.0+ | 客户端最低要求，不是对所有机型、GPU 或 OEM 系统的兼容保证 |
+| macOS、HarmonyOS NEXT、无线、多设备 | 不支持。手机触控、键鼠、音频及剪贴板回传均被过滤 |
+
+## 方式二：从源码构建
+
+在 Windows 11 x64 的**本地磁盘**上，使用现有 .NET Framework 4.8、WPF 及对应编译器。无须为控制层安装 Rust、CMake 或 Android SDK。
 
 ```powershell
+git clone https://github.com/ya0hu1/hu1-display.git
+cd hu1-display
 .\windows-controller\build.ps1
 .\bin\Hu1.Display.exe
 ```
 
-构建仅生成控制端，不下载其他软件。若系统策略不允许执行脚本，请先核对策略，不要为此关闭系统防护。
+也可把本仓库地址交给编程助手，按 `windows-controller/build.ps1` 构建控制层。脚本只编译，不下载软件、不安装驱动。若本机脚本策略受限，应先核对组织策略，不要为此绕过安全限制。
 
-**要查看界面，不需要手机或驱动。要传输画面，则另需：** Android 8.0+、数据线、USB 调试授权、与控制层校验值匹配的 AnyDisplay v0.1.4 引擎和 APK、Google ADB 及配套 DLL。默认相对路径为 `tools/engine/anydisplay-win.exe`、`tools/adb/` 和 `packages/AnyDisplay-v0.1.4.apk`（均相对于 EXE）。扩展模式还需要已有的非主屏 VDD。连接前请核对设备并手动刷新；此版过滤触控、音频和剪贴板回传。
+**编译成功 ≠ 已具备传输依赖。** 若已有完整便携包，最简单的是在其独立副本中替换控制端 EXE。干净检出的目录需自行取得 [AnyDisplay v0.1.4](https://github.com/efekurucay/anydisplay/releases/tag/v0.1.4) 的 Windows CLI 与 APK、[Google Platform-Tools](https://developer.android.com/tools/releases/platform-tools) 的匹配 Windows 组件。本地验证使用 Platform-Tools 37.0.3；工作台拒绝不匹配的哈希，不要用随机版本替代。路径均相对 EXE：
 
-## 发布与验证范围
+```text
+Hu1.Display.exe
+tools/engine/anydisplay-win.exe
+tools/adb/{adb.exe, AdbWinApi.dll, AdbWinUsbApi.dll}
+packages/AnyDisplay-v0.1.4.apk
+packages/VirtualDisplayDriver/    # 可选：用于手动准备已校验的 VDD 驱动文件
+```
 
-这是**控制层源码预览**，不是开箱即用的便携包。公开仓库不附带 EXE、APK、ADB、驱动、上游源码镜像或任何个人运行资料。上游版本和许可见[第三方说明](THIRD_PARTY_NOTICES.md)。
+源码位于 `windows-controller/src/`，测试在 `windows-controller/tests/`。`bin/` 是本地控制层编译输出，`dist/windows/` 是本地便携包及 SHA-256 交付目录；不要提交二进制产物、真实信任文件、设备序列号或原始会话日志。
 
-本版在 Windows 上编译并通过 **93 项策略、21 项合成布局、10 项 WPF 自测**；用合成数据渲染了中英文全部四页。[复现步骤](docs/testing.md)。本轮未连接真实手机、未安装驱动，也未验收真实显示布局的应用及还原。**建议保留现有 Windows 布局，不使用「应用到 Windows」**。不承诺持续帧率、端到端延迟或跨机型兼容性。
+### 排查与退出
 
-控制层采用 [MIT License](LICENSE)。反馈时请勿附上设备序列号、信任文件、配对密钥或未经脱敏的日志。
+- **看不到手机：** 换数据线，亮屏解锁并确认 RSA 授权，再点「刷新」。不要批量结束 ADB 进程或替换 USB 接口驱动。
+- **90 档只有约 60 fps：** 先核对虚拟屏旁的源 Hz 和当前分辨率可用 Hz，再核对已协商规格和实际 FPS。若 Windows 不提供 90 Hz，降低传输分辨率可减轻负载，但不会解除源刷新率上限。
+- **卸载或迁移：** 退出程序后可移除便携目录。设备信任和偏好另存于 `%LOCALAPPDATA%\DeskLinkStudio`，删除会重置；移除工作台不等于卸载 Windows 显示驱动。
+
+[测试方法与结果](docs/testing.md) · [第三方来源](THIRD_PARTY_NOTICES.md) · [MIT 许可](LICENSE)。本轮未验收真实拓扑拖动后的「应用 / 保留 / 取消 / 超时还原」，使用副屏无须执行这些操作。

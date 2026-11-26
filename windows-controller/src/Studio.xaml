@@ -112,6 +112,7 @@
         <Border Background="{StaticResource LayoutGrid}" BorderBrush="#DCE7ED" BorderThickness="1" CornerRadius="12" Margin="0,0,15,0"><Canvas x:Name="TopologyCanvas" Height="208" ClipToBounds="True"/></Border>
         <StackPanel Grid.Column="1"><ComboBox x:Name="TopologyPicker" DisplayMemberPath="DisplayTitle" AutomationProperties.Name="{DynamicResource EmptyDisplay}" Margin="0,0,0,8"/>
          <TextBlock x:Name="LayoutDetails" Text="{DynamicResource Text212}" FontSize="11" Foreground="#51677C" TextWrapping="Wrap" Margin="0,0,0,10"/>
+         <StackPanel x:Name="VddProfileLink" Visibility="Collapsed" Margin="0,0,0,8"><TextBlock x:Name="VddRates" Style="{StaticResource Muted}"/><Button x:Name="ToProfile" Content="{DynamicResource ProfileLink}" HorizontalAlignment="Left" Padding="10,4" Margin="0,4,0,0"/></StackPanel>
          <TextBlock Text="{DynamicResource Text213}" Style="{StaticResource Muted}" Margin="0,0,0,7"/>
          <WrapPanel><Button x:Name="Layoutleft" Content="{DynamicResource Text214}" Padding="12,7"/><Button x:Name="Layoutright" Content="{DynamicResource Text215}" Padding="12,7"/><Button x:Name="Layouttop" Content="{DynamicResource Text216}" Padding="12,7"/><Button x:Name="Layoutbottom" Content="{DynamicResource Text217}" Padding="12,7" Margin="0"/></WrapPanel>
         </StackPanel>
@@ -137,6 +138,11 @@
         <ComboBox x:Name="ModePicker" SelectedIndex="0" Margin="0,5,8,10"><ComboBoxItem Content="{DynamicResource Text227}"/><ComboBoxItem Content="{DynamicResource Text228}"/></ComboBox>
         <ComboBox x:Name="DisplayPicker" Tag="{DynamicResource EmptyDisplay}" AutomationProperties.Name="{DynamicResource EmptyDisplay}" Grid.Column="1" DisplayMemberPath="Label" Margin="0,5,0,10"/>
        </Grid>
+       <Grid x:Name="ProfilePanel"><Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="10"/><ColumnDefinition/></Grid.ColumnDefinitions>
+        <StackPanel><TextBlock Text="{DynamicResource ProfileSize}" Style="{StaticResource Muted}"/><ComboBox x:Name="StreamSize" SelectedIndex="0" AutomationProperties.Name="{DynamicResource ProfileSize}"><ComboBoxItem Content="{DynamicResource ProfileClient}"/><ComboBoxItem Tag="1280" Content="1280 × 720"/><ComboBoxItem Tag="1920" Content="1920 × 1080"/></ComboBox></StackPanel>
+        <StackPanel Grid.Column="2"><TextBlock Text="{DynamicResource ProfileFps}" Style="{StaticResource Muted}"/><ComboBox x:Name="StreamFps" SelectedIndex="0" AutomationProperties.Name="{DynamicResource ProfileFps}"><ComboBoxItem Content="{DynamicResource ProfileClient}"/><ComboBoxItem Tag="30" Content="30 fps"/><ComboBoxItem Tag="60" Content="60 fps"/><ComboBoxItem Tag="90" Content="90 fps"/></ComboBox></StackPanel>
+       </Grid>
+       <TextBlock Text="{DynamicResource ProfileHelp}" Style="{StaticResource Muted}" TextWrapping="Wrap"/>
        <WrapPanel><CheckBox x:Name="Continuous" Content="{DynamicResource Text229}" IsChecked="True" Margin="0,6,17,12"/><TextBlock Text="USB · H.264" Style="{StaticResource Muted}" VerticalAlignment="Center" Margin="0,0,0,5"/></WrapPanel>
        <WrapPanel><Button x:Name="Start" Content="{DynamicResource Text043}" Style="{StaticResource Primary}" Padding="22,11" IsEnabled="False"/><Button x:Name="Stop" Content="{DynamicResource Text231}" IsEnabled="False"/></WrapPanel>
       </StackPanel></Border>

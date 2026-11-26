@@ -72,6 +72,17 @@ namespace DeskMateLearning
         public static int Run(string path)
         {
             passed=0; failed=0; lines.Clear();
+            Func<byte[],StreamProfile,bool,byte[]> pass=delegate(byte[] packet,StreamProfile profile,bool client){
+                var output=new MemoryStream();FrameCodec.CopyPacket(new FragmentedStream(packet),output,client,false,null,new object(),null,profile,new FrameCodec.PacketBuffers());return output.ToArray();};
+            var req=new byte[]{128,7,56,4,60,0,1,0,1,2,3,80,4};
+            var reqFrame=Frame(0,0x11,req);var custom=new StreamProfile(1280,720,90);
+            Test("profile preserves Android defaults byte for byte",delegate {Check(pass(reqFrame,StreamProfile.ClientDefault,true).SequenceEqual(reqFrame));});
+            Test("720p90 alters only six request bytes",delegate {var outFrame=pass(reqFrame,custom,true);Check(outFrame.Take(6).SequenceEqual(reqFrame.Take(6)) && outFrame.Skip(6).Take(6).SequenceEqual(new byte[]{0,5,208,2,90,0}) && outFrame.Skip(12).SequenceEqual(reqFrame.Skip(12)));});
+            Test("independent size and fps choices",delegate {Check(pass(reqFrame,new StreamProfile(0,0,30),true)[10]==30 && pass(reqFrame,new StreamProfile(1280,720,0),true)[10]==60);});
+            Test("malformed custom request rejected",delegate {Reject(()=>pass(Frame(0,0x11,new byte[12]),custom,true));});
+            Test("profile ignores server and non-control packets",delegate {Check(pass(reqFrame,custom,false).SequenceEqual(reqFrame));var v=Frame(1,0x11,req);Check(pass(v,custom,true).SequenceEqual(v));});
+            Test("profile rejects unknown choices",delegate {Reject(()=>new StreamProfile(1920,720,60));Reject(()=>new StreamProfile(0,0,200));});
+            Test("reused buffer preserves large irregular packets",delegate {var data=Enumerable.Range(0,135001).Select(n=>(byte)n).ToArray();var f=Frame(1,0x20,data);Check(pass(f,custom,false).SequenceEqual(f));});
             Test("default configuration bounded and read-only",delegate {SafetyPolicy.ValidateSettings(Config());});
             Test("read-only cannot be disabled",delegate {var c=Config();c.ReadOnly=false;Reject(()=>SafetyPolicy.ValidateSettings(c));});
             Test("zero duration rejected",delegate {var c=Config();c.StreamingSeconds=0;Reject(()=>SafetyPolicy.ValidateSettings(c));});
