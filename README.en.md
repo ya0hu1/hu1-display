@@ -1,86 +1,56 @@
-# hu1 display
+# hu1 display · 晖映
 
-[简体中文](README.md) · **English**　|　Windows x64 → Android · USB second-screen workspace · [0.6.2 Preview](https://github.com/ya0hu1/hu1-display/releases/tag/v0.6.2-preview)
+**Turn an Android phone or tablet into a second Windows screen with a USB cable.** Drag a reference document onto your phone to free up your main monitor, or mirror the primary display to show the same thing on both. Video travels over USB, not through the cloud.
 
-Use your phone as an independent Windows desktop, or explicitly mirror the primary monitor. The Windows workspace is bilingual and sends video over local USB forwarding, not a cloud service.
+[简体中文](README.md) · **English**　｜　[Download for Windows](https://github.com/ya0hu1/hu1-display/releases) · [Quick start](#quick-start) · [Features](#features) · [FAQ](#faq)
 
-[Quick start](#quick-start) · [Stream settings](#stream-settings) · [Compatibility](#compatibility) · [Build from source](#build-from-source) · [Test results](docs/testing.md)
+![English workspace with virtual display 5 selected and its Windows source mode shown as 1920 × 1080 at 60 Hz](docs/assets/workspace-en-US.png)
 
-![0.6.2 workspace with virtual display 5 selected; the Windows source is 1920 × 1080 at 60 Hz](docs/assets/workspace-en-US.png)
+*Workspace example: the numbers match the Windows display numbers. The inspector on the right describes the selected display. This is a sample layout.*
 
-## 0.6.2: move a connected virtual desktop
+## Features
 
-Once an Extend stream is ready, drag its display number in the map (or use a direction button), then choose **Apply to Windows**. Keep within 15 seconds or the position is restored. A live transaction moves one MttVDD belonging to this workspace, without persisting the active topology or changing its mode. Windows chooses the position when a retired display is enabled again. Physical displays are not movable during streaming. The sidebar, canvas, primary tile and selected display now use distinct tones of the chosen theme, including custom colours.
+| Feature | What you can do |
+| --- | --- |
+| Extend or mirror | Move Windows apps onto the phone as a separate display in Extend mode, or show the physical primary monitor in Mirror mode. Mirroring needs no virtual display driver. |
+| Independent sessions | Pair each trusted device with a free virtual display and stop one connection at a time. On disconnect, the workspace normally moves ordinary windows back to the physical primary monitor before retiring that virtual desktop. Mirror runs on its own. |
+| Display arrangement | Drag the connected virtual display’s number while streaming. Dragging edits a draft; **Apply to Windows** starts a 15-second confirmation window. If you don’t keep the change, the old position returns. Physical monitors stay put. |
+| Picture and statistics | Follow the client’s settings, or request 720p / 1080p and 30 / 60 / 90 / 120 fps for an Extend session. Its optional stats overlay has a choice of corner, opacity and compact or detailed view. |
+| Workspace appearance | Switch between English and Simplified Chinese. Preset and custom themes use distinct tones for the primary display, other displays and the selected tile. |
+| Portable installation | **Exit & release portable folder** ends this workspace’s sessions without stopping an ADB server shared by other tools or clearing trust and preferences. |
 
-![The same display map in pink on the left and mint on the right. Display 5 is selected in both.](docs/assets/themes-preview.png)
+![The same layout in pink and mint. In both themes the darkest tile is the selected virtual display 5.](docs/assets/themes-preview.png)
 
-*One sample layout in two themes. The darkest tile in each is the selected virtual display.*
-
-## 0.6.1: display information at a glance
-
-The compact overlay keeps decoded FPS, the **entire negotiated resolution**, Mbps and RTT on one line when they fit. Detail view adds target FPS and dropped frames. Measurements use the same fonts and DPI as the rendered text; on narrow work areas whole fields wrap instead of clipping digits. Corner and opacity controls remain per Extend session.
-
-**Compact** · decoded frame rate, stream size, bitrate and round-trip time
+**Extend-only stats overlay** · Compact view shows decoded FPS, negotiated resolution, bitrate and round-trip time. Detail adds the target frame rate and dropped frames. Both examples use the same synthetic data, not benchmark results.
 
 ![Compact overlay: 59.9 FPS, 1920 × 1080, 12.4 Mbps and 4 ms RTT](docs/assets/hud-compact.png)
 
-**Detail** · the same sample, with a 60 fps target and zero dropped frames
-
-![Two-line detail overlay showing the full resolution, target frame rate and drop count](docs/assets/hud-detail.png)
-
-The display map now emphasizes Windows display numbers. Its inspector always shows the **source mode and Hz**, distinct from the stream size in the HUD. Controls stack in narrow windows; theme colours are in Preferences. Disconnect, window handoff and portable-folder release are unchanged.
-
-## 0.6: independent desktops
-
-These features are included in the 0.6.2 portable download. Extract it to a new folder rather than replacing a running version.
-
-- Refresh, select another trusted Android and a free MttVDD slot, then start Extend. The session shelf pairs each device with its display. Select a route to stop it or enable its FPS / Mbps / RTT overlay. Choose a corner, compact view and opacity; mirror is exclusive and has no HUD.
-- MttVDD 25.7.23 has a fixed **driver capacity**, not a hot-add-per-device API. In Setup, export a 2/3/4-slot copy of the installed configuration. Stop other software using the VDD, back up the original, then manually apply the copy and reload **only the virtual adapter** per its documentation. Disconnect initially unused slots in Windows Display settings. Within that capacity, the workspace activates a selected standby desktop on connection and disconnects it at teardown without restarting the driver.
-- By default, a disconnect returns eligible windows to the physical primary display and retires the selected virtual desktop. Clear the retirement option before connecting to an already-active VDD if another app needs it. A session-activated standby slot is always released. Hidden, elevated or self-positioning windows may not move. Check Windows Display settings after a forced exit or a refused change; there is no global topology reset.
-- **Exit & release portable folder** in Preferences or the tray stops all local routes. The verified ADB tools run from a user cache outside the extraction folder, with a separate working directory. No global ADB shutdown, preference deletion or cleanup of older running packages.
+![Detailed overlay with the full resolution, a target of 60 fps and zero dropped frames](docs/assets/hud-detail.png)
 
 ## Quick start
 
-**Option A — prebuilt Windows portable ZIP (recommended).** [Download 0.6.2 Preview for Windows x64](https://github.com/ya0hu1/hu1-display/releases/download/v0.6.2-preview/hu1-display-0.6.2-preview-windows-x64.zip) · [SHA-256 checksum](https://github.com/ya0hu1/hu1-display/releases/download/v0.6.2-preview/hu1-display-0.6.2-preview-windows-x64.zip.sha256) · [All versions and release notes](https://github.com/ya0hu1/hu1-display/releases). No compiler or Android Studio is required. Choose the named `windows-x64` asset, not GitHub’s automatically generated *Source code (zip)*.
+**What you need:** Windows 11 x64 with .NET Framework 4.8, Android 8.0 or later, and a USB data cable. You can explore the workspace without connecting a device.
 
-1. Compare `Get-FileHash .\hu1-display-0.6.2-preview-windows-x64.zip -Algorithm SHA256` with the `.sha256` sidecar. Extract the **entire ZIP to a local Windows drive** in a separate folder. Do not run from the archive or a network share.
-2. Open `Hu1.Display.exe`. Browsing the workspace needs no phone or driver. The binary is not formally signed; verify its source instead of disabling security protections.
-3. Enable **USB debugging** on Android, connect a data-capable cable, unlock the device and verify the RSA prompt. In the workspace click **Refresh**, select your device and **Trust this device**. Android authorization and application trust are separate.
-4. If needed, use **Connection & setup → Install Android client** and confirm the installation on your device. The client is the original AnyDisplay v0.1.4, not a separate hu1 display APK.
-5. Choose **Extend** and an existing non-primary VDD, or explicitly choose **Mirror** and the physical primary screen. Start the session; stop or exit when finished. The workspace does not automatically connect devices.
+1. **Download the portable package.** On [GitHub Releases](https://github.com/ya0hu1/hu1-display/releases), choose the version you want and get the portable archive ending in `windows-x64.zip` and its matching `.sha256`, not *Source code (zip)*. Run `Get-FileHash .\hu1-display-*-windows-x64.zip -Algorithm SHA256` in your download folder and compare the hash for that file. Extract the whole archive to a new local folder and open `Hu1.Display.exe`. Preview binaries are unsigned; do not disable system protections.
+2. **Connect the phone.** Enable **USB debugging**, connect the cable, unlock the device and verify the RSA prompt. In the workspace, select **Refresh**, choose your device, then **Trust this device**. Android authorization and workspace trust are separate steps.
+3. **Prepare the client.** If the matching AnyDisplay client is not already installed, choose **Connection & setup → Install Android client** and confirm on the phone. The client uses the upstream AnyDisplay name.
+4. **Choose a desktop and start.** Select **Mirror** to show the primary monitor. For **Extend**, first check **Windows Settings → System → Display** for an available non-primary virtual display (MttVDD), then select it in the workspace. If it is missing, follow the [VDD driver instructions](https://github.com/VirtualDrivers/Virtual-Display-Driver). **Prepare VDD files** does not install a driver; do not reinstall one that already works.
 
-### First-time Windows setup
+## FAQ
 
-USB transport uses **ADB**, not USB AOA or WinUSB. Do not use Zadig, replace an MTP/GPU driver, root the phone or disable signature checks. Mirror needs no virtual display. For Extend, check **Windows Settings → System → Display** for an enabled, extended Virtual Display Driver / MttVDD monitor. Do not reinstall a working driver. If missing, Connection & setup can open System Protection, prepare the verified driver files and open the manual wizard. Preparing files does **not** install a driver. Follow the applicable [VDD upstream instructions](https://github.com/VirtualDrivers/Virtual-Display-Driver), then refresh. Missing VDD never silently falls back to mirroring.
+**How do I connect a second device?** Each Extend session needs its own MttVDD slot. Refresh, trust the second device and pair it with a different free display. If there is only one slot, Connection & setup can generate a configuration copy with capacity for 2, 3 or 4. Stop sessions using the driver and back up the original before applying the copy. Follow the driver instructions to reload **only the virtual adapter**. Initially disconnect unused virtual displays in Windows Display settings. The workspace can then activate and retire desktops within that capacity without reloading the driver or taking over a physical screen. Simultaneous use with two real devices has not yet been verified.
 
-## Stream settings
+**Why is actual FPS lower than my 90 fps target?** The Hz value beside the display map is the **Windows source refresh rate**. The target is a request; the overlay reports **frames decoded by Android**. If you explicitly choose 90 or 120 fps and Windows offers that rate at the current resolution, the workspace temporarily switches the selected VDD and restores it on normal stop. The phone may still negotiate a lower rate, and a static desktop can report very low FPS. If the VDD offers only 60 Hz, see the [1080p MttVDD configuration example](docs/vdd-high-refresh.xml) and [hardware measurements](docs/testing.md). There’s no need to change your physical GPU.
 
-Select the **virtual display → Stream settings ↓**, or use **Choose your desktop**. Set the options before starting; stop the session before changing them. These are independent Extend-only requests, not changes to the primary monitor.
+**What if a window doesn't come back, or another app needs the virtual display?** Automatic handoff is for ordinary windows. Elevated apps or windows that manage their own position may refuse the move. To share an already-active VDD with another app, clear **Disconnect the selected MttVDD desktop when its session ends** in Preferences before connecting. Standby displays activated by a session are still released. After a forced exit, check the layout in Windows Display settings.
 
-| Setting | Choices | Starting point |
-|---|---|---|
-| Stream resolution | Client setting, 1280 × 720, 1920 × 1080 | 1080p for text; 720p to reduce pixel load |
-| Target frame rate | Client setting, 30, 60, 90, 120 fps | 60 for normal use; 30 for lower load; 90/120 when both source and receiver support it |
+**Why isn’t my phone listed?** Check that the cable carries data, unlock the device, confirm USB debugging authorization, then refresh. The connection uses ADB. Do not root the phone or replace its USB driver with Zadig.
 
-Both default to preserving Android's request. The engine negotiates with the device, may temporarily switch a supported VDD mode, or scale video to fit. **Windows source Hz**, **negotiated stream target** and **measured Android decoder FPS** are different metrics. A 60 Hz source does not produce 90 distinct desktop frames by requesting 90 fps. A static desktop can legitimately report near-zero FPS.
-
-**High-refresh source:** An explicit 90/120 Extend request temporarily switches only the selected non-primary VDD if Windows exposes that rate at its current desktop size. Normal session cleanup restores the prior rate without writing registry settings. Client default, 30/60, mirror and unsupported rates do not trigger this switch. If the layout changes externally the controller will not overwrite the new settings. After a forced termination, check the VDD under Windows Advanced display. The client may negotiate a lower target.
-
-**Only 60 Hz listed?** For the tested MttVDD 25.7.23 configuration, multiple `<g_refresh_rate>` elements under `<global>` advertise additional rates. The [one-screen 1080p example](docs/vdd-high-refresh.xml) preserves 60 and adds 90/120. Packaged driver preparation still uses conservative defaults. Stop sessions, back up your XML, merge only applicable entries and reload only the matching virtual adapter using its driver instructions. Do not restart physical display adapters. To revert, restore the original XML and reload that VDD.
-
-## Compatibility
-
-| Platform / device | Evidence and scope |
-|---|---|
-| Windows 11 x64 + .NET Framework 4.8 | WPF controller; USB/H.264 with independent Extend sessions in 0.6; concurrent hardware acceptance pending |
-| OPPO Reno7 / Android 13 | 0.5.1: median 59 fps at 1080p/60, 87 fps at 1080p/90 and 720p/90. With a 120 Hz source Reno7 negotiated 90, not 120 fps |
-| OPPO Find X8 / ColorOS 16.0.10 / Android 16 | User reports 0.4 works. No separate 0.5 high-FPS benchmark on this model |
-| Other Android 8.0+ | Client minimum, not a compatibility certification |
-| macOS, HarmonyOS NEXT, wireless | Not supported. Reverse touch/keyboard, audio and clipboard are filtered |
+**Which platforms and inputs are supported?** This is a Windows-to-Android USB / H.264 video connection. macOS, HarmonyOS NEXT, wireless streaming, reverse touch or keyboard/mouse input, audio and clipboard sync are not supported. The Android minimum is not a guarantee that every model has been tested.
 
 ## Build from source
 
-**Option B — customize the controller.** On a local Windows drive with .NET Framework 4.8, WPF and the framework compiler:
+On a local Windows drive with .NET Framework 4.8, WPF and the framework compiler:
 
 ```powershell
 git clone https://github.com/ya0hu1/hu1-display.git
@@ -89,12 +59,6 @@ cd hu1-display
 .\bin\Hu1.Display.exe
 ```
 
-You can give the repository URL to a coding assistant and ask it to follow the build script. It builds only the controller, downloads nothing and installs no driver. Do not bypass local execution policy. Rust, CMake and Android Studio are not required for this build.
+The [build script](windows-controller/build.ps1) compiles the Windows controller only. It does not download dependencies or install drivers. To test streaming, replace `Hu1.Display.exe` in a **separate copy** of a complete portable package. If assembling your own, use the pinned [AnyDisplay engine and APK](https://github.com/efekurucay/anydisplay/releases/tag/v0.1.4) and matching [Google Platform-Tools](https://developer.android.com/tools/releases/platform-tools) (tested: 37.0.3). Preserve the package’s `tools/engine/`, `tools/adb/` and `packages/` directories; the controller checks binary hashes.
 
-For streaming, replace the EXE in a separate copy of a complete portable package, or obtain the pinned Windows CLI and APK from [AnyDisplay v0.1.4](https://github.com/efekurucay/anydisplay/releases/tag/v0.1.4) and the matching Windows [Google Platform-Tools](https://developer.android.com/tools/releases/platform-tools) (tested: 37.0.3). Put `anydisplay-win.exe` in `tools/engine/`; put `adb.exe`, `AdbWinApi.dll` and `AdbWinUsbApi.dll` in `tools/adb/`; put `AnyDisplay-v0.1.4.apk` in `packages/`, all relative to the EXE. `packages/VirtualDisplayDriver/` is optional for manual driver preparation. Do not substitute unverified binaries: hashes are checked before use.
-
-Sources: `windows-controller/src/`. Tests: `windows-controller/tests/`. The local controller build goes to `bin/`; local Windows ZIPs and their checksums go to `dist/windows/`, not Git.
-
-**Troubleshooting:** If the phone is missing, check the data cable, lock screen and RSA prompt, then refresh. If 90 fps looks like 60, compare the VDD's available rates with the negotiated target and decoder stats before changing settings. Exit the app before removing its portable folder; `%LOCALAPPDATA%\DeskLinkStudio` holds separate local trust and preferences. Do not attach device identifiers, credentials or raw session logs to issues.
-
-[Tests & measurements](docs/testing.md) · [Third-party notices](THIRD_PARTY_NOTICES.md) · [MIT license](LICENSE).
+[Releases & change history](https://github.com/ya0hu1/hu1-display/releases) · [Tests & measurements](docs/testing.md) · [Third-party notices](THIRD_PARTY_NOTICES.md) · [MIT license](LICENSE)
