@@ -1,0 +1,13 @@
+{
+  "repository": "https://github.com/efekurucay/anydisplay",
+  "tag": "v0.1.4",
+  "commit": "01eb3eb0f7481655f2e42a8df9288b21d7c9c9b0",
+  "license": "MIT",
+  "changes_to_upstream_sources": "None at initialization; Android client is not yet rebranded or rebuilt.",
+  "local_workspace_mirrors": [
+    "android-client",
+    "vendor/anydisplay-windows",
+    "protocol"
+  ],
+  "public_source_snapshot": "Controller only. Upstream mirrors and binary dependencies are not redistributed."
+}

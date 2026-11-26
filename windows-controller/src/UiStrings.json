@@ -1,0 +1,1739 @@
+{
+  "Entries": [
+    {
+      "Key": "Text000",
+      "Zh": "副屏会话正在运行，请先停止再调整布局。",
+      "En": "The display session is running. Stop it before changing the layout."
+    },
+    {
+      "Key": "Text001",
+      "Zh": "另一个布局确认尚未结束。",
+      "En": "Another layout confirmation is still open."
+    },
+    {
+      "Key": "Text002",
+      "Zh": "布局请求无效。",
+      "En": "Invalid layout request."
+    },
+    {
+      "Key": "Text003",
+      "Zh": "Windows布局已变化，取消过期的操作。",
+      "En": "The Windows layout changed. The stale operation was cancelled."
+    },
+    {
+      "Key": "Text004",
+      "Zh": "正在应用位置；不更改模式或主屏。",
+      "En": "Applying positions only; display modes and primary screen stay unchanged."
+    },
+    {
+      "Key": "Text005",
+      "Zh": "Windows实际位置与草稿不一致，将还原。",
+      "En": "Windows positions differ from the draft. Restoring the original layout."
+    },
+    {
+      "Key": "Text006",
+      "Zh": "15秒内确认保留，否则自动还原。",
+      "En": "Keep within 15 seconds, or the original layout will be restored."
+    },
+    {
+      "Key": "Text007",
+      "Zh": "确认时Windows布局发生变化，不保留过期草稿。",
+      "En": "The Windows layout changed during confirmation. The stale draft was not kept."
+    },
+    {
+      "Key": "Text008",
+      "Zh": "已保留Windows显示位置。",
+      "En": "Windows display positions kept."
+    },
+    {
+      "Key": "Text009",
+      "Zh": "显示设备或模式已变化，无法安全还原；请使用Windows显示设置核对。",
+      "En": "Displays or modes changed. Safe restore is unavailable; check Windows display settings."
+    },
+    {
+      "Key": "Text010",
+      "Zh": "未保留，已自动还原原布局。",
+      "En": "Changes were not kept. The original layout was restored."
+    },
+    {
+      "Key": "Text011",
+      "Zh": "还原后检查不一致，请打开Windows显示设置。",
+      "En": "Restore verification failed. Open Windows display settings."
+    },
+    {
+      "Key": "Text012",
+      "Zh": "设备/模式有变化，拒绝盲目恢复。",
+      "En": "Displays or modes changed. Refusing an unsafe restore."
+    },
+    {
+      "Key": "Text013",
+      "Zh": "\n还原提示：",
+      "En": "\nRestore note: "
+    },
+    {
+      "Key": "Text014",
+      "Zh": "雾霾蓝",
+      "En": "Mist"
+    },
+    {
+      "Key": "Text015",
+      "Zh": "工作台界面资源缺失。",
+      "En": "The workspace interface resource is missing."
+    },
+    {
+      "Key": "Text016",
+      "Zh": "显示布局读取失败：",
+      "En": "Unable to read the display layout: "
+    },
+    {
+      "Key": "Text017",
+      "Zh": "天蓝",
+      "En": "Sky"
+    },
+    {
+      "Key": "Text018",
+      "Zh": "樱粉",
+      "En": "Rose"
+    },
+    {
+      "Key": "Text019",
+      "Zh": "薄荷",
+      "En": "Mint"
+    },
+    {
+      "Key": "Text020",
+      "Zh": "① 使用支持数据传输的USB线。\n② 手机启用开发者选项 → USB调试。\n③ 确认手机上的RSA授权弹窗。\n④ 刷新，选择设备并信任。\n⑤ 安装手机端；如品牌有USB安装开关，需手动允许。\n⑥ 选非主屏VDD，开始扩展。\n\n无需连接显卡接口，不启用无线ADB，不Root。",
+      "En": "1. Use a USB cable that supports data transfer.\n2. Enable Developer options and USB debugging on Android.\n3. Verify the computer and accept its RSA authorization prompt.\n4. Refresh, select your device, then explicitly trust it.\n5. Install the client; confirm any USB installation prompt on the device.\n6. Select an existing non-primary VDD to extend your desktop.\n\nUse a computer USB port, not a video connector. No wireless ADB or root."
+    },
+    {
+      "Key": "Text021",
+      "Zh": "USB连接指南",
+      "En": "USB connection guide"
+    },
+    {
+      "Key": "Text023",
+      "Zh": "\n设备数: ",
+      "En": "\nDevices: "
+    },
+    {
+      "Key": "Text024",
+      "Zh": "\n日志目录: ",
+      "En": "\nLog folder: "
+    },
+    {
+      "Key": "Text025",
+      "Zh": "\n（未复制设备序列号或画面）",
+      "En": "\n(No device serial numbers or screen content copied.)"
+    },
+    {
+      "Key": "Text026",
+      "Zh": "诊断摘要已复制到Windows剪贴板，未转发到手机。",
+      "En": "Diagnostics copied to the Windows clipboard; nothing sent to the phone."
+    },
+    {
+      "Key": "Text027",
+      "Zh": "晖映 · 工作台预览版 0.4\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB，单设备；触控/音频/剪贴板回传暂未开放。",
+      "En": "hu1 display · Studio Preview 0.4\nOriginal Windows interface and controller (MIT).\nVideo engine and Android client: AnyDisplay v0.1.4 (MIT).\nVirtual display: Virtual Display Driver / MikeTheTech.\nADB: Google Android Platform-Tools.\n\nWorkspace organization inspired by DeskMate; no DeskMate code, icons or branding included. Not an official distribution of those projects.\nUSB only, one device; touch, audio and clipboard forwarding are disabled."
+    },
+    {
+      "Key": "Text028",
+      "Zh": "关于与开源说明",
+      "En": "About & open source"
+    },
+    {
+      "Key": "Text029",
+      "Zh": "请先确认或还原显示布局，再关闭工作台。",
+      "En": "Keep or restore the display layout before closing the workspace."
+    },
+    {
+      "Key": "Text030",
+      "Zh": "工作台已就绪。点击刷新发现设备，启动窗口不会自动操作手机。",
+      "En": "Workspace ready. Refresh to discover devices; opening this window does not access your phone."
+    },
+    {
+      "Key": "Text031",
+      "Zh": "昵称需为1–32个可显示字符。",
+      "En": "Use 1–32 visible characters for the nickname."
+    },
+    {
+      "Key": "Text032",
+      "Zh": "已保存设备昵称：",
+      "En": "Device nickname saved: "
+    },
+    {
+      "Key": "Text034",
+      "Zh": "打开晖映工作台",
+      "En": "Open hu1 display"
+    },
+    {
+      "Key": "Text035",
+      "Zh": "停止当前副屏",
+      "En": "Stop display session"
+    },
+    {
+      "Key": "Text036",
+      "Zh": "退出并清理",
+      "En": "Quit & clean up"
+    },
+    {
+      "Key": "Text037",
+      "Zh": "主题色无效。",
+      "En": "Invalid theme color."
+    },
+    {
+      "Key": "Text038",
+      "Zh": "当前：",
+      "En": "Current theme: "
+    },
+    {
+      "Key": "Text039",
+      "Zh": "已保存主题：",
+      "En": "Theme saved: "
+    },
+    {
+      "Key": "Text040",
+      "Zh": "自定义",
+      "En": "Custom"
+    },
+    {
+      "Key": "Text041",
+      "Zh": "操作未完成：",
+      "En": "Action not completed: "
+    },
+    {
+      "Key": "Text042",
+      "Zh": "操作未完成",
+      "En": "Action not completed"
+    },
+    {
+      "Key": "Text043",
+      "Zh": "开始扩展副屏 →",
+      "En": "Start extending →"
+    },
+    {
+      "Key": "Text044",
+      "Zh": "开始主屏镜像 →",
+      "En": "Start mirroring →"
+    },
+    {
+      "Key": "Text045",
+      "Zh": "未发现设备？检查数据线、USB调试和手机授权。",
+      "En": "No device? Check the data cable, USB debugging and authorization on Android."
+    },
+    {
+      "Key": "Text046",
+      "Zh": "请在手机上确认RSA授权，然后刷新。",
+      "En": "Accept the RSA authorization on your device, then refresh."
+    },
+    {
+      "Key": "Text047",
+      "Zh": "已信任此设备，可以安装客户端或开始连接。",
+      "En": "Device trusted. You can install the client or start a session."
+    },
+    {
+      "Key": "Text048",
+      "Zh": "新设备仅被发现，尚未授权操作。请先点信任。",
+      "En": "Device discovered, but not authorized. Trust it first."
+    },
+    {
+      "Key": "Text049",
+      "Zh": "本机已信任 ",
+      "En": "Trusted locally: "
+    },
+    {
+      "Key": "Text050",
+      "Zh": " 个设备：",
+      "En": " device(s): "
+    },
+    {
+      "Key": "Text051",
+      "Zh": "尚无可用",
+      "En": "No available "
+    },
+    {
+      "Key": "Text052",
+      "Zh": "非主屏VDD。请到连接与安装准备虚拟显示器。",
+      "En": "non-primary VDD. Prepare a virtual display in Connection & setup."
+    },
+    {
+      "Key": "Text053",
+      "Zh": "物理主屏。",
+      "En": "physical primary display."
+    },
+    {
+      "Key": "Text054",
+      "Zh": "●  正在发现设备",
+      "En": "●  Discovering devices"
+    },
+    {
+      "Key": "Text055",
+      "Zh": "扫描完成：发现 ",
+      "En": "Scan complete: "
+    },
+    {
+      "Key": "Text056",
+      "Zh": " 个Android设备，",
+      "En": " Android device(s), "
+    },
+    {
+      "Key": "Text057",
+      "Zh": " 个桌面显示器。",
+      "En": " desktop display(s)."
+    },
+    {
+      "Key": "Text058",
+      "Zh": "●  等待开始",
+      "En": "●  Ready to start"
+    },
+    {
+      "Key": "Text059",
+      "Zh": "●  扫描未通过",
+      "En": "●  Discovery failed"
+    },
+    {
+      "Key": "Text060",
+      "Zh": "将允许此应用操作你选中的Android设备：\n型号：",
+      "En": "Allow this application to operate the selected Android device?\nModel: "
+    },
+    {
+      "Key": "Text061",
+      "Zh": "\n序列号：",
+      "En": "\nSerial: "
+    },
+    {
+      "Key": "Text062",
+      "Zh": "\n\n仅在你点击时安装客户端、打开应用或建立副屏连接。不会自动信任其他设备。",
+      "En": "\n\nClient installation, app launch and display sessions only run when you request them. Other devices are not automatically trusted."
+    },
+    {
+      "Key": "Text063",
+      "Zh": "信任此设备",
+      "En": "Trust this device"
+    },
+    {
+      "Key": "Text064",
+      "Zh": "已信任 ",
+      "En": "Trusted "
+    },
+    {
+      "Key": "Text065",
+      "Zh": "，授权记录只保存在本机。",
+      "En": ". Authorization is stored on this computer only."
+    },
+    {
+      "Key": "Text066",
+      "Zh": "移除 ",
+      "En": "Remove application trust for "
+    },
+    {
+      "Key": "Text067",
+      "Zh": " 的应用信任？\n不会卸载手机软件，也不会撤销手机系统中的RSA授权。",
+      "En": "?\nThis will not uninstall the client or revoke Android's RSA authorization."
+    },
+    {
+      "Key": "Text068",
+      "Zh": "移除信任",
+      "En": "Remove trust"
+    },
+    {
+      "Key": "Text069",
+      "Zh": "已移除所选设备的应用信任。",
+      "En": "Application trust removed for the selected device."
+    },
+    {
+      "Key": "Text070",
+      "Zh": "向 ",
+      "En": "Install the verified AnyDisplay v0.1.4 client on "
+    },
+    {
+      "Key": "Text071",
+      "Zh": " 安装已固定校验的 AnyDisplay v0.1.4 客户端？\n已有同签名版本会执行保留数据的覆盖安装；不静默卸载其他应用。\n如果手机出现USB安装提示，请在手机上确认。",
+      "En": "?\nAn existing version with the same signature is updated with data preserved. Other apps are not silently uninstalled.\nConfirm any USB installation prompt on the device."
+    },
+    {
+      "Key": "Text072",
+      "Zh": "安装Android客户端",
+      "En": "Install Android client"
+    },
+    {
+      "Key": "Text073",
+      "Zh": "正在安装手机客户端，请留意手机上的确认提示…",
+      "En": "Installing the Android client. Watch for confirmation on your device…"
+    },
+    {
+      "Key": "Text074",
+      "Zh": "已请求打开手机开发者设置，不自动修改开关。",
+      "En": "Requested Android Developer settings. No switches were changed automatically."
+    },
+    {
+      "Key": "Text075",
+      "Zh": "已请求打开手机端应用。",
+      "En": "Requested the Android client to open."
+    },
+    {
+      "Key": "Text076",
+      "Zh": "准备固定校验的驱动文件到 C:\\VirtualDisplayDriver？\n只复制文件，不安装驱动；已有不同配置则停止，不覆盖。\n若系统拒绝写入，不绕过权限，请手动以管理员准备。",
+      "En": "Prepare verified driver files in C:\\VirtualDisplayDriver?\nFiles are copied only; the driver is not installed. Existing different settings will not be overwritten.\nIf access is denied, stop and prepare the files manually with appropriate permissions."
+    },
+    {
+      "Key": "Text077",
+      "Zh": "准备VDD文件",
+      "En": "Prepare VDD files"
+    },
+    {
+      "Key": "Text078",
+      "Zh": "驱动文件已准备；不代表已安装。请先检查系统保护，再打开安装向导。",
+      "En": "Driver files prepared, not installed. Check System Protection before opening the installation wizard."
+    },
+    {
+      "Key": "Text079",
+      "Zh": "检测到已有VDD，请不要重复安装。可直接返回工作台选择扩展。",
+      "En": "An existing VDD was detected. Do not reinstall it; select Extend in the workspace."
+    },
+    {
+      "Key": "Text080",
+      "Zh": "已有虚拟显示器",
+      "En": "Virtual display already available"
+    },
+    {
+      "Key": "Text081",
+      "Zh": "请先点击准备驱动文件。",
+      "En": "Prepare the driver files first."
+    },
+    {
+      "Key": "Text082",
+      "Zh": "缺少驱动文件",
+      "En": "Driver files missing"
+    },
+    {
+      "Key": "Text083",
+      "Zh": "即将打开Windows官方添加硬件向导，需要管理员确认。\n建议先创建系统恢复点。驱动可能造成闪屏或窗口重排。\n仅选择Virtual Display Driver；签名错误或要求关闭安全功能时停止。\n\n向导需你手动完成，不自动修改显卡驱动或重启。",
+      "En": "Open the Windows Add Hardware wizard? Administrator confirmation is required.\nCreate a restore point first. Installing a driver may briefly blank screens or rearrange windows.\nSelect only Virtual Display Driver. Stop if signature checks fail or security features must be disabled.\n\nFinish the wizard manually. This does not automatically change GPU drivers or restart Windows."
+    },
+    {
+      "Key": "Text084",
+      "Zh": "安装前确认",
+      "En": "Before installing"
+    },
+    {
+      "Key": "Text085",
+      "Zh": "已打开添加硬件向导，安装需手动确认。完成后刷新设备。",
+      "En": "Add Hardware wizard opened. Finish installation manually, then refresh devices."
+    },
+    {
+      "Key": "Text086",
+      "Zh": "●  正在停止",
+      "En": "●  Stopping"
+    },
+    {
+      "Key": "Text087",
+      "Zh": "正在结束本次连接并清理，请稍候…",
+      "En": "Ending this session and cleaning up. Please wait…"
+    },
+    {
+      "Key": "Text088",
+      "Zh": "连接 ",
+      "En": "Connect "
+    },
+    {
+      "Key": "Text089",
+      "Zh": "独立扩展桌面",
+      "En": "an independent extended desktop"
+    },
+    {
+      "Key": "Text090",
+      "Zh": "主屏镜像",
+      "En": "the primary-screen mirror"
+    },
+    {
+      "Key": "Text091",
+      "Zh": "持续连接，点击停止或关闭窗口退出。",
+      "En": "Continuous session; stop or close the window to exit."
+    },
+    {
+      "Key": "Text092",
+      "Zh": "30秒限时测试。",
+      "En": "30-second limited test."
+    },
+    {
+      "Key": "Text093",
+      "Zh": "\n\n仅USB；触控、音频、剪贴板回传禁用。",
+      "En": "\n\nUSB only. Touch, audio and clipboard forwarding are disabled."
+    },
+    {
+      "Key": "Text094",
+      "Zh": "开始副屏",
+      "En": "Start display session"
+    },
+    {
+      "Key": "Text095",
+      "Zh": "●  连接中",
+      "En": "●  Connecting"
+    },
+    {
+      "Key": "Text096",
+      "Zh": "正在建立USB会话…",
+      "En": "Establishing a USB session…"
+    },
+    {
+      "Key": "Text097",
+      "Zh": "●  已停止并清理",
+      "En": "●  Stopped & cleaned up"
+    },
+    {
+      "Key": "Text098",
+      "Zh": "●  连接异常",
+      "En": "●  Session error"
+    },
+    {
+      "Key": "Text099",
+      "Zh": "会话结束：",
+      "En": "Session ended: "
+    },
+    {
+      "Key": "Text100",
+      "Zh": "；退出码=",
+      "En": "; exit code="
+    },
+    {
+      "Key": "Text101",
+      "Zh": "；布局不变=",
+      "En": "; layout unchanged="
+    },
+    {
+      "Key": "Text102",
+      "Zh": "。日志：",
+      "En": ". Log: "
+    },
+    {
+      "Key": "Text103",
+      "Zh": "清理提示：",
+      "En": "Cleanup note: "
+    },
+    {
+      "Key": "Text104",
+      "Zh": "●  未能连接",
+      "En": "●  Could not connect"
+    },
+    {
+      "Key": "Text105",
+      "Zh": "未在传输 · 不保留过期统计。静止桌面可能降低帧率，这是按需传输。",
+      "En": "Not streaming. Stale statistics are cleared. A static desktop may use fewer frames."
+    },
+    {
+      "Key": "Text106",
+      "Zh": "晖映 · ",
+      "En": "hu1 display · "
+    },
+    {
+      "Key": "Text107",
+      "Zh": "等待统计",
+      "En": "Awaiting stats"
+    },
+    {
+      "Key": "Text108",
+      "Zh": "正在传输",
+      "En": "Streaming"
+    },
+    {
+      "Key": "Text109",
+      "Zh": "连接中",
+      "En": "Connecting"
+    },
+    {
+      "Key": "Text110",
+      "Zh": "  ·  目标 ",
+      "En": "  ·  Target "
+    },
+    {
+      "Key": "Text111",
+      "Zh": "正在等待编码配置…",
+      "En": "Waiting for encoder configuration…"
+    },
+    {
+      "Key": "Text112",
+      "Zh": "等待手机端真实统计，首个采样不计算FPS。",
+      "En": "Waiting for actual Android statistics. The first sample has no calculated FPS."
+    },
+    {
+      "Key": "Text113",
+      "Zh": "统计已超过3秒未更新，帧率显示为 —。",
+      "En": "No statistics for over 3 seconds. FPS is shown as —."
+    },
+    {
+      "Key": "Text114",
+      "Zh": "尚无成功解码帧，请检查手机是否亮屏解锁。当前统计不代表画面已可用。",
+      "En": "No decoded frames yet. Keep the device awake and unlocked; these statistics do not confirm a usable picture."
+    },
+    {
+      "Key": "Text115",
+      "Zh": "实际解码FPS，非目标刷新率。",
+      "En": "Actual decoded FPS, not the target refresh rate."
+    },
+    {
+      "Key": "Text116",
+      "Zh": " 平均解码 ",
+      "En": " Average decode "
+    },
+    {
+      "Key": "Text117",
+      "Zh": "ms（不是端到端延迟）。",
+      "En": "ms (not end-to-end latency)."
+    },
+    {
+      "Key": "Text118",
+      "Zh": " 静止画面按需传输。",
+      "En": " Static frames are sent on demand."
+    },
+    {
+      "Key": "Text119",
+      "Zh": "晖映 未执行操作",
+      "En": "hu1 display — action not performed"
+    },
+    {
+      "Key": "Text120",
+      "Zh": "副屏会话正在运行，请先停止，再执行安装或设备操作。",
+      "En": "A display session is running. Stop it before installing or operating a device."
+    },
+    {
+      "Key": "Text121",
+      "Zh": "设备信任文件无效。",
+      "En": "Invalid device trust file."
+    },
+    {
+      "Key": "Text122",
+      "Zh": "设备信任记录无效。",
+      "En": "Invalid device trust record."
+    },
+    {
+      "Key": "Text123",
+      "Zh": "请先在手机上允许USB调试，再刷新设备。",
+      "En": "Allow USB debugging on Android first, then refresh."
+    },
+    {
+      "Key": "Text124",
+      "Zh": "设备身份有变化，请重新扫描。",
+      "En": "The device identity changed. Scan again."
+    },
+    {
+      "Key": "Text125",
+      "Zh": "Android安装包缺失或校验失败。请使用完整便携包，不执行未知APK。",
+      "En": "Android package missing or checksum mismatch. Use the complete portable package, not an unknown APK."
+    },
+    {
+      "Key": "Text126",
+      "Zh": "设备身份变化。",
+      "En": "The device identity changed."
+    },
+    {
+      "Key": "Text127",
+      "Zh": "客户端需要Android 8.0/API 26及以上。",
+      "En": "The client requires Android 8.0 / API 26 or newer."
+    },
+    {
+      "Key": "Text128",
+      "Zh": "安装未确认成功：",
+      "En": "Installation was not confirmed: "
+    },
+    {
+      "Key": "Text129",
+      "Zh": "安装成功。手机端当前使用 AnyDisplay v0.1.4（上游客户端），可点击打开。",
+      "En": "Installation completed. The Android client is upstream AnyDisplay v0.1.4; you can open it now."
+    },
+    {
+      "Key": "Text130",
+      "Zh": "驱动包缺失或哈希不匹配：",
+      "En": "Driver package missing or checksum mismatch: "
+    },
+    {
+      "Key": "Text131",
+      "Zh": "系统目录已有其他驱动/配置，不覆盖。请手动核对：",
+      "En": "Other driver files or settings already exist. Nothing overwritten; check manually: "
+    },
+    {
+      "Key": "Text132",
+      "Zh": "Android 设备",
+      "En": "Android device"
+    },
+    {
+      "Key": "Text133",
+      "Zh": "请在手机确认授权",
+      "En": "Authorize on device"
+    },
+    {
+      "Key": "Text134",
+      "Zh": "离线",
+      "En": "Offline"
+    },
+    {
+      "Key": "Text135",
+      "Zh": "已信任",
+      "En": "Trusted"
+    },
+    {
+      "Key": "Text136",
+      "Zh": "待确认信任",
+      "En": "Not yet trusted"
+    },
+    {
+      "Key": "Text137",
+      "Zh": "独立副屏",
+      "En": "Virtual display"
+    },
+    {
+      "Key": "Text138",
+      "Zh": "主屏",
+      "En": "Primary"
+    },
+    {
+      "Key": "Text139",
+      "Zh": "显示器",
+      "En": "Display"
+    },
+    {
+      "Key": "Text140",
+      "Zh": "显示器身份或模式发生变化，请重新读取Windows布局。",
+      "En": "Display identities or modes changed. Refresh the Windows layout."
+    },
+    {
+      "Key": "Text141",
+      "Zh": "主屏或显示器身份不唯一。",
+      "En": "The primary display or display identities are not unique."
+    },
+    {
+      "Key": "Text142",
+      "Zh": "布局超出允许范围。",
+      "En": "The layout is outside the permitted range."
+    },
+    {
+      "Key": "Text143",
+      "Zh": "主屏锚定原位；只能拖动其他屏幕。",
+      "En": "The primary display is anchored. Only other displays can move."
+    },
+    {
+      "Key": "Text144",
+      "Zh": "屏幕不能重叠；复制桌面请在Windows设置中配置。",
+      "En": "Displays cannot overlap. Use Windows settings for a duplicated desktop."
+    },
+    {
+      "Key": "Text145",
+      "Zh": "屏幕之间必须有边缘相接，请拖动吸附或使用快捷方向。",
+      "En": "Display edges must touch. Drag to snap, or use the direction buttons."
+    },
+    {
+      "Key": "Text146",
+      "Zh": "不能快捷移动主屏。",
+      "En": "The primary display cannot be repositioned here."
+    },
+    {
+      "Key": "Text147",
+      "Zh": "未知摆放方向。",
+      "En": "Unknown placement direction."
+    },
+    {
+      "Key": "Text148",
+      "Zh": "无法读取原生显示模式：",
+      "En": "Unable to read the native display mode: "
+    },
+    {
+      "Key": "Text149",
+      "Zh": "无法识别显示器：",
+      "En": "Unable to identify the display: "
+    },
+    {
+      "Key": "Text150",
+      "Zh": "手机虚拟屏 · VDD",
+      "En": "Virtual display · VDD"
+    },
+    {
+      "Key": "Text151",
+      "Zh": "未读到活动桌面。请在本地Windows交互会话运行。",
+      "En": "No active desktop found. Run in a local interactive Windows session."
+    },
+    {
+      "Key": "Text152",
+      "Zh": "布局准备失败：",
+      "En": "Layout staging failed: "
+    },
+    {
+      "Key": "Text153",
+      "Zh": "应用Windows布局失败 / code=",
+      "En": "Windows layout apply failed / code="
+    },
+    {
+      "Key": "Text154",
+      "Zh": "显示布局",
+      "En": "Display layout"
+    },
+    {
+      "Key": "Text155",
+      "Zh": "丢弃尚未应用的布局草稿，重新读取Windows？",
+      "En": "Discard the unapplied draft and reload the Windows layout?"
+    },
+    {
+      "Key": "Text156",
+      "Zh": "重新读取",
+      "En": "Reload layout"
+    },
+    {
+      "Key": "Text157",
+      "Zh": "已读取Windows真实显示布局：",
+      "En": "Windows layout loaded: "
+    },
+    {
+      "Key": "Text158",
+      "Zh": "块活动桌面，包含实体副屏。",
+      "En": " active display(s), including physical displays."
+    },
+    {
+      "Key": "Text159",
+      "Zh": "Windows布局有变更；草稿已保留，应用前必须重新同步。",
+      "En": "Windows layout changed. Draft kept; refresh before applying."
+    },
+    {
+      "Key": "Text160",
+      "Zh": "布局更新提示：",
+      "En": "Layout update: "
+    },
+    {
+      "Key": "Text161",
+      "Zh": "读取Windows布局后显示真实屏幕，不展示示意配置。",
+      "En": "Read Windows to show your real displays. No demo topology."
+    },
+    {
+      "Key": "Text162",
+      "Zh": " · 主屏",
+      "En": " · Primary"
+    },
+    {
+      "Key": "Text163",
+      "Zh": " · 手机虚拟屏",
+      "En": " · Virtual"
+    },
+    {
+      "Key": "Text164",
+      "Zh": " · 实体副屏",
+      "En": " · Physical"
+    },
+    {
+      "Key": "Text165",
+      "Zh": "主屏固定在原位",
+      "En": "Primary display is anchored"
+    },
+    {
+      "Key": "Text166",
+      "Zh": "拖动只修改草稿，点击应用才改变Windows",
+      "En": "Drag edits a draft only; Apply changes Windows"
+    },
+    {
+      "Key": "Text167",
+      "Zh": "选择屏幕查看真实参数。",
+      "En": "Select a display to see its actual details."
+    },
+    {
+      "Key": "Text168",
+      "Zh": "横向",
+      "En": "Landscape"
+    },
+    {
+      "Key": "Text169",
+      "Zh": "纵向90°",
+      "En": "Portrait 90°"
+    },
+    {
+      "Key": "Text170",
+      "Zh": "横向180°",
+      "En": "Landscape 180°"
+    },
+    {
+      "Key": "Text171",
+      "Zh": "纵向270°",
+      "En": "Portrait 270°"
+    },
+    {
+      "Key": "Text172",
+      "Zh": " · 坐标 (",
+      "En": " · Position ("
+    },
+    {
+      "Key": "Text173",
+      "Zh": "与读取时的Windows布局一致 · 主屏锚定，其他屏可拖动",
+      "En": "In sync with Windows · primary anchored, other displays draggable"
+    },
+    {
+      "Key": "Text174",
+      "Zh": "有未应用的位置草稿 · 确认应用后才同步Windows",
+      "En": "Unapplied position draft · Windows is unchanged"
+    },
+    {
+      "Key": "Text175",
+      "Zh": "Windows布局已变化，请重新读取后再拖动。",
+      "En": "The Windows layout changed. Refresh before dragging."
+    },
+    {
+      "Key": "Text176",
+      "Zh": "仅修改屏幕位置，保持主屏、方向、分辨率和刷新率不变。\n可能短暂闪屏或重排窗口。应用后15秒内确认保留，否则独立恢复进程还原。\n\n是否应用当前草稿？",
+      "En": "Change display positions only, keeping the primary screen, orientation, resolution and refresh rate.\nScreens may briefly blank or windows may rearrange. Confirm within 15 seconds, or an independent helper attempts to restore the original layout.\n\nApply this draft?"
+    },
+    {
+      "Key": "Text177",
+      "Zh": "应用到Windows",
+      "En": "Apply to Windows"
+    },
+    {
+      "Key": "Text178",
+      "Zh": "恢复进程未启动，未尝试修改Windows。",
+      "En": "Restore helper did not start. Windows was not changed."
+    },
+    {
+      "Key": "Text179",
+      "Zh": "恢复进程仍在运行，请勿重复应用。记录：",
+      "En": "The restore helper is still running. Do not apply again. Record: "
+    },
+    {
+      "Key": "Text180",
+      "Zh": "未读到布局结果，请核对Windows显示设置。",
+      "En": "No layout result found. Check Windows display settings."
+    },
+    {
+      "Key": "Text181",
+      "Zh": "布局操作结果",
+      "En": "Layout operation result"
+    },
+    {
+      "Key": "Text182",
+      "Zh": "保留显示位置？",
+      "En": "Keep display positions?"
+    },
+    {
+      "Key": "Text183",
+      "Zh": "请在15秒内确认，未确认将自动还原。",
+      "En": "Confirm within 15 seconds, or the original layout is restored."
+    },
+    {
+      "Key": "Text184",
+      "Zh": "保留位置",
+      "En": "Keep positions"
+    },
+    {
+      "Key": "Text185",
+      "Zh": "立即还原",
+      "En": "Restore now"
+    },
+    {
+      "Key": "Text186",
+      "Zh": "未知",
+      "En": "Unknown"
+    },
+    {
+      "Key": "Text188",
+      "Zh": "•  •",
+      "En": "•  •"
+    },
+    {
+      "Key": "Text190",
+      "Zh": "让每一块小屏，都有自己的桌面。",
+      "En": "A little screen. A little more room."
+    },
+    {
+      "Key": "Text191",
+      "Zh": "WINDOWS HOST · PREVIEW",
+      "En": "WINDOWS HOST · PREVIEW"
+    },
+    {
+      "Key": "Text192",
+      "Zh": "换个心情",
+      "En": "Appearance"
+    },
+    {
+      "Key": "Text193",
+      "Zh": "雾蓝",
+      "En": "Mist"
+    },
+    {
+      "Key": "Text194",
+      "Zh": "MY WORKSPACE",
+      "En": "WORKSPACE"
+    },
+    {
+      "Key": "Text195",
+      "Zh": "◉    副屏工作台",
+      "En": "◈    Workspace"
+    },
+    {
+      "Key": "Text196",
+      "Zh": "⊞    连接与安装",
+      "En": "⊞    Connection & setup"
+    },
+    {
+      "Key": "Text197",
+      "Zh": "◇    偏好与设备",
+      "En": "◇    Preferences"
+    },
+    {
+      "Key": "Text198",
+      "Zh": "≡    日志与帮助",
+      "En": "≡    Logs & help"
+    },
+    {
+      "Key": "Text199",
+      "Zh": "一根线，更多可能",
+      "En": "One cable. More room."
+    },
+    {
+      "Key": "Text200",
+      "Zh": "USB 连接 Android 手机或平板，给灵感多留一点空间。",
+      "En": "Connect an Android phone or tablet over USB. Make space for your next idea."
+    },
+    {
+      "Key": "Text201",
+      "Zh": "LOCAL FIRST",
+      "En": "LOCAL FIRST"
+    },
+    {
+      "Key": "Text202",
+      "Zh": "不上传画面 · 不经过云端",
+      "En": "Your screen stays local"
+    },
+    {
+      "Key": "Text204",
+      "Zh": "你好，欢迎回到副屏工作台",
+      "En": "Welcome to your workspace"
+    },
+    {
+      "Key": "Text205",
+      "Zh": "把手机放在手边，把桌面延伸出去。",
+      "En": "Keep your device close. Take your desktop further."
+    },
+    {
+      "Key": "Text206",
+      "Zh": "●  等待连接",
+      "En": "●  Not connected"
+    },
+    {
+      "Key": "Text207",
+      "Zh": "真实桌面布局",
+      "En": "Your desktop at a glance"
+    },
+    {
+      "Key": "Text208",
+      "Zh": "读取Windows真实位置，包含你的实体主屏与副屏。",
+      "En": "Real Windows positions, including your physical displays."
+    },
+    {
+      "Key": "Text209",
+      "Zh": "同步Windows",
+      "En": "Sync Windows"
+    },
+    {
+      "Key": "Text210",
+      "Zh": "识别屏幕",
+      "En": "Identify"
+    },
+    {
+      "Key": "Text211",
+      "Zh": "系统设置 ↗",
+      "En": "Settings ↗"
+    },
+    {
+      "Key": "Text212",
+      "Zh": "选择屏幕查看参数。",
+      "En": "Select a display for details."
+    },
+    {
+      "Key": "Text213",
+      "Zh": "相对主屏快捷摆放",
+      "En": "Position relative to primary"
+    },
+    {
+      "Key": "Text214",
+      "Zh": "左",
+      "En": "Left"
+    },
+    {
+      "Key": "Text215",
+      "Zh": "右",
+      "En": "Right"
+    },
+    {
+      "Key": "Text216",
+      "Zh": "上",
+      "En": "Above"
+    },
+    {
+      "Key": "Text217",
+      "Zh": "下",
+      "En": "Below"
+    },
+    {
+      "Key": "Text218",
+      "Zh": "拖动仅编辑草稿；应用后15秒内确认，否则还原。不更改主屏、分辨率或方向。",
+      "En": "Dragging edits a draft. Confirm within 15 seconds after applying, or restore. Modes and primary screen stay unchanged."
+    },
+    {
+      "Key": "Text219",
+      "Zh": "撤销草稿",
+      "En": "Reset draft"
+    },
+    {
+      "Key": "Text220",
+      "Zh": "01  连接你的 Android",
+      "En": "01  Connect your Android"
+    },
+    {
+      "Key": "Text221",
+      "Zh": "支持手机和平板；新设备需先明确允许。",
+      "En": "Phones and tablets. New devices need your approval."
+    },
+    {
+      "Key": "Text222",
+      "Zh": "刷新",
+      "En": "Refresh"
+    },
+    {
+      "Key": "Text223",
+      "Zh": "点击刷新，发现USB设备后选择并信任。",
+      "En": "Refresh to discover USB devices, then select and trust yours."
+    },
+    {
+      "Key": "Text224",
+      "Zh": "安装手机端",
+      "En": "Install client"
+    },
+    {
+      "Key": "Text225",
+      "Zh": "02  选择独立桌面",
+      "En": "02  Choose your desktop"
+    },
+    {
+      "Key": "Text226",
+      "Zh": "扩展需要 VDD；不会偷偷切换为主屏镜像。",
+      "En": "Extend needs a VDD. No silent fallback to a mirror."
+    },
+    {
+      "Key": "Text227",
+      "Zh": "扩展",
+      "En": "Extend"
+    },
+    {
+      "Key": "Text228",
+      "Zh": "镜像",
+      "En": "Mirror"
+    },
+    {
+      "Key": "Text229",
+      "Zh": "持续连接，不限时",
+      "En": "Keep connected"
+    },
+    {
+      "Key": "Text230",
+      "Zh": "USB · H.264",
+      "En": "USB · H.264"
+    },
+    {
+      "Key": "Text231",
+      "Zh": "停止连接",
+      "En": "Stop session"
+    },
+    {
+      "Key": "Text232",
+      "Zh": "实际解码帧率",
+      "En": "Decoded frame rate"
+    },
+    {
+      "Key": "Text233",
+      "Zh": "—",
+      "En": "—"
+    },
+    {
+      "Key": "Text234",
+      "Zh": "FPS · 按统计间隔计算",
+      "En": "FPS · measured per interval"
+    },
+    {
+      "Key": "Text235",
+      "Zh": "接收速率",
+      "En": "Receive rate"
+    },
+    {
+      "Key": "Text236",
+      "Zh": "Mbps · 手机端报告",
+      "En": "Mbps · reported by Android"
+    },
+    {
+      "Key": "Text237",
+      "Zh": "链路往返",
+      "En": "Round-trip time"
+    },
+    {
+      "Key": "Text238",
+      "Zh": "ms · 不是端到端延迟",
+      "En": "ms · not end-to-end latency"
+    },
+    {
+      "Key": "Text239",
+      "Zh": "累计丢帧",
+      "En": "Dropped frames"
+    },
+    {
+      "Key": "Text240",
+      "Zh": "手机解码统计",
+      "En": "Android decoder statistics"
+    },
+    {
+      "Key": "Text241",
+      "Zh": "让流畅，看得见",
+      "En": "Performance, not guesswork"
+    },
+    {
+      "Key": "Text242",
+      "Zh": "连接后显示分辨率与编码信息",
+      "En": "Resolution and codec appear after connecting"
+    },
+    {
+      "Key": "Text243",
+      "Zh": "尚未连接 · 不使用演示数据。静止桌面可能降低帧率，这是按需传输。",
+      "En": "Not connected. No demo data. Static desktops may use fewer frames."
+    },
+    {
+      "Key": "Text244",
+      "Zh": "连接与安装",
+      "En": "Connection & setup"
+    },
+    {
+      "Key": "Text245",
+      "Zh": "从第一次插线，到开始副屏，都在这里完成。",
+      "En": "From the first cable to an extra screen."
+    },
+    {
+      "Key": "Text246",
+      "Zh": "01  USB 准备",
+      "En": "01  Prepare USB"
+    },
+    {
+      "Key": "Text247",
+      "Zh": "用数据线连接电脑与 Android。手机开启开发者选项和 USB 调试，确认电脑的 RSA 授权；部分品牌还需要额外允许 USB 安装。",
+      "En": "Connect Android with a data cable. Enable Developer options and USB debugging, then verify the RSA prompt. Some devices also require permission to install over USB."
+    },
+    {
+      "Key": "Text248",
+      "Zh": "检测 USB 设备",
+      "En": "Discover USB devices"
+    },
+    {
+      "Key": "Text249",
+      "Zh": "打开手机开发者设置",
+      "En": "Android Developer settings"
+    },
+    {
+      "Key": "Text250",
+      "Zh": "查看连接指南",
+      "En": "Connection guide"
+    },
+    {
+      "Key": "Text251",
+      "Zh": "02  安装 Android 客户端",
+      "En": "02  Install the Android client"
+    },
+    {
+      "Key": "Text252",
+      "Zh": "在工作台选择并信任设备，再点击安装。安装包先校验 SHA-256，只操作你选择的设备；如需系统确认，请在手机上允许。",
+      "En": "Select and trust the device first. The APK is checked with SHA-256 and installed only on your selected device. Confirm any prompts on Android."
+    },
+    {
+      "Key": "Text253",
+      "Zh": "一键安装手机端",
+      "En": "Install Android client"
+    },
+    {
+      "Key": "Text254",
+      "Zh": "打开手机端应用",
+      "En": "Open Android client"
+    },
+    {
+      "Key": "Text255",
+      "Zh": "打开 APK 所在目录",
+      "En": "Open APK folder"
+    },
+    {
+      "Key": "Text256",
+      "Zh": "当前复用 AnyDisplay v0.1.4 Android 客户端（MIT），不是已经重写或改名的自有 APK。",
+      "En": "Uses upstream AnyDisplay v0.1.4 for Android (MIT), not a rebuilt or rebranded hu1 display APK."
+    },
+    {
+      "Key": "Text257",
+      "Zh": "03  Windows 虚拟显示器",
+      "En": "03  Windows virtual display"
+    },
+    {
+      "Key": "Text258",
+      "Zh": "真正扩展需要独立 VDD。已有 VDD 不要重复安装。新增驱动可能闪屏或重排窗口，需要管理员确认；不关闭签名校验，也不修改 NVIDIA 等显卡驱动。",
+      "En": "Extend requires an existing VDD. Do not reinstall one that already works. Driver changes may blank screens or move windows and require administrator approval. Never disable signature checks or replace GPU drivers."
+    },
+    {
+      "Key": "Text259",
+      "Zh": "打开系统保护",
+      "En": "System Protection"
+    },
+    {
+      "Key": "Text260",
+      "Zh": "准备驱动文件",
+      "En": "Prepare driver files"
+    },
+    {
+      "Key": "Text261",
+      "Zh": "打开安装向导",
+      "En": "Installation wizard"
+    },
+    {
+      "Key": "Text262",
+      "Zh": "Windows 显示设置",
+      "En": "Windows display settings"
+    },
+    {
+      "Key": "Text263",
+      "Zh": "手动向导：下一步 → 手动从列表安装 → 显示适配器 → 从磁盘安装 → C:\\VirtualDisplayDriver\\MttVDD.inf。只安装一次。",
+      "En": "Manual wizard: Next → Install manually from a list → Display adapters → Have Disk → C:\\VirtualDisplayDriver\\MttVDD.inf. Install once only."
+    },
+    {
+      "Key": "Text264",
+      "Zh": "偏好与设备",
+      "En": "Preferences"
+    },
+    {
+      "Key": "Text265",
+      "Zh": "你的配色、你的设备，你来决定。",
+      "En": "Your workspace. Your way."
+    },
+    {
+      "Key": "Text266",
+      "Zh": "给工作台换个心情",
+      "En": "A color that feels like you"
+    },
+    {
+      "Key": "Text267",
+      "Zh": "右上角一键切换天蓝、雾霾蓝、樱粉、薄荷；也可以选择喜欢的颜色。主题会保存在本机。",
+      "En": "Choose Sky, Mist, Rose or Mint in the header, or pick your own color. Your theme stays on this computer."
+    },
+    {
+      "Key": "Text268",
+      "Zh": "选择自定义主题色…",
+      "En": "Choose a custom color…"
+    },
+    {
+      "Key": "Text269",
+      "Zh": "当前：雾霾蓝",
+      "En": "Current theme: Mist"
+    },
+    {
+      "Key": "Text270",
+      "Zh": "设备信任，不绑定某一个品牌",
+      "En": "Trust is explicit. Any Android brand."
+    },
+    {
+      "Key": "Text271",
+      "Zh": "会列出 ADB 发现的 Android 手机和平板。新设备必须由你点「信任此设备」，序列号与型号一起记录；不会自动允许所有插入的设备。",
+      "En": "ADB lists connected Android phones and tablets. New devices need your approval. Serial and model are stored together; plugging a device in does not automatically trust it."
+    },
+    {
+      "Key": "Text272",
+      "Zh": "尚未加载",
+      "En": "Not loaded"
+    },
+    {
+      "Key": "Text273",
+      "Zh": "给工作台所选的已信任设备起个昵称",
+      "En": "A nickname for the selected trusted device"
+    },
+    {
+      "Key": "Text274",
+      "Zh": "保存昵称",
+      "En": "Save nickname"
+    },
+    {
+      "Key": "Text275",
+      "Zh": "移除所选设备的信任",
+      "En": "Remove selected device trust"
+    },
+    {
+      "Key": "Text276",
+      "Zh": "桌面与托盘",
+      "En": "Desktop & tray"
+    },
+    {
+      "Key": "Text277",
+      "Zh": "最小化时收进系统托盘（不结束副屏）",
+      "En": "Minimize to tray without stopping the session"
+    },
+    {
+      "Key": "Text278",
+      "Zh": "托盘可查看真实FPS/速率、返回工作台、停止当前连接。关闭窗口仍会退出并清理，不偷偷留在后台。",
+      "En": "Use the tray to check actual FPS and rate, return to the workspace or stop. Closing the window still exits and cleans up."
+    },
+    {
+      "Key": "Text279",
+      "Zh": "当前支持范围",
+      "En": "Current support"
+    },
+    {
+      "Key": "Text280",
+      "Zh": "Windows 11 x64 主机；Android 8.0+（API 26+）客户端；USB 调试/ADB；一次连接一个设备；H.264；现有非主屏 VDD。",
+      "En": "Windows 11 x64 host; Android 8.0+ / API 26+; USB debugging / ADB; one device; H.264; an existing non-primary VDD."
+    },
+    {
+      "Key": "Text281",
+      "Zh": "实际已在本机 Windows 11 25H2 + Reno7 验证。其他品牌、GPU、系统版本需要实测，不保证全部兼容。触控、剪贴板、音频、无线及多屏并发尚未开放。",
+      "En": "The earlier link was tested on Windows 11 with Reno7. Other devices, GPUs and OS versions need testing. Touch, clipboard, audio, wireless and concurrent displays are not supported."
+    },
+    {
+      "Key": "Text282",
+      "Zh": "日志与帮助",
+      "En": "Logs & help"
+    },
+    {
+      "Key": "Text283",
+      "Zh": "看见状态，也保留排查问题的线索。日志只保存在本机。",
+      "En": "See what is happening. Keep troubleshooting local."
+    },
+    {
+      "Key": "Text284",
+      "Zh": "打开日志目录",
+      "En": "Open log folder"
+    },
+    {
+      "Key": "Text285",
+      "Zh": "复制诊断摘要",
+      "En": "Copy diagnostics"
+    },
+    {
+      "Key": "Text286",
+      "Zh": "清空界面日志",
+      "En": "Clear view"
+    },
+    {
+      "Key": "Text287",
+      "Zh": "就绪 · 尚未访问设备",
+      "En": "Ready · no device accessed"
+    },
+    {
+      "Key": "Text289",
+      "Zh": "晖映",
+      "En": "hu1 display"
+    },
+    {
+      "Key": "Text290",
+      "Zh": "晖映 · Windows 副屏工作台",
+      "En": "hu1 display · Windows display workspace"
+    },
+    {
+      "Key": "Text291",
+      "Zh": "主题",
+      "En": "Theme"
+    },
+    {
+      "Key": "Text292",
+      "Zh": "界面语言",
+      "En": "Interface language"
+    },
+    {
+      "Key": "Text293",
+      "Zh": "选择界面语言",
+      "En": "Choose interface language"
+    },
+    {
+      "Key": "Text294",
+      "Zh": "◈    副屏工作台",
+      "En": "◈    Workspace"
+    },
+    {
+      "Key": "Text295",
+      "Zh": "让桌面，再宽一点。",
+      "En": "A little more room."
+    },
+    {
+      "Key": "Text296",
+      "Zh": "连接手边的 Android，把专注留给眼前的事。",
+      "En": "Connect your Android. Make room for what matters."
+    },
+    {
+      "Key": "Text297",
+      "Zh": "你的桌面，一目了然",
+      "En": "Your desktop at a glance"
+    },
+    {
+      "Key": "Text298",
+      "Zh": "仅编辑布局草稿。真实布局应用 / 还原尚未验收，请保留当前 Windows 布局。",
+      "En": "Draft only. Applying and restoring real layouts is not yet validated; keep your current Windows layout."
+    },
+    {
+      "Key": "Text299",
+      "Zh": "Studio Preview 0.4",
+      "En": "Studio Preview 0.4"
+    },
+    {
+      "Key": "Text300",
+      "Zh": "连接表现，真实呈现",
+      "En": "Performance, not guesswork"
+    },
+    {
+      "Key": "Text301",
+      "Zh": "晖映  /  WINDOWS → ANDROID  /  USB ONLY",
+      "En": "hu1 display  /  WINDOWS → ANDROID  /  USB ONLY"
+    },
+    {
+      "Key": "Text302",
+      "Zh": "语言偏好文件无效，已使用系统语言。",
+      "En": "Language preference could not be read. Using the system language."
+    },
+    {
+      "Key": "Text303",
+      "Zh": "界面语言已切换为简体中文。",
+      "En": "Interface language changed to English."
+    },
+    {
+      "Key": "Text304",
+      "Zh": "语言选择已保存在本机。",
+      "En": "Language preference saved on this computer."
+    },
+    {
+      "Key": "Text305",
+      "Zh": "布局助手将沿用当前界面语言。",
+      "En": "The layout helper uses the current interface language."
+    },
+    {
+      "Key": "Text306",
+      "Zh": "本机已信任 {0} 个设备：{1}",
+      "En": "{0} device(s) trusted locally: {1}"
+    },
+    {
+      "Key": "Text307",
+      "Zh": "扫描完成：发现 {0} 个 Android 设备，{1} 个桌面显示器。",
+      "En": "Scan complete: {0} Android device(s), {1} desktop display(s)."
+    },
+    {
+      "Key": "Text308",
+      "Zh": "就绪 · 未访问设备",
+      "En": "Ready · no device accessed"
+    },
+    {
+      "Key": "Text309",
+      "Zh": "语言设置未保存，界面未切换。",
+      "En": "Language preference could not be saved; the interface was not changed."
+    },
+    {
+      "Key": "Text310",
+      "Zh": "当前：{0}  {1}",
+      "En": "Current: {0}  {1}"
+    },
+    {
+      "Key": "Text311",
+      "Zh": "未进行真实布局应用 / 还原验收",
+      "En": "Real layout apply / restore not yet validated"
+    },
+    {
+      "Key": "WorkspaceIndex",
+      "Zh": "工作台导航",
+      "En": "WORKSPACE"
+    },
+    {
+      "Key": "NavHome",
+      "Zh": "副屏工作台",
+      "En": "Workspace"
+    },
+    {
+      "Key": "NavPreferences",
+      "Zh": "偏好设置",
+      "En": "Preferences"
+    },
+    {
+      "Key": "LayoutSample",
+      "Zh": "合成布局 · 仅作界面预览",
+      "En": "Sample layout · interface preview only"
+    },
+    {
+      "Key": "PreviewBadge",
+      "Zh": "预览版",
+      "En": "PREVIEW"
+    },
+    {
+      "Key": "LocalFirst",
+      "Zh": "仅限本机",
+      "En": "LOCAL FIRST"
+    },
+    {
+      "Key": "ThemeSelection",
+      "Zh": "当前主题",
+      "En": "Selected theme"
+    },
+    {
+      "Key": "TopologyIndex",
+      "Zh": "显示布局  /  01",
+      "En": "DISPLAY LAYOUT  /  01"
+    },
+    {
+      "Key": "ControlError0",
+      "Zh": "设备信任配置无效。",
+      "En": "Invalid device approval configuration."
+    },
+    {
+      "Key": "ControlError1",
+      "Zh": "此版本要求启用只读输入过滤。",
+      "En": "This version requires read-only input filtering."
+    },
+    {
+      "Key": "ControlError2",
+      "Zh": "传输测试时长必须为 10–60 秒。",
+      "En": "Streaming duration must be 10..60 seconds."
+    },
+    {
+      "Key": "ControlError3",
+      "Zh": "会话超时设置无效。",
+      "En": "Invalid bounded wall-clock duration."
+    },
+    {
+      "Key": "ControlError4",
+      "Zh": "ADB 设备序列号为空或含有不受支持的字符。",
+      "En": "Unsafe/empty ADB serial."
+    },
+    {
+      "Key": "ControlError5",
+      "Zh": "请先选择一台已授权的设备。",
+      "En": "Select an authorized phone."
+    },
+    {
+      "Key": "ControlError6",
+      "Zh": "设备与本机信任记录不符，已拒绝访问。",
+      "En": "Phone is not the approved spare device; refusing access."
+    },
+    {
+      "Key": "ControlError7",
+      "Zh": "不支持此显示模式。",
+      "En": "Unsupported display mode."
+    },
+    {
+      "Key": "ControlError8",
+      "Zh": "找到多个可用显示器，请在工作台中明确选择。",
+      "En": "Ambiguous smoke-test display; select explicitly in the GUI."
+    },
+    {
+      "Key": "ControlError9",
+      "Zh": "请选择可用的显示器。",
+      "En": "Select a valid display."
+    },
+    {
+      "Key": "ControlError10",
+      "Zh": "镜像模式仅支持实体主屏。",
+      "En": "Mirror mode only accepts the physical primary display."
+    },
+    {
+      "Key": "ControlError11",
+      "Zh": "扩展模式需要已有的非主屏 VDD，不会改用镜像。",
+      "En": "Extend requires an existing non-primary VDD monitor; no mirror fallback."
+    },
+    {
+      "Key": "ControlError12",
+      "Zh": "本次会话的转发端口无效。",
+      "En": "Invalid owned forwarding port."
+    },
+    {
+      "Key": "ControlError13",
+      "Zh": "进程参数无效。",
+      "En": "Unsafe process argument."
+    },
+    {
+      "Key": "ControlError14",
+      "Zh": "命令执行超时。",
+      "En": "Command exceeded its bounded timeout."
+    },
+    {
+      "Key": "ControlError15",
+      "Zh": "命令输出未正常结束。",
+      "En": "Command output did not close."
+    },
+    {
+      "Key": "ControlError16",
+      "Zh": "缺少指定版本的视频引擎或 ADB。工作台不会自动下载或安装。",
+      "En": "Pinned engine/ADB missing; no auto-download or install."
+    },
+    {
+      "Key": "ControlError17",
+      "Zh": "引擎或 ADB 的校验值不符。",
+      "En": "Pinned engine/ADB hash mismatch."
+    },
+    {
+      "Key": "ControlError18",
+      "Zh": "ADB 组件校验失败。",
+      "En": "Pinned ADB DLL hash mismatch."
+    },
+    {
+      "Key": "ControlError19",
+      "Zh": "ADB 操作失败：",
+      "En": "ADB failed: "
+    },
+    {
+      "Key": "ControlError20",
+      "Zh": "引擎读取显示器失败：",
+      "En": "Engine monitor enumeration failed: "
+    },
+    {
+      "Key": "ControlError21",
+      "Zh": "无法确认设备温度。",
+      "En": "Cannot verify phone temperature."
+    },
+    {
+      "Key": "ControlError22",
+      "Zh": "另一个会话正在运行，请先在其窗口中停止。",
+      "En": "Another DeskMate session is active; stop it in its own window first."
+    },
+    {
+      "Key": "ControlError23",
+      "Zh": "访问手机前已停止。",
+      "En": "Stopped before phone access."
+    },
+    {
+      "Key": "ControlError24",
+      "Zh": "设备身份已变化，已取消连接。",
+      "En": "Spare phone identity changed; refusing test."
+    },
+    {
+      "Key": "ControlError25",
+      "Zh": "Android 版本或当前设备温度不满足连接条件。",
+      "En": "Android version or phone temperature not suitable for this test."
+    },
+    {
+      "Key": "ControlError26",
+      "Zh": "未检测到手机客户端。工作台不会自动安装 APK。",
+      "En": "Test client not installed. Launcher never installs APK automatically."
+    },
+    {
+      "Key": "ControlError27",
+      "Zh": "启动手机客户端前已停止。",
+      "En": "Stopped before starting client."
+    },
+    {
+      "Key": "ControlError28",
+      "Zh": "返回的转发端口无效，未清理其他端口。",
+      "En": "Invalid returned forwarding port; no broad cleanup attempted."
+    },
+    {
+      "Key": "ControlError29",
+      "Zh": "无法识别启动参数。",
+      "En": "Unknown arguments."
+    },
+    {
+      "Key": "EmptyDevice",
+      "Zh": "选择 USB 设备",
+      "En": "Select a USB device"
+    },
+    {
+      "Key": "EmptyDisplay",
+      "Zh": "选择显示器",
+      "En": "Select a display"
+    },
+    {
+      "Key": "NoTrust",
+      "Zh": "尚未信任任何设备。",
+      "En": "No trusted devices yet."
+    }
+  ]
+}
