@@ -47,6 +47,10 @@ class VideoDecoder(private val surface: Surface, private val listener: Listener)
     private var ackOnQueue = false
     private val stallCheck = Runnable { checkStall() }
 
+    // One writer on the codec thread. Count successful output submissions, not queue-time flow-control ACKs.
+    @Volatile var outputFrames = 0L
+        private set
+
     @Volatile var decoderName = ""
         private set
 
@@ -139,7 +143,10 @@ class VideoDecoder(private val surface: Surface, private val listener: Listener)
                 // An explicit "now" timestamp lets SurfaceFlinger drop a stale frame when a newer one is queued for the
                 // same vsync. With releaseOutputBuffer(index, true) the decoder blocks on the display's buffer queue,
                 // so any burst leaves frames queued for good (measured: 44 ms instead of 7 ms per frame).
-                if (render) c.releaseOutputBuffer(index, System.nanoTime()) else c.releaseOutputBuffer(index, false)
+                if (render) {
+                    c.releaseOutputBuffer(index, System.nanoTime())
+                    outputFrames++
+                } else c.releaseOutputBuffer(index, false)
             } catch (e: Exception) {
                 Elog.w("releaseOutputBuffer failed: ${e.message}")
             }
@@ -202,7 +209,7 @@ class VideoDecoder(private val surface: Surface, private val listener: Listener)
         if (tuning) {
             if (Build.VERSION.SDK_INT >= 30) f.setInteger(MediaFormat.KEY_LOW_LATENCY, 1)
             f.setInteger(MediaFormat.KEY_PRIORITY, 0) // realtime
-            f.setInteger(MediaFormat.KEY_OPERATING_RATE, Short.MAX_VALUE.toInt())
+            f.setInteger(MediaFormat.KEY_OPERATING_RATE, cfg.refreshHz.coerceIn(1, 240))
         }
         if (vendorKeys) {
             val n = name.lowercase()

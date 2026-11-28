@@ -2,7 +2,7 @@ package dev.anydisplay.client.protocol
 
 /** Constants and message bodies from docs/PROTOCOL.md (protocol version 1). */
 object Proto {
-    const val PORT = 47820
+    const val PORT = 47821 // Separate ADB endpoint; never steal the upstream client's listener.
     val MAGIC = byteArrayOf('A'.code.toByte(), 'N'.code.toByte(), 'Y'.code.toByte(), 'D'.code.toByte())
     const val MAJOR = 1
     const val MINOR = 0

@@ -27,13 +27,15 @@
 
 ![详细视图：保留完整分辨率，另列目标 60 fps 和丢帧 0](docs/assets/hud-detail.png)
 
+**本地 0.7 Android 预览**：手机可选关闭 / 仅 FPS / 详细统计，另有持续性能优先模式。[构建、验收与性能指标说明](docs/android-performance.md)。此候选没有上传到 Releases。
+
 ## 快速上手
 
 **准备：** Windows 11 x64（.NET Framework 4.8）、Android 8.0 或更高版本，以及支持数据传输的 USB 线。只看工作台界面不需要连接设备。
 
 1. **下载便携包。** 从 [GitHub Releases](https://github.com/ya0hu1/hu1-display/releases) 选择要使用的版本，下载该版本以 `windows-x64.zip` 结尾的便携包 和同名 `.sha256`，不要选 *Source code (zip)*。在下载目录运行 `Get-FileHash .\hu1-display-*-windows-x64.zip -Algorithm SHA256`，核对对应文件的哈希。将整个 ZIP 解压到新的本地目录，双击 `Hu1.Display.exe`。预览包未正式签名，不要关闭系统防护。
 2. **连接手机。** 打开 Android 的「USB 调试」，接线并解锁，核对手机上的 RSA 授权提示。回到工作台点「刷新」，选择自己的设备，再点「信任此设备」。手机授权和工作台信任是两步。
-3. **准备客户端。** 若手机尚未安装匹配的 AnyDisplay，在「连接与安装」点「安装手机端」，并在手机上确认。客户端沿用上游名称，不叫“晖映”。
+3. **准备客户端。** 若手机尚未安装匹配的 AnyDisplay，在「连接与安装」点「安装手机端」，并在手机上确认。已发布的 0.6.2 使用上游名称；本地 0.7 候选使用可并存的晖映客户端。
 4. **选择桌面并开始。** 只看主屏就选「镜像」。要扩展，先在 **Windows 设置 → 系统 → 显示** 确认可用的非主屏虚拟显示器（MttVDD），再在工作台选「扩展」和目标屏。没有虚拟屏时，请按 [VDD 官方说明](https://github.com/VirtualDrivers/Virtual-Display-Driver) 手动准备驱动；工作台的「准备 VDD 文件」不会替你安装驱动。已有可用虚拟屏无需重装。
 
 ## 常见问题

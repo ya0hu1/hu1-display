@@ -3,11 +3,6 @@
   "tag": "v0.1.4",
   "commit": "01eb3eb0f7481655f2e42a8df9288b21d7c9c9b0",
   "license": "MIT",
-  "changes_to_upstream_sources": "None at initialization; Android client is not yet rebranded or rebuilt.",
-  "local_workspace_mirrors": [
-    "android-client",
-    "vendor/anydisplay-windows",
-    "protocol"
-  ],
-  "public_source_snapshot": "Controller only. Upstream mirrors and binary dependencies are not redistributed."
+  "changes_to_upstream_sources": "Android fork: separate app identity and ADB loopback endpoint; output-FPS HUD, negotiated-rate hints and opt-in sustained performance. Windows video engine unchanged.",
+  "public_source_snapshot": "Windows controller, MIT-licensed Android receiver source and protocol fixtures. No APK, driver, engine, SDK binary or key."
 }

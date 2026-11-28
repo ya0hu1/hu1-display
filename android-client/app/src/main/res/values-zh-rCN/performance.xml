@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">晖映 · hu1 Display</string>
+    <string name="settings">设置</string>
+    <string name="pref_cat_display">显示</string>
+    <string name="hud_title">手机帧率浮层</string>
+    <string-array name="hud_entries"><item>关闭</item><item>仅帧率</item><item>详细统计</item></string-array>
+    <string name="hud_waiting">输出 — FPS</string>
+    <string name="hud_fps">输出 %.1f FPS</string>
+    <string name="sustained_title">持续性能优先</string>
+    <string name="sustained_summary">下次连接优先请求面板最高刷新率（最多 120 fps），支持时启用系统持续性能提示。耗电可能增加，仍服从系统温控和电脑端显式目标。</string>
+</resources>

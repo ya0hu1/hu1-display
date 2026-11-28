@@ -1,0 +1,9 @@
+<resources>
+    <string name="hud_title">Phone FPS overlay</string>
+    <string-array name="hud_entries"><item>Off</item><item>FPS only</item><item>Detailed</item></string-array>
+    <string-array name="hud_keys" translatable="false"><item>off</item><item>fps</item><item>detail</item></string-array>
+    <string name="hud_waiting">Output — FPS</string>
+    <string name="hud_fps">Output %.1f FPS</string>
+    <string name="sustained_title">Prefer sustained performance</string>
+    <string name="sustained_summary">Next connection: request the highest panel rate (up to 120 fps), and sustained window performance where supported. Uses more power; Android thermal limits and explicit PC targets still apply.</string>
+</resources>

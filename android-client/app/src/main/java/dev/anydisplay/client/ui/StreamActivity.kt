@@ -6,10 +6,12 @@ import android.content.res.Configuration
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import android.os.Handler
 import android.os.Looper
 import android.view.Gravity
 import android.view.KeyEvent
+import android.view.Surface
 import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewConfiguration
@@ -26,6 +28,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dev.anydisplay.client.Elog
 import dev.anydisplay.client.R
+import dev.anydisplay.client.data.HudMode
 import dev.anydisplay.client.data.Settings
 import dev.anydisplay.client.data.StreamOrientation
 import dev.anydisplay.client.data.TouchMode
@@ -53,7 +56,11 @@ class StreamActivity : BaseActivity(), SurfaceHolder.Callback, VideoDecoder.List
     private var session: Session? = null
     private var decoder: VideoDecoder? = null
     private val ui = Handler(Looper.getMainLooper())
-    private var lastRendered = 0L
+    private val fpsSampler = FpsSampler()
+    private var hudMode = HudMode.OFF
+    private var resumed = false
+    private var votedHz = 0
+    private var sustainedWindow = false
     private var lastBytes = 0L
     private var lastStatsAt = 0L
     private var keyboardShown = false
@@ -93,7 +100,7 @@ class StreamActivity : BaseActivity(), SurfaceHolder.Callback, VideoDecoder.List
             textSize = 11f
             val p = (8 * resources.displayMetrics.density).toInt()
             setPadding(p, p / 2, p, p / 2)
-            visibility = if (settings.statsOverlay) View.VISIBLE else View.GONE
+            visibility = View.GONE
         }
         waiting = TextView(this).apply {
             setText(R.string.waiting_for_video)
@@ -175,6 +182,14 @@ class StreamActivity : BaseActivity(), SurfaceHolder.Callback, VideoDecoder.List
                 router.mode = router.mode.next()
                 menu.setIcon("mode", modeIcon(router.mode), modeLabel(router.mode))
                 Snackbar.make(layout, modeLabel(router.mode), Snackbar.LENGTH_SHORT).show()
+            },
+            FloatingMenu.Item("fps", 0, getString(R.string.hud_title), text = "FPS") {
+                MaterialAlertDialogBuilder(this).setTitle(R.string.hud_title)
+                    .setSingleChoiceItems(R.array.hud_entries, hudMode.ordinal) { dialog, index ->
+                        settings.hud = HudMode.entries[index]
+                        syncHud()
+                        dialog.dismiss()
+                    }.show()
             },
             FloatingMenu.Item("keyboard", R.drawable.ic_keyboard, getString(R.string.menu_keyboard)) { toggleKeyboard() },
             FloatingMenu.Item("undo", R.drawable.ic_undo, getString(R.string.menu_undo)) { shortcut(HidKeys.letter('z'), 0) },
@@ -272,6 +287,7 @@ class StreamActivity : BaseActivity(), SurfaceHolder.Callback, VideoDecoder.List
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
+        if (!::router.isInitialized) return
         if (hasFocus) {
             hideSystemBars()
             clipboard.addPrimaryClipChangedListener(clipListener)
@@ -284,6 +300,7 @@ class StreamActivity : BaseActivity(), SurfaceHolder.Callback, VideoDecoder.List
     // ------------------------------------------------------------ video
 
     private fun applyConfig(cfg: StreamConfig) {
+        voteFrameRate(if (resumed) cfg.refreshHz else 0)
         layout.setStreamSize(cfg.width, cfg.height)
         layout.surfaceView.holder.setFixedSize(cfg.width, cfg.height)
         router.streamWidth = cfg.width
@@ -294,7 +311,19 @@ class StreamActivity : BaseActivity(), SurfaceHolder.Callback, VideoDecoder.List
         if (!cfg.clientCursor) cursor.clear()
     }
 
+    // A content-rate hint, not a forced panel mode. Older Androids keep their native policy.
+    private fun voteFrameRate(hz: Int) {
+        if (Build.VERSION.SDK_INT < 30 || votedHz == hz) return
+        val surface = layout.surfaceView.holder.surface
+        if (!surface.isValid) return
+        try {
+            surface.setFrameRate(hz.toFloat(), Surface.FRAME_RATE_COMPATIBILITY_DEFAULT)
+            votedHz = hz
+        } catch (e: RuntimeException) { Elog.w("frame-rate hint unavailable: ${e.message}") }
+    }
+
     override fun surfaceCreated(holder: SurfaceHolder) {
+        if (resumed) session?.config?.let { voteFrameRate(it.refreshHz) }
         val d = VideoDecoder(holder.surface, this)
         decoder = d
         session?.attachVideo(d)
@@ -303,6 +332,8 @@ class StreamActivity : BaseActivity(), SurfaceHolder.Callback, VideoDecoder.List
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {}
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
+        votedHz = 0
+        resetSample()
         val d = decoder ?: return
         decoder = null
         session?.detachVideo(d)
@@ -319,7 +350,7 @@ class StreamActivity : BaseActivity(), SurfaceHolder.Callback, VideoDecoder.List
     }
 
     override fun onDecoderStarted(name: String, config: StreamConfig) {
-        ui.post { applyConfig(config) }
+        ui.post { resetSample(); applyConfig(config) }
     }
 
     // ------------------------------------------------------------ lifecycle
@@ -336,11 +367,19 @@ class StreamActivity : BaseActivity(), SurfaceHolder.Callback, VideoDecoder.List
 
     override fun onResume() {
         super.onResume()
+        if (!::layout.isInitialized || isFinishing) return
+        resumed = true
         session?.attachCursor(cursor)
-        ui.post(statsTick)
+        session?.config?.let { voteFrameRate(it.refreshHz) }
+        sustainedWindow = settings.sustained && getSystemService(PowerManager::class.java).isSustainedPerformanceModeSupported
+        if (sustainedWindow) window.setSustainedPerformanceMode(true)
+        syncHud()
     }
 
     override fun onPause() {
+        resumed = false
+        if (::layout.isInitialized) voteFrameRate(0)
+        if (sustainedWindow) { window.setSustainedPerformanceMode(false); sustainedWindow = false }
         ui.removeCallbacks(statsTick)
         session?.attachCursor(null)
         super.onPause()
@@ -360,35 +399,45 @@ class StreamActivity : BaseActivity(), SurfaceHolder.Callback, VideoDecoder.List
         }
     }
 
+    private fun resetSample() {
+        fpsSampler.reset()
+        if (hudMode != HudMode.OFF) stats.setText(R.string.hud_waiting)
+    }
+
+    private fun syncHud() {
+        ui.removeCallbacks(statsTick)
+        hudMode = settings.hud
+        stats.visibility = if (hudMode == HudMode.OFF) View.GONE else View.VISIBLE
+        resetSample()
+        if (resumed && hudMode != HudMode.OFF) ui.post(statsTick)
+    }
+
     private val statsTick = object : Runnable {
         override fun run() {
+            if (!resumed || hudMode == HudMode.OFF) return
             updateStats()
-            ui.postDelayed(this, 500)
+            ui.postDelayed(this, 1000)
         }
     }
 
     private fun updateStats() {
         val s = session ?: return
-        if (!settings.statsOverlay) return
+        val d = decoder ?: return
         val now = System.nanoTime()
-        val rendered = s.totalRendered.get()
-        val bytes = s.bytesSoFar()
-        val dt = (now - lastStatsAt) / 1e9
-        if (lastStatsAt != 0L && dt > 0) {
-            val fps = (rendered - lastRendered) / dt
-            val cfg = s.config
-            val lat = s.lastLatencyUs
-            stats.text = buildString {
-                append("%.0f fps".format(fps))
-                if (cfg != null) append("  ${cfg.width}×${cfg.height} ${Proto.codecName(cfg.codec)}")
+        val fps = fpsSampler.sample(now, d.outputFrames)
+        val detail = hudMode == HudMode.DETAIL
+        val bytes = if (detail) s.bytesSoFar() else 0L
+        if (fps != null) stats.text = buildString {
+            append(getString(R.string.hud_fps, fps))
+            if (detail) {
+                s.config?.let { append("  ${it.width}×${it.height} ${Proto.codecName(it.codec)} @${it.refreshHz}") }
                 append("\ndecode %.1f ms  rtt %.1f ms".format(s.lastAvgDecodeUs / 1000.0, s.rttUs / 1000.0))
-                if (lat >= 0) append("\nlatency ≈ %.0f ms".format(lat / 1000.0))
-                append("\n%.1f Mbps  dropped %d".format((bytes - lastBytes) * 8 / dt / 1e6, s.totalDropped.get()))
-                decoder?.decoderName?.takeIf { it.isNotEmpty() }?.let { append("\n$it") }
+                val mbps = (bytes - lastBytes) * 8e3 / (now - lastStatsAt)
+                append("\n%.1f Mbps  dropped %d".format(mbps, s.totalDropped.get()))
+                append("\n${d.decoderName}")
             }
         }
         lastStatsAt = now
-        lastRendered = rendered
         lastBytes = bytes
     }
 

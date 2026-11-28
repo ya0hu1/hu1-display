@@ -169,8 +169,7 @@ namespace DeskMateLearning
                 throw new InvalidOperationException(UiText.Get("设备身份已变化，已取消连接。"));
             int api=Int32.Parse(Adb("-s",selected.Serial,"shell","getprop","ro.build.version.sdk"));
             if(api<26 || BatteryTemperature(selected.Serial)>=400) throw new InvalidOperationException(UiText.Get("Android 版本或当前设备温度不满足连接条件。"));
-            if(Adb("-s",selected.Serial,"shell","pm","list","packages","dev.anydisplay.client")!="package:dev.anydisplay.client")
-                throw new InvalidOperationException(UiText.Get("未检测到手机客户端。工作台不会自动安装 APK。"));
+            var client=AndroidClient.Installed(pkg=>Adb("-s",selected.Serial,"shell","pm","list","packages",pkg));
             Directory.CreateDirectory(settings.LogDirectory); Directory.CreateDirectory(settings.StateDirectory);
             DesktopDisplay[] before=null;DisplayInfo fresh=null;VddRefreshSession rate=null;
             var result=new SessionResult { StartedAt=DateTimeOffset.Now.ToString("o"), Mode=mode.ToString(),Continuous=continuous };
@@ -199,8 +198,8 @@ namespace DeskMateLearning
                 rate=new VddRefreshSession(before,fresh,mode,profile.Fps,WindowsDisplays.Capture,WindowsDisplays.SetTemporaryVddRate);
                 rate.Apply();
                 clientOwned=true;
-                Adb("-s",selected.Serial,"shell","am","start","-W","-n","dev.anydisplay.client/.ui.MainActivity");
-                string port=Adb("-s",selected.Serial,"forward","tcp:0","tcp:47820");
+                Adb("-s",selected.Serial,"shell","am","start","-W","-n",client.Activity);
+                string port=Adb("-s",selected.Serial,"forward","tcp:0",client.Endpoint);
                 if(!Int32.TryParse(port,out ownedPort) || ownedPort<1024 || ownedPort>65535)
                     throw new InvalidOperationException(UiText.Get("返回的转发端口无效，未清理其他端口。"));
                 engine=new Process();
@@ -266,7 +265,7 @@ namespace DeskMateLearning
                     }catch(Exception e){result.CleanupErrors.Add(e.Message);}
                     try{lease.Finish(SessionTarget,telemetry.Configured,result);}catch(Exception e){result.CleanupErrors.Add(e.Message);}
                     lease.Unlock();
-                    if(clientOwned) try { Adb("-s",selected.Serial,"shell","am","force-stop","dev.anydisplay.client"); }
+                    if(clientOwned) try { Adb("-s",selected.Serial,"shell","am","force-stop",client.Package); }
                         catch(Exception e) { result.CleanupErrors.Add(e.Message); }
                     if(ownedPort>=1024 && ownedPort<=65535) try { Adb(SafetyPolicy.RemoveOwnedForward(selected.Serial,ownedPort)); }
                         catch(Exception e) { result.CleanupErrors.Add(e.Message); }

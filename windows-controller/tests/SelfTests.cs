@@ -116,6 +116,10 @@ namespace DeskMateLearning
             Test("device parser preserves unauthorized state",delegate {var d=SafetyPolicy.ParseDevices("List of devices attached\nSPARE-TEST unauthorized transport_id:1\n");Check(d.Count==1 && d[0].State=="unauthorized");});
             Test("device parser ignores daemon messages",delegate {var d=SafetyPolicy.ParseDevices("* daemon started *\nSPARE-TEST device product:X model:PFJM10\n");Check(d.Count==1 && d[0].Model=="PFJM10");});
             Test("display parser preserves primary and VDD flags",delegate {var d=SafetyPolicy.ParseDisplays("monitors:\n  0: physical [primary]\n  2: VDD [Virtual Display Driver]\n");Check(d.Count==2 && d[0].Primary && !d[0].Virtual && d[1].Virtual);});
+            Test("Android preview preferred and uses a separate listener",delegate {
+                var c=AndroidClient.Installed(id=>"package:"+id);Check(c==AndroidClient.Preview && c.Endpoint=="tcp:47821" && c.Activity.StartsWith(c.Package+"/"));});
+            Test("Legacy fallback ignores similarly named packages",delegate {
+                var c=AndroidClient.Installed(id=>id==AndroidClient.Preview.Package ? "package:"+id+".other" : "package:"+id+"\r\n");Check(c==AndroidClient.Upstream && c.Endpoint=="tcp:47820");});
             Test("cleanup command scoped to one owned port",delegate {var a=SafetyPolicy.RemoveOwnedForward("SPARE-TEST",50001);Check(String.Join(" ",a)=="-s SPARE-TEST forward --remove tcp:50001");});
             Test("cleanup refuses unknown zero port",delegate {Reject(()=>SafetyPolicy.RemoveOwnedForward("SPARE-TEST",0));});
             Test("cleanup refuses overflow port",delegate {Reject(()=>SafetyPolicy.RemoveOwnedForward("SPARE-TEST",65536));});

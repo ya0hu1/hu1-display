@@ -29,7 +29,7 @@ namespace DeskMateLearning
                 StateDirectory=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"DeskLinkStudio"),
                 ApprovedDevices=new ApprovedDevice[0]};
             if(String.IsNullOrEmpty(s.LogDirectory))s.LogDirectory=Path.Combine(s.StateDirectory,"logs");
-            if(String.IsNullOrEmpty(s.ApkPath))s.ApkPath=Path.Combine(root,"packages","AnyDisplay-v0.1.4.apk");
+            if(String.IsNullOrEmpty(s.ApkPath))s.ApkPath=Path.Combine(root,"packages",AndroidClient.PreviewHash==null ? "AnyDisplay-v0.1.4.apk" : "Hu1Display-Android.apk");
             if(String.IsNullOrEmpty(s.DriverDirectory))s.DriverDirectory=Path.Combine(root,"packages","VirtualDisplayDriver");
             SafetyPolicy.ValidateSettings(s);
             string approvals=Path.Combine(s.StateDirectory,"trusted-devices.json");
@@ -67,7 +67,7 @@ namespace DeskMateLearning
             AtomicJson(Path.Combine(s.StateDirectory,"trusted-devices.json"),approved);
             s.ApprovedDevices=approved;d.Trusted=true;
         }
-        public static void VerifyApk(Settings s) {if(!File.Exists(s.ApkPath) || Hash(s.ApkPath)!=ApkHash)throw new InvalidDataException(UiText.Get("Android安装包缺失或校验失败。请使用完整便携包，不执行未知APK。"));}
+        public static void VerifyApk(Settings s) {if(!File.Exists(s.ApkPath) || Hash(s.ApkPath)!=(AndroidClient.PreviewHash ?? ApkHash))throw new InvalidDataException(UiText.Get("Android安装包缺失或校验失败。请使用完整便携包，不执行未知APK。"));}
         public static string InstallClient(Settings s,DeviceInfo d)
         {
             using(var lease=PhoneLease(d)){return InstallClientOwned(s,d);}
@@ -79,6 +79,7 @@ namespace DeskMateLearning
             int api;if(!Int32.TryParse(Adb(s,"-s",d.Serial,"shell","getprop","ro.build.version.sdk"),out api)||api<26)throw new InvalidOperationException(UiText.Get("客户端需要Android 8.0/API 26及以上。"));
             string result=Adb(s,"-s",d.Serial,"install","-r",s.ApkPath);
             if(!result.Split('\n').Any(x=>x.Trim()=="Success"))throw new InvalidOperationException(UiText.Get("安装未确认成功：")+result);
+            if(AndroidClient.PreviewHash!=null)return UiText.Get("晖映 Android 预览客户端已安装。旧客户端未被替换。");
             return UiText.Get("安装成功。手机端当前使用 AnyDisplay v0.1.4（上游客户端），可点击打开。");
         }
         public static string OpenClient(Settings s,DeviceInfo d,bool developerSettings)
@@ -90,7 +91,8 @@ namespace DeskMateLearning
             new Backend(s).VerifyTools();SafetyPolicy.ValidateDevice(s,d);
             if(Adb(s,"-s",d.Serial,"shell","getprop","ro.product.model")!=d.Model)throw new InvalidOperationException(UiText.Get("设备身份变化。"));
             if(developerSettings)return Adb(s,"-s",d.Serial,"shell","am","start","-a","android.settings.APPLICATION_DEVELOPMENT_SETTINGS");
-            return Adb(s,"-s",d.Serial,"shell","am","start","-W","-n","dev.anydisplay.client/.ui.MainActivity");
+            var client=AndroidClient.Installed(pkg=>Adb(s,"-s",d.Serial,"shell","pm","list","packages",pkg));
+            return Adb(s,"-s",d.Serial,"shell","am","start","-W","-n",client.Activity);
         }
         public static bool ExistingVddDevice()
         {

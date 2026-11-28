@@ -27,13 +27,15 @@
 
 ![Detailed overlay with the full resolution, a target of 60 fps and zero dropped frames](docs/assets/hud-detail.png)
 
+**Local Android 0.7 preview:** optional phone-side FPS overlay and sustained-performance preference. See [build and acceptance notes](docs/android-performance.md). This candidate is not on Releases.
+
 ## Quick start
 
 **What you need:** Windows 11 x64 with .NET Framework 4.8, Android 8.0 or later, and a USB data cable. You can explore the workspace without connecting a device.
 
 1. **Download the portable package.** On [GitHub Releases](https://github.com/ya0hu1/hu1-display/releases), choose the version you want and get the portable archive ending in `windows-x64.zip` and its matching `.sha256`, not *Source code (zip)*. Run `Get-FileHash .\hu1-display-*-windows-x64.zip -Algorithm SHA256` in your download folder and compare the hash for that file. Extract the whole archive to a new local folder and open `Hu1.Display.exe`. Preview binaries are unsigned; do not disable system protections.
 2. **Connect the phone.** Enable **USB debugging**, connect the cable, unlock the device and verify the RSA prompt. In the workspace, select **Refresh**, choose your device, then **Trust this device**. Android authorization and workspace trust are separate steps.
-3. **Prepare the client.** If the matching AnyDisplay client is not already installed, choose **Connection & setup → Install Android client** and confirm on the phone. The client uses the upstream AnyDisplay name.
+3. **Prepare the client.** If the matching AnyDisplay client is not already installed, choose **Connection & setup → Install Android client** and confirm on the phone. Published 0.6.2 uses upstream AnyDisplay; the local 0.7 candidate installs a separate hu1 Display client.
 4. **Choose a desktop and start.** Select **Mirror** to show the primary monitor. For **Extend**, first check **Windows Settings → System → Display** for an available non-primary virtual display (MttVDD), then select it in the workspace. If it is missing, follow the [VDD driver instructions](https://github.com/VirtualDrivers/Virtual-Display-Driver). **Prepare VDD files** does not install a driver; do not reinstall one that already works.
 
 ## FAQ

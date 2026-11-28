@@ -38,11 +38,14 @@
             app:key="mirror"
             app:summary="@string/pref_mirror_summary"
             app:title="@string/pref_mirror" />
+        <ListPreference
+            app:defaultValue="off"
+            app:entries="@array/hud_entries" app:entryValues="@array/hud_keys"
+            app:iconSpaceReserved="false" app:key="hud_mode"
+            app:title="@string/hud_title" app:useSimpleSummaryProvider="true" />
         <SwitchPreferenceCompat
-            app:defaultValue="false"
-            app:iconSpaceReserved="false"
-            app:key="stats_overlay"
-            app:title="@string/pref_stats" />
+            app:defaultValue="false" app:iconSpaceReserved="false" app:key="sustained"
+            app:title="@string/sustained_title" app:summary="@string/sustained_summary" />
     </PreferenceCategory>
 
     <PreferenceCategory app:title="@string/pref_cat_connection" app:iconSpaceReserved="false">

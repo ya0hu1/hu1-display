@@ -36,7 +36,10 @@ class Settings(context: Context) {
     val clientCursor: Boolean get() = prefs.getBoolean(K_CLIENT_CURSOR, true)
     val mirror: Boolean get() = prefs.getBoolean(K_MIRROR, false)
     val palmRejection: Boolean get() = prefs.getBoolean(K_PALM, true)
-    val statsOverlay: Boolean get() = prefs.getBoolean(K_STATS, false)
+    var hud: HudMode
+        get() = HudMode.from(prefs.getString(K_HUD, null))
+        set(value) { prefs.edit().putString(K_HUD, value.key).apply() }
+    val sustained: Boolean get() = prefs.getBoolean(K_SUSTAINED, false)
     val autoStart: Boolean get() = prefs.getBoolean(K_AUTO_START, true)
     val orientation: StreamOrientation get() = StreamOrientation.of(prefs.getString(K_ORIENTATION, "landscape"))
 
@@ -60,7 +63,8 @@ class Settings(context: Context) {
         const val K_MIRROR = "mirror"
         const val K_TOUCH_MODE = "touch_mode"
         const val K_PALM = "palm_rejection"
-        const val K_STATS = "stats_overlay"
+        const val K_HUD = "hud_mode"
+        const val K_SUSTAINED = "sustained"
         const val K_AUTO_START = "auto_start"
         const val K_ORIENTATION = "orientation"
         private const val K_MENU_X = "menu_x"

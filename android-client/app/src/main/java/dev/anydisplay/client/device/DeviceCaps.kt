@@ -12,6 +12,7 @@ import android.view.Display
 import android.view.InputDevice
 import android.view.MotionEvent
 import android.view.Surface
+import dev.anydisplay.client.data.StreamPolicy
 import dev.anydisplay.client.data.Settings
 import dev.anydisplay.client.data.StreamOrientation
 import dev.anydisplay.client.protocol.ConfigReq
@@ -182,7 +183,7 @@ object DeviceCaps {
                 h = (h * 0.9f).roundToInt() and 1.inv()
             }
         }
-        val hz = settings.refreshHz.coerceAtMost(maxOf(maxRefresh(context).roundToInt(), 30))
+        val hz = StreamPolicy.requestHz(settings.refreshHz, maxRefresh(context).roundToInt(), settings.sustained)
         var flags = 0
         if (settings.hidpi) flags = flags or Proto.FLAG_HIDPI
         if (settings.audio) flags = flags or Proto.FLAG_AUDIO

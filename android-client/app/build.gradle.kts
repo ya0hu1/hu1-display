@@ -8,11 +8,11 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "dev.anydisplay.client"
+        applicationId = "io.github.ya0hu1.display"
         minSdk = 26
         targetSdk = 36
-        versionCode = 5
-        versionName = "0.1.4"
+        versionCode = 7
+        versionName = "0.7.0-preview"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -51,7 +51,7 @@ android {
 
     testOptions {
         unitTests.all {
-            it.systemProperty("anydisplay.vectors", rootProject.file("../tools/vectors.json").absolutePath)
+            it.systemProperty("anydisplay.vectors", rootProject.file("../protocol/upstream-vectors.json").absolutePath)
         }
     }
 }

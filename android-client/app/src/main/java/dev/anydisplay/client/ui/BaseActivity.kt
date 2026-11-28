@@ -1,14 +1,11 @@
 package dev.anydisplay.client.ui
 
-import android.os.Build
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import dev.anydisplay.client.BuildConfig
 import dev.anydisplay.client.R
 import dev.anydisplay.client.session.PairingRequest
 import dev.anydisplay.client.session.SessionHub
@@ -18,16 +15,6 @@ import dev.anydisplay.client.session.Status
 abstract class BaseActivity : AppCompatActivity(), SessionHub.Listener {
     private var pairingDialog: AlertDialog? = null
     private var shownRequest: PairingRequest? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Debug builds only: lets automated device tests drive the UI while a secure lock screen is up.
-        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 27) {
-            setShowWhenLocked(true)
-            setTurnScreenOn(true)
-            window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        }
-    }
 
     override fun onResume() {
         super.onResume()

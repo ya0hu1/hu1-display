@@ -121,8 +121,8 @@ namespace DeskMateLearning
             Click("DriverFolder",delegate {PrepareDriver();});Click("DriverWizard",delegate {DriverWizard();});
             Click("OpenLogs",delegate {Directory.CreateDirectory(settings.LogDirectory);StudioServices.Open(settings.LogDirectory,false);});
             Click("ClearLogs",delegate {C<TextBox>("LogText").Clear();});
-            Click("CopyDiagnostics",delegate {Clipboard.SetText(UiText.Brand+" Studio 0.6.2 Preview\nOS: "+Environment.OSVersion+"\n"+C<TextBlock>("StreamInfo").Text+UiText.Get("\n设备数: ")+(scan==null ? 0 : scan.Devices.Count)+UiText.Get("\n（未复制设备序列号或画面）"));Log(UiText.Get("诊断摘要已复制到Windows剪贴板，未转发到手机。"));});
-            Click("About",delegate {MessageBox.Show(Window,UiText.Get("晖映 · 工作台预览版 0.6.2\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB；触控/音频/剪贴板回传暂未开放。"),UiText.Get("关于与开源说明"));});
+            Click("CopyDiagnostics",delegate {Clipboard.SetText(UiText.Brand+" Studio 0.7.0 Preview\nOS: "+Environment.OSVersion+"\n"+C<TextBlock>("StreamInfo").Text+UiText.Get("\n设备数: ")+(scan==null ? 0 : scan.Devices.Count)+UiText.Get("\n（未复制设备序列号或画面）"));Log(UiText.Get("诊断摘要已复制到Windows剪贴板，未转发到手机。"));});
+            Click("About",delegate {MessageBox.Show(Window,UiText.Get("晖映 · 工作台预览版 0.7.0\n原创Windows界面与控制层（MIT）。\n视频引擎：AnyDisplay v0.1.4；晖映 Android 客户端基于该版本（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB；触控/音频/剪贴板回传暂未开放。"),UiText.Get("关于与开源说明"));});
             C<ComboBox>("SessionPicker").ItemsSource=routes;
             C<ComboBox>("SessionPicker").SelectionChanged+=delegate {BindRoute();};
             C<CheckBox>("HudEnabled").Click+=delegate {SaveHud();};C<CheckBox>("HudCompact").Click+=delegate {SaveHud();};
@@ -327,7 +327,7 @@ namespace DeskMateLearning
         private async void Install()
         {
             var d=Device;if(busy || d==null)return;
-            if(!Confirm(UiText.Get("向 ")+d.Model+UiText.Get(" 安装已固定校验的 AnyDisplay v0.1.4 客户端？\n已有同签名版本会执行保留数据的覆盖安装；不静默卸载其他应用。\n如果手机出现USB安装提示，请在手机上确认。"),UiText.Get("安装Android客户端")))return;
+            if(!Confirm(UiText.Get("向 ")+d.Model+UiText.Get(" 安装本便携包内已固定校验的 Android 客户端？\n已有同签名版本会执行保留数据的覆盖安装；不静默卸载其他应用。\n如果手机出现USB安装提示，请在手机上确认。"),UiText.Get("安装Android客户端")))return;
             SetBusy(true);try{Log(UiText.Get("正在安装手机客户端，请留意手机上的确认提示…"));string result=await Task.Run(()=>StudioServices.InstallClient(settings,d));Log(result);}
             catch(Exception e){Fail(e);}finally{SetBusy(false);if(closing && routes.Count==0)Window.Close();}
         }

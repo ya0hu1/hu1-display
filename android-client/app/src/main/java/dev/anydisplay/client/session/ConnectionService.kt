@@ -27,14 +27,9 @@ import dev.anydisplay.client.ui.StreamActivity
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 
-/**
- * Foreground service that owns the TCP listener on 47820, the mDNS advertisement, USB accessory links, and the one
- * active [Session], so a connection survives the activities going to the background.
- */
 class ConnectionService : Service(), SessionHub.Listener {
     private var server: ServerSocket? = null
     private var acceptThread: Thread? = null
-    private lateinit var nsd: NsdAdvertiser
     @Volatile private var stopping = false
     private val lock = Any()
 
@@ -44,12 +39,8 @@ class ConnectionService : Service(), SessionHub.Listener {
         super.onCreate()
         createChannels(this)
         goForeground()
-        nsd = NsdAdvertiser(this)
-        val identity = Identity(this)
-        nsd.start(identity.deviceName, identity.deviceIdHex)
         startListening()
         SessionHub.addListener(this)
-        checkAttachedAccessory()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -62,13 +53,6 @@ class ConnectionService : Service(), SessionHub.Listener {
             ACTION_DISCONNECT -> SessionHub.session?.disconnect()
             ACTION_ACCEPT_PAIRING -> SessionHub.pairing?.answer(true)
             ACTION_REJECT_PAIRING -> SessionHub.pairing?.answer(false)
-            ACTION_ATTACH_ACCESSORY -> {
-                @Suppress("DEPRECATION")
-                val acc: UsbAccessory? = if (Build.VERSION.SDK_INT >= 33) {
-                    intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY, UsbAccessory::class.java)
-                } else intent.getParcelableExtra(UsbManager.EXTRA_ACCESSORY)
-                acc?.let { openAccessory(it) }
-            }
         }
         return START_STICKY
     }
@@ -87,7 +71,7 @@ class ConnectionService : Service(), SessionHub.Listener {
             ServerSocket().apply {
                 reuseAddress = true
                 receiveBufferSize = 4 * 1024 * 1024
-                bind(InetSocketAddress(Proto.PORT))
+                bind(InetSocketAddress("127.0.0.1", Proto.PORT))
             }
         } catch (e: Exception) {
             Elog.e("cannot listen on ${Proto.PORT}", e)
@@ -132,22 +116,6 @@ class ConnectionService : Service(), SessionHub.Listener {
         SessionHub.update {
             Status(phase = if (server != null && !stopping) Phase.LISTENING else Phase.STOPPED, lastError = s.endMessage)
         }
-    }
-
-    private fun checkAttachedAccessory() {
-        val usb = getSystemService(Context.USB_SERVICE) as UsbManager
-        usb.accessoryList?.firstOrNull { it.manufacturer == "AnyDisplay" && usb.hasPermission(it) }?.let { openAccessory(it) }
-    }
-
-    private fun openAccessory(acc: UsbAccessory) {
-        val usb = getSystemService(Context.USB_SERVICE) as UsbManager
-        val pfd = try { usb.openAccessory(acc) } catch (e: Exception) { Elog.w("openAccessory failed", e); null }
-        if (pfd == null) {
-            Elog.w("cannot open accessory ${acc.model}")
-            return
-        }
-        Elog.i("USB accessory opened: ${acc.manufacturer} ${acc.model}")
-        begin(AccessoryTransport(pfd, acc.model ?: ""))
     }
 
     // ------------------------------------------------------------ hub events
@@ -207,13 +175,12 @@ class ConnectionService : Service(), SessionHub.Listener {
     )
 
     private fun buildNotification(status: Status): Notification {
-        val address = DeviceCaps.lanAddresses().firstOrNull()
         val (title, text) = when (status.phase) {
             Phase.CONNECTED -> getString(R.string.notif_connected, status.hostName) to linkLabel(this, status.link, status.mode)
             Phase.PAIRING -> getString(R.string.notif_pairing, status.hostName) to getString(R.string.notif_pairing_text)
             Phase.HANDSHAKE -> getString(R.string.notif_handshake) to status.peer
             else -> getString(R.string.notif_waiting) to
-                (if (address != null) "$address:${Proto.PORT}" else getString(R.string.notif_usb_only))
+                getString(R.string.notif_usb_only)
         }
         val connected = status.phase == Phase.CONNECTED
         val tap = PendingIntent.getActivity(
@@ -240,7 +207,6 @@ class ConnectionService : Service(), SessionHub.Listener {
     override fun onDestroy() {
         stopping = true
         SessionHub.removeListener(this)
-        nsd.stop()
         try { server?.close() } catch (_: Exception) {}
         server = null
         SessionHub.session?.disconnect(Proto.BYE_SHUTDOWN)

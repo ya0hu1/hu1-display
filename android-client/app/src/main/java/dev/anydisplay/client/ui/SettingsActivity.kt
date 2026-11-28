@@ -36,6 +36,7 @@ class SettingsActivity : BaseActivity() {
             setPreferencesFromResource(R.xml.settings, rootKey)
             val ctx = requireContext()
             findPreference<ListPreference>(Settings.K_REFRESH)?.let { p ->
+                p.isEnabled = !Settings(ctx).sustained
                 val choices = DeviceCaps.refreshChoices(ctx)
                 p.entries = choices.map { "$it Hz" }.toTypedArray()
                 p.entryValues = choices.map { it.toString() }.toTypedArray()
@@ -58,6 +59,10 @@ class SettingsActivity : BaseActivity() {
 
         override fun onSharedPreferenceChanged(prefs: SharedPreferences?, key: String?) {
             // Stream settings take effect immediately for a running session.
+            if (key == Settings.K_SUSTAINED) {
+                findPreference<ListPreference>(Settings.K_REFRESH)?.isEnabled = !Settings(requireContext()).sustained
+                // The controller pins the capture target. Change the power/stream policy on reconnect.
+            }
             if (key in STREAM_KEYS) SessionHub.session?.refreshConfigRequest()
         }
 

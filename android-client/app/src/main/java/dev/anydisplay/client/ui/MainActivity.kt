@@ -37,7 +37,6 @@ class MainActivity : BaseActivity() {
     private lateinit var btnOpen: Button
     private lateinit var btnDisconnect: Button
     private lateinit var btnStart: Button
-    private lateinit var wifiAddress: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -64,12 +63,10 @@ class MainActivity : BaseActivity() {
         btnOpen = findViewById(R.id.btn_open)
         btnDisconnect = findViewById(R.id.btn_disconnect)
         btnStart = findViewById(R.id.btn_start)
-        wifiAddress = findViewById(R.id.wifi_address)
         btnOpen.setOnClickListener { startActivity(Intent(this, StreamActivity::class.java)) }
         btnDisconnect.setOnClickListener { SessionHub.session?.disconnect() }
         btnStart.setOnClickListener { ConnectionService.start(this) }
         findViewById<TextView>(R.id.usb_command).setOnLongClickListener { copy(getString(R.string.usb_command)); true }
-        wifiAddress.setOnLongClickListener { copy(wifiAddress.text.toString()); true }
         findViewById<TextView>(R.id.footer).text =
             getString(R.string.device_footer, Identity(this).deviceIdHex.take(8), BuildConfig.VERSION_NAME)
 
@@ -79,12 +76,6 @@ class MainActivity : BaseActivity() {
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
         }
         ConnectionService.start(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        val addresses = DeviceCaps.lanAddresses()
-        wifiAddress.text = if (addresses.isEmpty()) getString(R.string.wifi_none) else addresses.joinToString("\n") { "$it:${Proto.PORT}" }
     }
 
     private fun copy(text: String) {

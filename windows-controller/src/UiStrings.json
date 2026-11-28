@@ -1,5 +1,6 @@
 {
   "Entries": [
+    { "Key": "AndroidPreviewInstalled", "Zh": "晖映 Android 预览客户端已安装。旧客户端未被替换。", "En": "hu1 Display for Android is installed. The original client was not replaced." },
     {
       "Key": "Text000",
       "Zh": "副屏会话正在运行，请先停止再调整布局。",
@@ -132,8 +133,8 @@
     },
     {
       "Key": "Text027",
-      "Zh": "晖映 · 工作台预览版 0.6.2\n原创Windows界面与控制层（MIT）。\n视频引擎及Android客户端：AnyDisplay v0.1.4（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB；触控/音频/剪贴板回传暂未开放。",
-      "En": "hu1 display · Studio Preview 0.6.2\nOriginal Windows interface and controller (MIT).\nVideo engine and Android client: AnyDisplay v0.1.4 (MIT).\nVirtual display: Virtual Display Driver / MikeTheTech.\nADB: Google Android Platform-Tools.\n\nWorkspace organization inspired by DeskMate; no DeskMate code, icons or branding included. Not an official distribution of those projects.\nUSB only; touch, audio and clipboard forwarding are disabled."
+      "Zh": "晖映 · 工作台预览版 0.7.0\n原创Windows界面与控制层（MIT）。\n视频引擎：AnyDisplay v0.1.4；晖映 Android 客户端基于该版本（MIT）。\n虚拟显示器：Virtual Display Driver / MikeTheTech。\nADB：Google Android Platform-Tools。\n\n学习DeskMate的工作台布局思路，不复制其代码、图标或品牌；非上述项目的官方发行版。\n仅USB；触控/音频/剪贴板回传暂未开放。",
+      "En": "hu1 display · Studio Preview 0.7.0\nOriginal Windows interface and controller (MIT).\nVideo engine: AnyDisplay v0.1.4. The hu1 Android client is derived from it (MIT).\nVirtual display: Virtual Display Driver / MikeTheTech.\nADB: Google Android Platform-Tools.\n\nWorkspace organization inspired by DeskMate; no DeskMate code, icons or branding included. Not an official distribution of those projects.\nUSB only; touch, audio and clipboard forwarding are disabled."
     },
     {
       "Key": "Text028",
@@ -343,11 +344,11 @@
     {
       "Key": "Text070",
       "Zh": "向 ",
-      "En": "Install the verified AnyDisplay v0.1.4 client on "
+      "En": "Install the verified Android client from this portable package on "
     },
     {
       "Key": "Text071",
-      "Zh": " 安装已固定校验的 AnyDisplay v0.1.4 客户端？\n已有同签名版本会执行保留数据的覆盖安装；不静默卸载其他应用。\n如果手机出现USB安装提示，请在手机上确认。",
+      "Zh": " 安装本便携包内已固定校验的 Android 客户端？\n已有同签名版本会执行保留数据的覆盖安装；不静默卸载其他应用。\n如果手机出现USB安装提示，请在手机上确认。",
       "En": "?\nAn existing version with the same signature is updated with data preserved. Other apps are not silently uninstalled.\nConfirm any USB installation prompt on the device."
     },
     {
@@ -1257,8 +1258,8 @@
     },
     {
       "Key": "Text256",
-      "Zh": "当前复用 AnyDisplay v0.1.4 Android 客户端（MIT），不是已经重写或改名的自有 APK。",
-      "En": "Uses upstream AnyDisplay v0.1.4 for Android (MIT), not a rebuilt or rebranded hu1 display APK."
+      "Zh": "晖映 Android 预览版基于 AnyDisplay v0.1.4（MIT）。可与原版并存，连接时优先使用晖映。",
+      "En": "The hu1 Android preview is based on AnyDisplay v0.1.4 (MIT). It can coexist with the original; hu1 is preferred when both are installed."
     },
     {
       "Key": "Text257",
@@ -1467,8 +1468,8 @@
     },
     {
       "Key": "Text299",
-      "Zh": "Studio Preview 0.6.2",
-      "En": "Studio Preview 0.6.2"
+      "Zh": "Studio Preview 0.7.0",
+      "En": "Studio Preview 0.7.0"
     },
     {
       "Key": "Text300",
