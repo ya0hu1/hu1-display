@@ -16,6 +16,7 @@
 | 多屏会话 | 为每台受信任的设备选择一个空闲虚拟屏，可单独停止某一路连接。断开时，默认先把该屏上的普通窗口迁回实体主屏，再停用虚拟桌面。镜像独占，不与扩展同时运行。 |
 | 屏幕排列 | 传输中也能拖动已连接虚拟屏的编号。拖动只改草稿；点「应用到 Windows」后有 15 秒确认，未保留就自动还原。不会移动实体屏。 |
 | 画质与统计 | 扩展模式可跟随手机设置，或指定 720p / 1080p、30 / 60 / 90 / 120 fps 的目标。仅在扩展屏显示的统计小窗可选角落、透明度以及紧凑或详细视图。 |
+| 手机帧率与功耗 | 镜像和扩展时，都可以在手机的 FPS 菜单中选「关闭」「仅帧率」或「详细统计」。若更看重长时间显示的流畅度，可在手机设置中开启「持续性能优先」，重新连接后生效；系统温控仍然有效。 |
 | 工作台外观 | 可切换简体中文与英语，选择预设或自定义配色。排列图用同一主题的不同明暗区分主屏、其他屏和当前选中屏。 |
 | 便携退出 | 「退出并释放便携目录」会结束本工作台的会话，不会强制停止其他调试工具共用的 ADB，也不清除设备信任或偏好。 |
 
@@ -27,22 +28,20 @@
 
 ![详细视图：保留完整分辨率，另列目标 60 fps 和丢帧 0](docs/assets/hud-detail.png)
 
-**0.7.0 Android 预览版**：手机可选关闭 / 仅 FPS / 详细统计，另有持续性能优先模式。[构建、验收与性能指标说明](docs/android-performance.md)。[发布包与 SHA-256](https://github.com/ya0hu1/hu1-display/releases)。
-
 ## 快速上手
 
 **准备：** Windows 11 x64（.NET Framework 4.8）、Android 8.0 或更高版本，以及支持数据传输的 USB 线。只看工作台界面不需要连接设备。
 
-1. **下载便携包。** 从 [GitHub Releases](https://github.com/ya0hu1/hu1-display/releases) 选择要使用的版本，下载该版本以 `windows-x64.zip` 结尾的便携包 和同名 `.sha256`，不要选 *Source code (zip)*。在下载目录运行 `Get-FileHash .\hu1-display-*-windows-x64.zip -Algorithm SHA256`，核对对应文件的哈希。将整个 ZIP 解压到新的本地目录，双击 `Hu1.Display.exe`。预览包未正式签名，不要关闭系统防护。
+1. **下载便携包。** 从 [GitHub Releases](https://github.com/ya0hu1/hu1-display/releases) 选择要使用的版本，下载该版本以 `windows-x64.zip` 结尾的便携包和同名 `.sha256`，不要选 *Source code (zip)*。在下载目录运行 `Get-FileHash .\hu1-display-*-windows-x64.zip -Algorithm SHA256`，核对对应文件的哈希。将整个 ZIP 解压到新的本地目录，双击 `Hu1.Display.exe`。Windows 可执行文件未签名，不要关闭系统防护。
 2. **连接手机。** 打开 Android 的「USB 调试」，接线并解锁，核对手机上的 RSA 授权提示。回到工作台点「刷新」，选择自己的设备，再点「信任此设备」。手机授权和工作台信任是两步。
-3. **准备客户端。** 若手机尚未安装对应客户端，在「连接与安装」点「安装手机端」，并在手机上确认。0.7.0 便携包安装使用发行密钥签名的晖映客户端，可与 0.6.2 使用的 AnyDisplay 并存。
+3. **准备客户端。** 若手机尚未安装对应客户端，在「连接与安装」点「安装手机端」，并在手机上确认。便携包已包含签名的晖映 Android 客户端，不必另行下载或卸载原版 AnyDisplay。
 4. **选择桌面并开始。** 只看主屏就选「镜像」。要扩展，先在 **Windows 设置 → 系统 → 显示** 确认可用的非主屏虚拟显示器（MttVDD），再在工作台选「扩展」和目标屏。没有虚拟屏时，请按 [VDD 官方说明](https://github.com/VirtualDrivers/Virtual-Display-Driver) 手动准备驱动；工作台的「准备 VDD 文件」不会替你安装驱动。已有可用虚拟屏无需重装。
 
 ## 常见问题
 
 **如何接第二台设备？** 每个扩展会话需要单独的 MttVDD 槽位。刷新并信任第二台设备，为它选择不同的空闲屏幕即可。若只有一个槽位，在「连接与安装」可生成容量为 2、3 或 4 的配置副本。先停止使用该驱动的会话，备份原配置，再按驱动说明应用副本并只重载虚拟适配器。首次在 Windows 显示设置中断开闲置虚拟屏，此后工作台按会话启停，不会热重载驱动或占用实体屏。双机并发仍待实机验证。
 
-**为什么目标选了 90 fps，画面却不到 90？** 排列图旁的 Hz 是 **Windows 源刷新率**，目标帧率是请求，统计小窗的 FPS 才是 **手机实际解码帧率**。明确选择 90 或 120 fps 时，若 Windows 在当前分辨率提供该刷新率，工作台会临时切换所选虚拟屏，正常停止后还原。手机仍可能协商到更低帧率，静止桌面的 FPS 也可能很低。如果虚拟屏只列出 60 Hz，可对照 [MttVDD 的 1080p 配置示例](docs/vdd-high-refresh.xml) 和[实机测试记录](docs/testing.md)，不必更改实体显卡。
+**为什么目标选了 90 fps，画面却不到 90？** 排列图旁的 Hz 是 **Windows 源刷新率**，目标帧率是请求；手机浮层的 FPS 是解码器每秒提交给显示系统的帧数，不是面板实际刷新的次数。明确选择 90 或 120 fps 时，若 Windows 在当前分辨率提供该刷新率，工作台会临时切换所选虚拟屏，正常停止后还原。手机仍可能协商到更低帧率，静止桌面的 FPS 也可能很低。如果虚拟屏只列出 60 Hz，可对照 [MttVDD 的 1080p 配置示例](docs/vdd-high-refresh.xml) 和[实机测试记录](docs/testing.md)，不必更改实体显卡。
 
 **断开后找不到窗口，或另一款软件还需要虚拟屏？** 默认的窗口迁回适用于普通应用，提权或自行控制位置的窗口可能不接受移动。若其他软件还要使用一块已经启用的虚拟屏，连接前可在偏好设置取消「断开时停用所选 MttVDD 桌面」。由本次会话从待机启用的屏幕仍会释放。异常退出后可到 Windows 显示设置核对布局。
 
@@ -61,6 +60,6 @@ cd hu1-display
 .\bin\Hu1.Display.exe
 ```
 
-[构建脚本](windows-controller/build.ps1)只编译 Windows 控制端，不下载依赖或安装驱动。要测试传输，可在完整便携包的**独立副本**里替换 `Hu1.Display.exe`。要复现 0.7 的手机安装路径，需在编译工作台时传入对应签名 APK，见 [Android 构建说明](docs/android-performance.md#rebuild)。不传入时沿用上游 APK 的固定哈希。自行组装时需使用匹配的 [AnyDisplay 引擎与上游 APK](https://github.com/efekurucay/anydisplay/releases/tag/v0.1.4) 和 [Google Platform-Tools](https://developer.android.com/tools/releases/platform-tools)（已验证 37.0.3）；保留便携包的 `tools/engine/`、`tools/adb/` 和 `packages/` 目录结构，工作台会核对二进制哈希。
+[构建脚本](windows-controller/build.ps1)只编译 Windows 控制端，不下载依赖或安装驱动。要测试传输，可在完整便携包的**独立副本**里替换 `Hu1.Display.exe`。如需让工作台安装晖映客户端，请在编译时传入对应的签名 APK，见 [Android 构建说明](docs/android-performance.md#rebuild)；不传入时，安装器只接受固定哈希的上游 APK。自行组装时，使用匹配的 [AnyDisplay 引擎](https://github.com/efekurucay/anydisplay/releases/tag/v0.1.4) 和 [Google Platform-Tools](https://developer.android.com/tools/releases/platform-tools)（已验证 37.0.3），保留 `tools/engine/`、`tools/adb/` 和 `packages/` 目录结构。
 
 [版本发布与更新记录](https://github.com/ya0hu1/hu1-display/releases) · [测试方法与结果](docs/testing.md) · [第三方来源](THIRD_PARTY_NOTICES.md) · [MIT 许可](LICENSE)
