@@ -1,3 +1,15 @@
+# 0.7.0 Preview · Android 发行验收 / Release verification
+
+| 检查 / Check | 结果 / Result |
+| --- | --- |
+| Windows x64 便携 EXE，四套离线自测 | 策略 104、模拟布局 35、本机回环 9、WPF/UI 17；**165 通过，0 失败**。运行的是内置本版 APK 哈希的同一份 EXE。 |
+| Android | **44 项 JVM 测试通过**；release 构建、R8 与发布 lint 通过。不可调试 APK，最低 API 26；`apksigner verify` 确认 v2/v3 签名。 |
+| 安装与传输 | 本次发布检查时没有 ADB 设备在线；**未进行发行 APK 的真机安装、USB 传输或持续性能/温升复测**。历史 Reno7 测量不代表本版结果。 |
+
+请完整解压到 **Windows 本地磁盘**。在 WSL 网络共享路径上运行 WPF 测试时，语言持久化用例未通过；按上一版的方法把相同 EXE 复制到本地磁盘后，四套全部通过。不要把共享路径当成已验证的运行方式。
+
+The Windows portable includes the same release-signed APK offered as a separate download. The four Windows suites passed on a local disk, not a network share. No device was attached for this release run; neither long-session FPS nor thermal behavior has been measured on this build. See [Android settings and acceptance](android-performance.md).
+
 # 0.6.2 Preview · 在线位置与主题 / Live placement and themes
 
 Windows 离线验证：策略 102、布局 35、回环 9、WPF/UI 17，共 **163** 项。用例覆盖已连接虚拟屏可编辑、连接中/退出中和实体屏不可在线移动、已占用方向避让、会话专属位置许可、高刷恢复不覆盖新坐标，以及浅深色和标签对比度。租约自测使用独立互斥锁，不会争用真实会话。

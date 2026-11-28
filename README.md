@@ -61,6 +61,6 @@ cd hu1-display
 .\bin\Hu1.Display.exe
 ```
 
-[构建脚本](windows-controller/build.ps1)只编译 Windows 控制端，不下载依赖或安装驱动。要测试传输，可在完整便携包的**独立副本**里替换 `Hu1.Display.exe`。自行组装时需使用匹配的 [AnyDisplay 引擎与 APK](https://github.com/efekurucay/anydisplay/releases/tag/v0.1.4) 和 [Google Platform-Tools](https://developer.android.com/tools/releases/platform-tools)（已验证 37.0.3）；保留便携包的 `tools/engine/`、`tools/adb/` 和 `packages/` 目录结构，工作台会核对二进制哈希。
+[构建脚本](windows-controller/build.ps1)只编译 Windows 控制端，不下载依赖或安装驱动。要测试传输，可在完整便携包的**独立副本**里替换 `Hu1.Display.exe`。要复现 0.7 的手机安装路径，需在编译工作台时传入对应签名 APK，见 [Android 构建说明](docs/android-performance.md#rebuild)。不传入时沿用上游 APK 的固定哈希。自行组装时需使用匹配的 [AnyDisplay 引擎与上游 APK](https://github.com/efekurucay/anydisplay/releases/tag/v0.1.4) 和 [Google Platform-Tools](https://developer.android.com/tools/releases/platform-tools)（已验证 37.0.3）；保留便携包的 `tools/engine/`、`tools/adb/` 和 `packages/` 目录结构，工作台会核对二进制哈希。
 
 [版本发布与更新记录](https://github.com/ya0hu1/hu1-display/releases) · [测试方法与结果](docs/testing.md) · [第三方来源](THIRD_PARTY_NOTICES.md) · [MIT 许可](LICENSE)
