@@ -3,6 +3,7 @@
 The 晖映 / hu1 display Windows workspace, controller and original icon are covered by the root [MIT license](LICENSE). This project is not an official AnyDisplay, DeskMate, Google or Virtual Display Driver distribution.
 
 - **AnyDisplay** — upstream H.264 video engine and Android client by Yahya Efe Kuruçay, MIT. The original client retains its upstream identity. The modified hu1 Android receiver in `android-client/` uses a separate application ID and retains the [upstream MIT license](android-client/UPSTREAM_LICENSE). [Pinned v0.1.4 source tree](https://github.com/efekurucay/anydisplay/tree/01eb3eb0f7481655f2e42a8df9288b21d7c9c9b0), [upstream license](protocol/UPSTREAM_LICENSE), [source metadata](UPSTREAM.json).
+- **Android runtime libraries** — AndroidX, Material Components, Kotlin runtime libraries and annotations are distributed under Apache-2.0. The standalone APK includes license texts in `assets/licenses/`.
 - **Android SDK Platform-Tools** — ADB and its companion libraries come from [Google](https://developer.android.com/tools/releases/platform-tools) under their respective terms and notices. No Google binaries are distributed in this source preview.
 - **Virtual Display Driver / MttVDD** — extend mode uses an existing non-primary virtual display. See the [upstream driver project](https://github.com/VirtualDrivers/Virtual-Display-Driver) for its own terms. No driver binary is distributed or automatically installed by this source preview.
 

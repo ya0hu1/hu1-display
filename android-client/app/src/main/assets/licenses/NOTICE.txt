@@ -1,0 +1,6 @@
+hu1 Display for Android is derived from AnyDisplay v0.1.4 by Yahya Efe Kuruçay (MIT).
+See AnyDisplay-MIT.txt for the upstream terms; hu1-display-MIT.txt covers the fork's changes.
+The Android client includes AndroidX and Material Components for Android (Android Open
+Source Project / Google), and Kotlin runtime libraries, coroutines and annotations
+(JetBrains and contributors), under the Apache License, Version 2.0; see Apache-2.0.txt.
+Android test and build tools are not components of the distributed application.
